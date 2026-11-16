@@ -23,10 +23,12 @@ from evaluate_robust_ensemble import EVALUATION as P28_EVAL, Ensemble
 from evaluate_temporal_features import eicu_temporal, save_json, set_c_temporal
 from pilot_temporal_features import time_summary
 from prepare import OUT, sha
+from sequence_blending import blend
 from stress_missingness_c import METRICS, SCENARIOS, apply_masks, load_cohort, mask_draws, score_metrics
 from train_predictive_boosting import AB_FEATURES, from_json, verify_sources
 
 CADENCE = ROOT.parent / "p34_sequence_cadence"
+BLEND = ROOT.parent / "p37_sequence_blend"
 NEW = "sequence_mixture"
 P28 = "p28"
 WORKER = Path(__file__).with_name("infer_hourly_sequence.py")
@@ -55,20 +57,28 @@ def mask_key(hidden):
 
 
 class SetCSequenceMixture:
-    def __init__(self, original, anchor, seq_scores, weight):
+    def __init__(self, original, anchor, seq_scores, weight, blend_rule=None):
         self.original, self.anchor, self.seq_scores, self.weight = original, anchor, seq_scores, weight
+        self.blend_rule = blend_rule
 
     def predict_proba(self, frame):
         if not self.original.index.equals(frame.index):
             raise ValueError("Unexpected row order in Set C")
         key = mask_key(hidden_channels(self.original, frame))
-        score = self.weight * self.seq_scores[key].astype(float)
-        if self.weight < 1.0:
-            score += (1 - self.weight) * self.anchor.predict_proba(frame)[:, 1]
+        sequence = self.seq_scores[key].astype(float)
+        if self.blend_rule is not None:
+            score = blend(self.anchor.predict_proba(frame)[:, 1], sequence, self.blend_rule)
+        else:
+            score = self.weight * sequence
+            if self.weight < 1.0:
+                score += (1 - self.weight) * self.anchor.predict_proba(frame)[:, 1]
         return np.column_stack((1 - score, score))
 
 
-def set_c(stage, model, weight, frozen_routed, gcs, rule, prior, reference, p11, cadence, p33_control):
+def set_c(
+    stage, model, weight, frozen_routed, gcs, rule, prior, reference, p11, cadence, p33_control,
+    *, blend_rule=None, fixed_control=None,
+):
     raw, y, _ = load_cohort()
     positions, plan, mask_digest = plan_for(raw)
     if mask_digest != reference["mask_draws_sha256"]:
@@ -93,8 +103,12 @@ def set_c(stage, model, weight, frozen_routed, gcs, rule, prior, reference, p11,
     baseline = {row["scenario"]: row for row in prior["set_c"]}
     checked_metrics(y, anchor.predict_proba(raw)[:, 1], baseline["clean"])
     cols = raw.columns.tolist()
-    predictor = SetCSequenceMixture(raw, anchor, seq_scores, weight)
+    predictor = SetCSequenceMixture(raw, anchor, seq_scores, weight, blend_rule)
     controls = {**benchmarks(), P28: (anchor, cols)}
+    if fixed_control:
+        fixed = SetCSequenceMixture(raw, anchor, seq_scores, 0.25)
+        checked_metrics(y, fixed.predict_proba(raw)[:, 1], fixed_control["set_c"][0])
+        controls["fixed_sequence"] = (fixed, cols)
     if p33_control:
         p33_path, p33_prior = p33_control
         p33_clean, = infer(stage, p33_path, cubes=cube[None], statics=static[None])
@@ -112,10 +126,18 @@ def set_c(stage, model, weight, frozen_routed, gcs, rule, prior, reference, p11,
         for row in summary:
             row["ap_p33"] = p33_reference[row["scenario"]]["ap"]
             row["delta_ap_vs_p33"] = row["ap"] - row["ap_p33"]
+    if fixed_control:
+        fixed_reference = {row["scenario"]: row for row in fixed_control["set_c"]}
+        for row in summary:
+            row["ap_fixed_sequence"] = fixed_reference[row["scenario"]]["ap"]
+            row["delta_ap_vs_fixed_sequence"] = row["ap"] - row["ap_fixed_sequence"]
     return summary, masks, intervals
 
 
-def external(stage, model, weight, anchor, elastic, prior, columns, extras, cadence, p33_control):
+def external(
+    stage, model, weight, anchor, elastic, prior, columns, extras, cadence, p33_control,
+    *, blend_rule=None, fixed_control=None,
+):
     cubes = []
 
     def extension(records, index):
@@ -151,6 +173,9 @@ def external(stage, model, weight, anchor, elastic, prior, columns, extras, cade
     if seq.shape != (len(cases), len(y)):
         raise ValueError("Invalid eICU sequence score shape")
     old = {(r["alignment"], r["mode"]): r for r in prior["eicu"]}
+    fixed_scores = {}
+    if fixed_control:
+        fixed_reference = {(row["alignment"], row["mode"]): row["metrics"] for row in fixed_control["eicu"]}
     rows = []
     first, previous = {}, {}
     frozen_comparison, frozen_reference = {}, {}
@@ -159,7 +184,13 @@ def external(stage, model, weight, anchor, elastic, prior, columns, extras, cade
         key = f"{alignment}:{mode}"
         p28_score = anchor.predict_proba(frame)[:, 1]
         checked_metrics(y, p28_score, old[alignment, mode]["metrics"])
-        scores = weight * seq[i].astype(float) + (1 - weight) * p28_score
+        scores = (
+            blend(p28_score, seq[i], blend_rule)
+            if blend_rule is not None else weight * seq[i].astype(float) + (1 - weight) * p28_score
+        )
+        if fixed_control:
+            fixed_scores[key] = 0.25 * seq[i].astype(float) + 0.75 * p28_score
+            checked_metrics(y, fixed_scores[key], fixed_reference[alignment, mode])
         first[key], previous[key] = scores, p28_score
         control = no_category_warning(pipe, frame.loc[:, cols])
         if alignment == "urine_mapped":
@@ -178,6 +209,8 @@ def external(stage, model, weight, anchor, elastic, prior, columns, extras, cade
     versus_elastic = paired_intervals(cohort, frozen_reference, frozen_comparison)
     if p33_control:
         versus_p33 = paired_intervals(cohort, p33_scores, first)
+    if fixed_control:
+        versus_fixed = paired_intervals(cohort, fixed_scores, first)
     for row in rows:
         key = row.pop("key")
         row["paired_ci_vs_p28"] = versus_p28[key]
@@ -185,14 +218,32 @@ def external(stage, model, weight, anchor, elastic, prior, columns, extras, cade
         if p33_control:
             row["p33"] = score_metrics(y, p33_scores[key])
             row["paired_ci_vs_p33"] = versus_p33[key]
+        if fixed_control:
+            row["fixed_sequence"] = score_metrics(y, fixed_scores[key])
+            row["paired_ci_vs_fixed_sequence"] = versus_fixed[key]
     if source_hashes(DEMO) != raw_hashes:
         raise ValueError("Demo sources changed during scoring")
     return rows, raw_hashes
 
 
-def evaluate(cadence=False):
+def evaluate(cadence=False, use_blend=False):
+    selection = None
+    blend_rule = None
+    if use_blend:
+        selection_path = BLEND / "selection.json"
+        selection = from_json(selection_path)
+        if (selection["dataset"], selection["device"], selection["final_fits"]) != ("P12 A/B", "cpu", 0):
+            raise ValueError("Unexpected P37 selection source")
+        blend_rule = selection["selected"]
+        if blend_rule is None:
+            print("A/B retained the existing candidate. Its frozen holdout evaluation applies.", flush=True)
+            return
+        if blend_rule != selection["candidates"][selection["winner"]] or blend_rule["branch"] not in {"p33", "p34"}:
+            raise ValueError("Unexpected frozen blending rule")
+        cadence = blend_rule["branch"] == "p34"
     root = CADENCE if cadence else ROOT
-    output = root / "evaluation"
+    output_root = BLEND if use_blend else root
+    output = output_root / "evaluation"
     if output.exists():
         raise FileExistsError(output)
     fit_path, input_path, model = root / "fitted/manifest.json", PREPARED / "manifest.json", root / "fitted/sequence.pt"
@@ -212,6 +263,15 @@ def evaluate(cadence=False):
     protected.update(prior["source_sha256"])
     protected.update(bundle_hashes)
     protected.update({path.relative_to(OUT).as_posix(): sha(path) for path in (*paths, fit_path, input_path, model)})
+    fixed_control = None
+    if selection is not None:
+        verify_sources(selection["input_sha256"])
+        fixed_path = root / "evaluation" / "summary.json"
+        fixed_control = from_json(fixed_path)
+        if fit["selected"] != ["plain", 8, 0.25] or fixed_control["training"] != fit:
+            raise ValueError("Unexpected frozen reference for the selected sequence branch")
+        protected.update(selection["input_sha256"])
+        protected.update({path.relative_to(OUT).as_posix(): sha(path) for path in (selection_path, fixed_path)})
     p33_control = None
     if cadence:
         p33_path, p33_eval = ROOT / "fitted/sequence.pt", ROOT / "evaluation/summary.json"
@@ -224,24 +284,36 @@ def evaluate(cadence=False):
     verify_sources(protected)
     _, _, weight = fit["selected"]
     columns = pd.read_parquet(AB_FEATURES).columns.tolist()
-    with tempfile.TemporaryDirectory(dir=root, prefix="sequence-evaluation-") as temporary:
+    with tempfile.TemporaryDirectory(dir=output_root, prefix="sequence-evaluation-") as temporary:
         stage = Path(temporary)
-        c, masks, c_ci = set_c(stage, model, weight, routed, gcs, rule, prior, reference, p11, cadence, p33_control)
+        c, masks, c_ci = set_c(
+            stage, model, weight, routed, gcs, rule, prior, reference, p11, cadence, p33_control,
+            blend_rule=blend_rule, fixed_control=fixed_control,
+        )
         anchor = Ensemble(routed, gcs, rule)
-        eicu, raw_sources = external(stage, model, weight, anchor, (pipe, cols), prior, columns, extras, cadence, p33_control)
+        eicu, raw_sources = external(
+            stage, model, weight, anchor, (pipe, cols), prior, columns, extras, cadence, p33_control,
+            blend_rule=blend_rule, fixed_control=fixed_control,
+        )
         verify_sources(protected)
         deliverable = stage / "evaluation"
         deliverable.mkdir()
         masks.to_csv(deliverable / "set_c_paired_replicates.csv", index=False)
-        save_json(deliverable / "summary.json", {
+        result = {
             "training": fit, "set_c": c, "set_c_clean_ci": c_ci, "eicu": eicu,
             "source_sha256": protected, "eicu_raw_sha256": raw_sources,
-        })
+        }
+        if selection is not None:
+            result["blend_selection"] = {"winner": selection["winner"], "rule": blend_rule}
+        save_json(deliverable / "summary.json", result)
         deliverable.rename(output)
     print(f"Completed frozen CPU sequence evaluation at {output}", flush=True)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--cadence", action="store_true")
-    evaluate(cadence=parser.parse_args().cadence)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--cadence", action="store_true")
+    mode.add_argument("--blend", action="store_true")
+    args = parser.parse_args()
+    evaluate(cadence=args.cadence, use_blend=args.blend)
