@@ -1,0 +1,43 @@
+# Local datasets and dataset archives
+data/
+raw_data/
+restricted_data/
+datasets/
+physionet.org/
+physionet-challenge-2012/
+eicu-crd*/
+eicu-collaborative-research-database*/
+predicting-mortality-of-icu-patients-the-physionet*
+set-[abc]/
+set-[abc].tar.gz
+set-[abc].zip
+[Oo]utcomes-[abc].txt
+[Oo]utcomes-[abc].csv
+
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.cache/
+.mplcache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Generated records, predictions, trained models, and intermediate tables
+artifacts/
+models/
+checkpoints/
+*.parquet
+*.joblib
+*.pkl
+*.pickle
+*.ubj
+*.bst
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.safetensors
