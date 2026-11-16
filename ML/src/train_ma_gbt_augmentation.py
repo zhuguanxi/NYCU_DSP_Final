@@ -39,15 +39,17 @@ def mask_features(frame, rates, seed):
         "GCS": np.flatnonzero(frame["GCS__count"].gt(0).to_numpy()),
         "ICUType": np.flatnonzero(frame[ICU_TYPE].notna().to_numpy()),
     }
+    if "Urine" in rates:
+        observed["Urine"] = np.flatnonzero(frame["Urine__count"].gt(0).to_numpy())
     selected = {
         key: rng.permutation(rows)[: (len(rows) * rates[key] + 50) // 100]
         for key, rows in observed.items()
     }
-    gcs_n = len(selected["GCS"])
+    dynamic = {key: rows for key, rows in selected.items() if key != "ICUType"}
     augmented = apply_masks(
         frame,
-        {"GCS": selected["GCS"]},
-        {"GCS": {"set_c_matched_observed": len(observed["GCS"]) - gcs_n}},
+        dynamic,
+        {key: {"set_c_matched_observed": len(observed[key]) - len(rows)} for key, rows in dynamic.items()},
         "matched",
     )
     augmented.loc[augmented.index[selected["ICUType"]], ICU_TYPE] = np.nan
@@ -83,7 +85,7 @@ def validation_scores(model, frame, target, schema, fold):
     return {name: dict(zip(("ap", "auroc", "rho"), metrics, strict=True)) for name, metrics in rows.items()}
 
 
-def fit_one(schemas, name, fold, recipe, alpha):
+def fit_one(schemas, name, fold, recipe, alpha, *, rates=None, validation_fn=validation_scores):
     frame, target, folds = ab_inputs()
     schema = schemas[name][fold]
     is_final = fold == "final"
@@ -91,9 +93,11 @@ def fit_one(schemas, name, fold, recipe, alpha):
     train_rows = np.ones(len(target), dtype=bool) if is_final else folds != fold_no
     train = frame.loc[train_rows]
     removed = {"GCS": 0, "ICUType": 0}
-    if recipe is not None:
+    if rates is None and recipe is not None:
+        rates = RECIPES[recipe]
+    if rates is not None:
         train, removed = mask_features(
-            train, RECIPES[recipe], np.random.SeedSequence([MASK_SEED, fold_no, 0])
+            train, rates, np.random.SeedSequence([MASK_SEED, fold_no, 0])
         )
     x, missing = encode(train, schema)
     elapsed = time.perf_counter()
@@ -107,7 +111,7 @@ def fit_one(schemas, name, fold, recipe, alpha):
         "deaths": int(target[train_rows].sum()), "newly_masked": removed, "seconds": elapsed,
     }
     if not is_final:
-        row["views"] = validation_scores(estimator, frame.loc[~train_rows], target[~train_rows], schema, fold_no)
+        row["views"] = validation_fn(estimator, frame.loc[~train_rows], target[~train_rows], schema, fold_no)
     print(json.dumps(row), flush=True)
     return estimator if is_final else None, row
 
