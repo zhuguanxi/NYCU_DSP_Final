@@ -10,3 +10,5 @@ P33 逐小時分支提高 Set C AP，eICU Demo 點估計較低。P34 保留原 4
 - 如 P34 入選，就以全 A/B 擬合一次並凍結，沿用 P33 的 Set C 與 eICU Demo 評估。若保留 P33，沿用其既有評估。完整 eICU 仍依 P29 既定規格。
 
 全程 CPU。沿用 [P33 環境](P33_hourly_sequence_protocol.md) 的 P13 CPU PyTorch 與 P33 局部套件，在 `ML` 執行 `& .\artifacts\ma_gbt_runtime\.venv\Scripts\python.exe src/train_sequence_cadence.py`。選型彙總和模型位於 Git 排除的 `ML/artifacts/p34_sequence_cadence/`。
+
+如選出四小時表示，恢復 P21 主環境，再用 `& $py src/evaluate_hourly_sequence.py --cadence` 比較 P28、P33 和 P34。凍結的 P33 會在同一隊列重現，再計算 P34 的配對 AP 和 AUROC 差。

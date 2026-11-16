@@ -1,5 +1,6 @@
 """Evaluate a frozen P33 sequence mixture without fitting on either test cohort."""
 
+import argparse
 import os
 import subprocess
 import tempfile
@@ -25,21 +26,24 @@ from prepare import OUT, sha
 from stress_missingness_c import METRICS, SCENARIOS, apply_masks, load_cohort, mask_draws, score_metrics
 from train_predictive_boosting import AB_FEATURES, from_json, verify_sources
 
-EVAL = ROOT / "evaluation"
+CADENCE = ROOT.parent / "p34_sequence_cadence"
 NEW = "sequence_mixture"
 P28 = "p28"
 WORKER = Path(__file__).with_name("infer_hourly_sequence.py")
 PYTORCH = OUT / "ma_gbt_runtime" / ".venv" / "Scripts" / "python.exe"
 
 
-def infer(stage, model, **arrays):
+def infer(stage, model, *, four_hour=False, **arrays):
     packet, result = stage / "packet.npz", stage / "predictions.npy"
     np.savez_compressed(packet, **arrays)
     env = {
         **os.environ, "CUDA_VISIBLE_DEVICES": "-1", "PYTHONDONTWRITEBYTECODE": "1",
         "PYTHONPATH": os.pathsep.join(map(str, (ROOT / "cpu_deps", WORKER.parent))),
     }
-    subprocess.run([str(PYTORCH), str(WORKER), str(model), str(packet), str(result)], check=True, env=env)
+    command = [str(PYTORCH), str(WORKER), str(model), str(packet), str(result)]
+    if four_hour:
+        command.append("--four-hour")
+    subprocess.run(command, check=True, env=env)
     scores = np.load(result, allow_pickle=False)
     if not (np.isfinite(scores) & (scores >= 0) & (scores <= 1)).all():
         raise ValueError("Invalid frozen CNN output")
@@ -64,7 +68,7 @@ class SetCSequenceMixture:
         return np.column_stack((1 - score, score))
 
 
-def set_c(stage, model, weight, frozen_routed, gcs, rule, prior, reference, p11):
+def set_c(stage, model, weight, frozen_routed, gcs, rule, prior, reference, p11, cadence, p33_control):
     raw, y, _ = load_cohort()
     positions, plan, mask_digest = plan_for(raw)
     if mask_digest != reference["mask_draws_sha256"]:
@@ -80,7 +84,8 @@ def set_c(stage, model, weight, frozen_routed, gcs, rule, prior, reference, p11)
             masked = apply_masks(raw, {key: draw.get(key, positions[key]) for key in variables}, plan, design)
             hidden = hidden_channels(raw, masked)
             all_cases.setdefault(mask_key(hidden), hidden)
-    values = infer(stage, model, cubes=cube, statics=static_values(raw), hidden=np.stack(list(all_cases.values())))
+    static = static_values(raw)
+    values = infer(stage, model, four_hour=cadence, cubes=cube, statics=static, hidden=np.stack(list(all_cases.values())))
     if values.shape != (len(all_cases), len(raw)):
         raise ValueError("Invalid Set C sequence score shape")
     seq_scores = dict(zip(all_cases, values, strict=True))
@@ -89,18 +94,28 @@ def set_c(stage, model, weight, frozen_routed, gcs, rule, prior, reference, p11)
     checked_metrics(y, anchor.predict_proba(raw)[:, 1], baseline["clean"])
     cols = raw.columns.tolist()
     predictor = SetCSequenceMixture(raw, anchor, seq_scores, weight)
+    controls = {**benchmarks(), P28: (anchor, cols)}
+    if p33_control:
+        p33_path, p33_prior = p33_control
+        p33_clean, = infer(stage, p33_path, cubes=cube[None], statics=static[None])
+        p33_score = SetCSequenceMixture(raw, anchor, {mask_key(no_mask): p33_clean}, 0.25)
+        checked_metrics(y, p33_score.predict_proba(raw)[:, 1], p33_prior["set_c"][0])
+        controls["p33"] = (p33_score, cols)
     print(f"Verified {len(all_cases)} distinct Set C sequence masks", flush=True)
-    summary, masks, intervals = compare_c(
-        {NEW: (predictor, cols)}, {**benchmarks(), P28: (anchor, cols)}, reference, p11,
-    )
+    summary, masks, intervals = compare_c({NEW: (predictor, cols)}, controls, reference, p11)
     for row in summary:
         for metric in METRICS:
             row[f"{metric}_p28"] = baseline[row["scenario"]][metric]
             row[f"delta_{metric}_vs_p28"] = row[metric] - row[f"{metric}_p28"]
+    if p33_control:
+        p33_reference = {row["scenario"]: row for row in p33_control[1]["set_c"]}
+        for row in summary:
+            row["ap_p33"] = p33_reference[row["scenario"]]["ap"]
+            row["delta_ap_vs_p33"] = row["ap"] - row["ap_p33"]
     return summary, masks, intervals
 
 
-def external(stage, model, weight, anchor, elastic, prior, columns, extras):
+def external(stage, model, weight, anchor, elastic, prior, columns, extras, cadence, p33_control):
     cubes = []
 
     def extension(records, index):
@@ -123,10 +138,16 @@ def external(stage, model, weight, anchor, elastic, prior, columns, extras):
                 cube = cube.copy()
                 cube[:, GROUPS.index("Urine")] = urine
             cases.append((alignment, mode, frame.loc[:, columns + extras], cube))
-    seq = infer(
-        stage, model, cubes=np.stack([cube for _, _, _, cube in cases]),
-        statics=np.stack([static_values(frame) for _, _, frame, _ in cases]),
-    )
+    batch = {
+        "cubes": np.stack([cube for _, _, _, cube in cases]),
+        "statics": np.stack([static_values(frame) for _, _, frame, _ in cases]),
+    }
+    seq = infer(stage, model, four_hour=cadence, **batch)
+    p33_scores, p33_old = {}, {}
+    if p33_control:
+        p33_path, p33_prior = p33_control
+        p33_seq = infer(stage, p33_path, **batch)
+        p33_old = {(row["alignment"], row["mode"]): row["metrics"] for row in p33_prior["eicu"]}
     if seq.shape != (len(cases), len(y)):
         raise ValueError("Invalid eICU sequence score shape")
     old = {(r["alignment"], r["mode"]): r for r in prior["eicu"]}
@@ -144,6 +165,10 @@ def external(stage, model, weight, anchor, elastic, prior, columns, extras):
         if alignment == "urine_mapped":
             checked_metrics(y, control, old[alignment, mode]["comparison"]["frozen_elastic_mapped"]["metrics"])
         frozen_comparison[key], frozen_reference[key] = scores, control
+        if p33_control:
+            p33_mix = 0.25 * p33_seq[i].astype(float) + 0.75 * p28_score
+            checked_metrics(y, p33_mix, p33_old[alignment, mode])
+            p33_scores[key] = p33_mix
         rows.append({
             "alignment": alignment, "mode": mode, "key": key,
             "metrics": score_metrics(y, scores), "sequence_only": score_metrics(y, seq[i]),
@@ -151,40 +176,59 @@ def external(stage, model, weight, anchor, elastic, prior, columns, extras):
         })
     versus_p28 = paired_intervals(cohort, previous, first)
     versus_elastic = paired_intervals(cohort, frozen_reference, frozen_comparison)
+    if p33_control:
+        versus_p33 = paired_intervals(cohort, p33_scores, first)
     for row in rows:
         key = row.pop("key")
         row["paired_ci_vs_p28"] = versus_p28[key]
         row["paired_ci_vs_frozen_elastic"] = versus_elastic[key]
+        if p33_control:
+            row["p33"] = score_metrics(y, p33_scores[key])
+            row["paired_ci_vs_p33"] = versus_p33[key]
     if source_hashes(DEMO) != raw_hashes:
         raise ValueError("Demo sources changed during scoring")
     return rows, raw_hashes
 
 
-def evaluate():
-    if EVAL.exists():
-        raise FileExistsError(EVAL)
-    fit_path, input_path, model = ROOT / "fitted/manifest.json", PREPARED / "manifest.json", ROOT / "fitted/sequence.pt"
+def evaluate(cadence=False):
+    root = CADENCE if cadence else ROOT
+    output = root / "evaluation"
+    if output.exists():
+        raise FileExistsError(output)
+    fit_path, input_path, model = root / "fitted/manifest.json", PREPARED / "manifest.json", root / "fitted/sequence.pt"
     fit, inputs = from_json(fit_path), from_json(input_path)
     if fit["selected"] is None:
-        print("P33 retained P28. Existing holdout evaluations apply.", flush=True)
+        print("A/B retained the existing candidate. Its frozen holdout evaluation applies.", flush=True)
         return
-    if fit["device"] != "cpu" or sha(input_path) != fit["input_manifest_sha256"] or sha(model) != fit["model_sha256"]:
-        raise ValueError("P33 frozen model and its A/B inputs do not match")
+    bundle_hashes = fit["input_sha256"] if cadence else {input_path.relative_to(OUT).as_posix(): fit["input_manifest_sha256"]}
+    if fit["device"] != "cpu" or sha(model) != fit["model_sha256"] or (cadence and fit["block_hours"] != 4):
+        raise ValueError("Unexpected frozen sequence model")
+    verify_sources(bundle_hashes)
     routed, _, gcs, extras, protected = frozen_models()
     rule, pipe, cols = frozen_ensemble(protected)
     paths = [P28_EVAL / "summary.json", P11 / "summary.json", REFERENCES / "manifest.json"]
     prior, p11, reference = map(from_json, paths)
     protected.update(inputs["source_sha256"])
     protected.update(prior["source_sha256"])
+    protected.update(bundle_hashes)
     protected.update({path.relative_to(OUT).as_posix(): sha(path) for path in (*paths, fit_path, input_path, model)})
+    p33_control = None
+    if cadence:
+        p33_path, p33_eval = ROOT / "fitted/sequence.pt", ROOT / "evaluation/summary.json"
+        p33_prior = from_json(p33_eval)
+        if p33_prior["training"]["selected"] != ["plain", 8, 0.25]:
+            raise ValueError("Unexpected P33 recipe")
+        protected[p33_path.relative_to(OUT).as_posix()] = p33_prior["training"]["model_sha256"]
+        protected[p33_eval.relative_to(OUT).as_posix()] = sha(p33_eval)
+        p33_control = (p33_path, p33_prior)
     verify_sources(protected)
     _, _, weight = fit["selected"]
     columns = pd.read_parquet(AB_FEATURES).columns.tolist()
-    with tempfile.TemporaryDirectory(dir=ROOT, prefix="sequence-evaluation-") as temporary:
+    with tempfile.TemporaryDirectory(dir=root, prefix="sequence-evaluation-") as temporary:
         stage = Path(temporary)
-        c, masks, c_ci = set_c(stage, model, weight, routed, gcs, rule, prior, reference, p11)
+        c, masks, c_ci = set_c(stage, model, weight, routed, gcs, rule, prior, reference, p11, cadence, p33_control)
         anchor = Ensemble(routed, gcs, rule)
-        eicu, raw_sources = external(stage, model, weight, anchor, (pipe, cols), prior, columns, extras)
+        eicu, raw_sources = external(stage, model, weight, anchor, (pipe, cols), prior, columns, extras, cadence, p33_control)
         verify_sources(protected)
         deliverable = stage / "evaluation"
         deliverable.mkdir()
@@ -193,9 +237,11 @@ def evaluate():
             "training": fit, "set_c": c, "set_c_clean_ci": c_ci, "eicu": eicu,
             "source_sha256": protected, "eicu_raw_sha256": raw_sources,
         })
-        deliverable.rename(EVAL)
-    print(f"Completed frozen CPU P33 evaluation at {EVAL}", flush=True)
+        deliverable.rename(output)
+    print(f"Completed frozen CPU sequence evaluation at {output}", flush=True)
 
 
 if __name__ == "__main__":
-    evaluate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--cadence", action="store_true")
+    evaluate(cadence=parser.parse_args().cadence)
