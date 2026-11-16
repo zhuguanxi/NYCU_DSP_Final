@@ -37,7 +37,7 @@ def c_inputs(reference):
     return frame, y, positions, plan, views
 
 
-def xgb_urine_rho(pipeline, frame, schema):
+def xgb_missing_path_hits(pipeline, frame, schema, selected=None):
     raw = frame.loc[:, schema["columns"]]
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", message="Found unknown categories.*")
@@ -47,13 +47,15 @@ def xgb_urine_rho(pipeline, frame, schema):
     model = pipeline.named_steps["model"]
     booster = model.get_booster()
     feature_names = booster.feature_names or [f"f{i}" for i in range(values.shape[1])]
-    indices = {feature_names[i]: i for i, column in enumerate(schema["numeric"]) if column.startswith("Urine__")}
+    indices = {
+        name: i for i, name in enumerate(feature_names) if selected is None or i in selected
+    }
     # XGBoost supplies the actual visited terminal node in each tree.
     terminal = np.asarray(model.apply(values), dtype=np.int64).reshape(len(raw), -1)
     trees = booster.get_dump(dump_format="json")
     if len(trees) < terminal.shape[1]:
         raise ValueError("XGBoost returned more leaf columns than there are trees")
-    relied = np.zeros(len(raw), dtype=bool)
+    relied = np.zeros_like(missing, dtype=bool)
     for j in range(terminal.shape[1]):
         unmatched = set(np.unique(terminal[:, j]))
         pending = [(json.loads(trees[j]), ())]
@@ -63,7 +65,8 @@ def xgb_urine_rho(pipeline, frame, schema):
                 unmatched.discard(node["nodeid"])
                 if path:
                     rows = np.flatnonzero(terminal[:, j] == node["nodeid"])
-                    relied[rows] |= missing[np.ix_(rows, path)].any(axis=1)
+                    cells = np.ix_(rows, path)
+                    relied[cells] |= missing[cells].astype(bool)
                 continue
             if node["split"] in indices:
                 path = (*path, indices[node["split"]])
@@ -71,7 +74,13 @@ def xgb_urine_rho(pipeline, frame, schema):
         if unmatched:
             raise ValueError("An XGBoost terminal node is absent from the corresponding tree")
     probabilities = model.predict_proba(values)[:, 1]
-    return float(relied.mean()), probabilities
+    return relied, probabilities
+
+
+def xgb_urine_rho(pipeline, frame, schema):
+    selected = {i for i, name in enumerate(schema["numeric"]) if name.startswith("Urine__")}
+    relied, probabilities = xgb_missing_path_hits(pipeline, frame, schema, selected)
+    return float(relied.any(axis=1).mean()), probabilities
 
 
 def export_gcs_reference():
