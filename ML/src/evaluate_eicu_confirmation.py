@@ -11,6 +11,8 @@ from evaluate_gcs_routed_temporal import RoutedPredictor
 import joblib
 import pandas as pd
 
+from select_robust_ensemble import OUTPUT as P28, blend
+
 from eicu_demo_features import DEMO, INPUT_TABLES, STAY, build_features, read_table, select_cohort
 from evaluate_eicu_urine_mapping import urine_events, urine_values
 from evaluate_missingness_augmentation import paired_intervals
@@ -21,7 +23,7 @@ from prepare import OUT, sha
 from stress_missingness_c import METRICS, score_metrics
 from train_gcs_routed_temporal import BASELINE, OUTPUT as P26
 from train_missingness_augmentation import from_json
-from train_predictive_boosting import AB_FEATURES, verify_sources
+from train_predictive_boosting import AB_FEATURES, FROZEN, verify_sources
 
 PATIENT = "uniquepid"
 SEED = "p27-eicu-confirmation-20261117"
@@ -112,8 +114,31 @@ def frozen_models():
     )
 
 
-def evaluate(source, patients, smoke):
-    output = OUT / ("p27_demo_smoke" if smoke else "p27_independent_eicu")
+def frozen_ensemble(protected):
+    selection_path = P28 / "manifest.json"
+    evaluation_path = P28 / "evaluation" / "summary.json"
+    selected = from_json(selection_path)
+    if (
+        selected != from_json(evaluation_path)["training"]
+        or (selected["dataset"], selected["device"], selected["final_fits"]) != ("P12 A/B", "cpu", 0)
+        or (selected["rule"] is not None and selected["rule"]["elastic"] != "gcs_only_elastic")
+    ):
+        raise ValueError("Expected the evaluated P28 CPU ensemble")
+    for name, digest in selected["source_sha256"].items():
+        if name in protected and protected[name] != digest:
+            raise ValueError(f"Conflicting source digest for {name}")
+        protected[name] = digest
+    for path in (selection_path, evaluation_path):
+        protected[path.relative_to(OUT).as_posix()] = sha(path)
+    verify_sources(protected)
+    pipe, _, columns = joblib.load(FROZEN / "Elastic.joblib")
+    pipe.named_steps["model"].set_params(device="cpu", n_jobs=2)
+    return selected["rule"], pipe, columns
+
+
+def evaluate(source, patients, smoke, *, ensemble=False):
+    prefix = "p29" if ensemble else "p27"
+    output = OUT / f"{prefix}_{'demo_smoke' if smoke else 'independent_eicu'}"
     if output.exists():
         raise FileExistsError(output)
     if not smoke and source.samefile(DEMO):
@@ -122,6 +147,10 @@ def evaluate(source, patients, smoke):
         if not (source / f"{table}.csv.gz").is_file():
             raise FileNotFoundError(source / f"{table}.csv.gz")
     new, temporal, gcs, extras, protected = frozen_models()
+    if ensemble:
+        rule, original_elastic, original_columns = frozen_ensemble(protected)
+    candidate = "ensemble" if ensemble else "routed"
+    baselines = ("frozen_elastic", "routed", *BASELINES) if ensemble else BASELINES
     original, overlap = choose_cohort(source, patients, smoke)
     input_sha = {table: sha(source / f"{table}.csv.gz") for table in INPUT_TABLES}
     cols = pd.read_parquet(AB_FEATURES).columns.tolist() + extras
@@ -133,13 +162,19 @@ def evaluate(source, patients, smoke):
         coverage = mapped_inputs(stage, cohort, frames)
         y = cohort.y.to_numpy()
         pipe, old_columns = gcs
-        predicted = {name: {} for name in ("routed", *BASELINES)}
+        predicted = {name: {} for name in (candidate, *baselines)}
         for mode, frame in frames.items():
             predicted["routed"][mode] = new.predict_proba(frame.loc[:, cols])[:, 1]
             predicted["temporal"][mode] = temporal.predict_proba(frame.loc[:, cols])[:, 1]
             predicted["gcs_only_elastic"][mode] = no_category_warning(pipe, frame.loc[:, old_columns])
+            if ensemble:
+                predicted["frozen_elastic"][mode] = no_category_warning(original_elastic, frame.loc[:, original_columns])
+                anchor = predicted["routed"][mode]
+                predicted["ensemble"][mode] = anchor if rule is None else blend(
+                    anchor, predicted["gcs_only_elastic"][mode], frame["GCS__count"].eq(0).to_numpy(), rule,
+                )
         intervals = {
-            name: paired_intervals(cohort, predicted[name], predicted["routed"]) for name in BASELINES
+            name: paired_intervals(cohort, predicted[name], predicted[candidate]) for name in baselines
         }
         result = []
         for mode in frames:
@@ -147,8 +182,8 @@ def evaluate(source, patients, smoke):
             result.append({
                 "mode": mode, "metrics": stats,
                 "delta_vs_baseline": {
-                    name: {metric: stats["routed"][metric] - stats[name][metric] for metric in METRICS}
-                    for name in BASELINES
+                    name: {metric: stats[candidate][metric] - stats[name][metric] for metric in METRICS}
+                    for name in baselines
                 },
                 "paired_ci": {name: ci[mode] for name, ci in intervals.items()},
             })
@@ -160,6 +195,7 @@ def evaluate(source, patients, smoke):
         save_json(deliverable / "summary.json", {
             "kind": "demo_runtime_test" if smoke else "patient_disjoint_eicu_confirmation",
             "device": "cpu", "fits": 0, "stays": len(cohort), "patients": int(cohort[PATIENT].nunique()),
+            "candidate": candidate, "primary_baseline": baselines[0],
             "deaths": int(y.sum()), "sample_seed": SEED, "patient_cap": patients,
             "overlap_audit": overlap, "retained_source_rows": copied, "urine_coverage": coverage,
             "rows": result, "source_sha256": protected, "raw_eicu_sha256": input_sha,
@@ -174,8 +210,9 @@ if __name__ == "__main__":
     modes.add_argument("--smoke-demo", action="store_true")
     modes.add_argument("--full-directory", type=Path)
     parser.add_argument("--max-patients", type=int)
+    parser.add_argument("--ensemble", action="store_true", help="Use the frozen P28 comparison (P29)")
     args = parser.parse_args()
     cap = args.max_patients if args.max_patients is not None else (120 if args.smoke_demo else 6000)
     if cap < 2:
         parser.error("--max-patients must be at least 2")
-    evaluate(DEMO if args.smoke_demo else args.full_directory.resolve(), cap, args.smoke_demo)
+    evaluate(DEMO if args.smoke_demo else args.full_directory.resolve(), cap, args.smoke_demo, ensemble=args.ensemble)
