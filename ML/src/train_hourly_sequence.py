@@ -84,8 +84,8 @@ def predict(model, dynamic, static):
         return torch.cat([torch.sigmoid(model(block, base)) for block, base in tensors]).numpy()
 
 
-def fit(data, train, fold, policy, epochs, views, *, alternate_cube=None):
-    torch.manual_seed(SEED + fold)
+def fit(data, train, fold, policy, epochs, views, *, alternate_cube=None, seed=SEED):
+    torch.manual_seed(seed + fold)
     cube, static = data["cube"][train], data["static"][train]
     observations = cube.transpose(0, 2, 1).reshape(-1, cube.shape[1])
     model = HourlyCNN(*moments(observations), *moments(static)).cpu()
