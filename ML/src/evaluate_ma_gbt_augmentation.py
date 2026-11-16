@@ -90,11 +90,16 @@ def compare_eicu(new_pipes, original_pipes, reference, prior):
     prior_rows = {(row["mode"], row["model"]): row for row in prior["eicu"]}
     comparators = {"ma": baseline, "gcs": {key: gcs[key].to_numpy() for key in baseline}}
     scores, rhos = eicu_scores(new_pipes, frames)
+    targets = cohort.y.to_numpy()
     for key in scores:
         row = prior_rows[tuple(key.split("_"))]
         np.testing.assert_allclose(original_rhos[key], row["ma_rho"], rtol=0, atol=1e-12)
         for tag, probabilities in comparators.items():
-            observed = score_metrics(cohort.y.to_numpy(), probabilities[key])
+            values = probabilities[key]
+            observed = score_metrics(targets, values)
+            # P11 computed Brier in the saved probabilities' float32 precision.
+            # sklearn 1.5 promotes those inputs to float64 before averaging.
+            observed["brier"] = float(np.mean(np.square(targets.astype(values.dtype) - values)))
             np.testing.assert_allclose(
                 [observed[m] for m in METRICS], [row[f"{m}_{tag}"] for m in METRICS], rtol=0, atol=1e-12
             )
