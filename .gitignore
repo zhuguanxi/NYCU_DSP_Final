@@ -44,3 +44,6 @@ checkpoints/
 
 # Local Python runtime
 .venv-runtime/
+
+# Downloaded datasets
+dataset/
