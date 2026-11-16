@@ -63,7 +63,7 @@ def matrix(raw, altered, temporal):
     return native_inputs(altered.join(temporal_view(raw, altered, temporal)), "full")
 
 
-def train_one(tag, x, timing, y, seed):
+def train_one(tag, x, timing, y, seed, *, extra=None):
     alg, aug, blind = SPECS[tag]
     base = gcs_full(x, seed) if blind else x
     native = matrix(x, base, timing)
@@ -84,6 +84,14 @@ def train_one(tag, x, timing, y, seed):
         y = np.r_[y, y[changed]]
         if not np.isclose(weight.sum(), len(base)):
             raise ValueError("Augmentation altered total sample weight")
+    if extra is not None:
+        added, outcomes = extra
+        if added.ndim != 2 or added.shape[1] != native.shape[1] or added.shape[0] != len(outcomes):
+            raise ValueError("External observations do not match the training schema")
+        native = np.concatenate((native, added))
+        if weight is not None:
+            weight = np.r_[weight, np.ones(len(outcomes))]
+        y = np.r_[y, outcomes]
     model = estimator(alg, ROUNDS[-1])
     if alg.startswith(("xgb", "lgb")):
         model.set_params(n_jobs=2)
