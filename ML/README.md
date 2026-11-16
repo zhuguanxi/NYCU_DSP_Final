@@ -10,6 +10,7 @@
 - [P35 權重門檻](reports/P35_sequence_gate_results.md) 與 [P36 通道別增強](reports/P36_profile_sequence_results.md) 用 A/B 比較 eICU 觀測小時分布模擬，兩輪均維持固定四小時模型。
 - [P37 序列分數修正](reports/P37_sequence_blend_results.md) 用 A/B 選擇對數勝算修正幅度，保留原模型後重跑 Set C 和 eICU Demo。
 - [P38 序列通道消融](reports/P38_sequence_channel_ablation_results.md) 比較從四小時卷積移除尿量、呼吸率及兩者，表格模型沿用原輸入。
+- [P39 序列種子與平均](reports/P39_sequence_seed_ensemble_results.md) 用 A/B 三折比較通道消融的種子敏感度及三網路平均。
 - [P29 完整 eICU 確認規格](reports/P29_eicu_ensemble_confirmation_protocol.md) 有 CPU 執行入口。正式結果等已授權的 eICU v2.0 本機資料，先排除所有 Demo 患者再計分。
 
 組員分享版（2026-10-18）：[前處理、方法、實驗設定、結果與討論](實驗報告_組員分享版.md)。含實際摘要定義、模型參數、切分與統計方式、C 結果及重現入口，供組內審閱。
