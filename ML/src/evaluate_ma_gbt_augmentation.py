@@ -78,6 +78,14 @@ def eicu_scores(pipes, frames):
     return scores, rhos
 
 
+def reference_metrics(targets, values):
+    observed = score_metrics(targets, values)
+    # P11 computed Brier in the saved probabilities' float32 precision.
+    # sklearn 1.5 promotes those inputs to float64 before averaging.
+    observed["brier"] = float(np.mean(np.square(targets.astype(values.dtype) - values)))
+    return observed
+
+
 def compare_eicu(new_pipes, original_pipes, reference, prior):
     cohort, frames = eicu_inputs()
     gcs_path = REFERENCES / "gcs_eicu_scores.parquet"
@@ -95,11 +103,7 @@ def compare_eicu(new_pipes, original_pipes, reference, prior):
         row = prior_rows[tuple(key.split("_"))]
         np.testing.assert_allclose(original_rhos[key], row["ma_rho"], rtol=0, atol=1e-12)
         for tag, probabilities in comparators.items():
-            values = probabilities[key]
-            observed = score_metrics(targets, values)
-            # P11 computed Brier in the saved probabilities' float32 precision.
-            # sklearn 1.5 promotes those inputs to float64 before averaging.
-            observed["brier"] = float(np.mean(np.square(targets.astype(values.dtype) - values)))
+            observed = reference_metrics(targets, probabilities[key])
             np.testing.assert_allclose(
                 [observed[m] for m in METRICS], [row[f"{m}_{tag}"] for m in METRICS], rtol=0, atol=1e-12
             )

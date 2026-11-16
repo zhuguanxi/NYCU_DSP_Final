@@ -89,9 +89,12 @@ def fit_one(schemas, name, fold, recipe, alpha):
     is_final = fold == "final"
     fold_no = len(FOLD_IDS) if is_final else int(fold)
     train_rows = np.ones(len(target), dtype=bool) if is_final else folds != fold_no
-    train, removed = mask_features(
-        frame.loc[train_rows], RECIPES[recipe], np.random.SeedSequence([MASK_SEED, fold_no, 0])
-    )
+    train = frame.loc[train_rows]
+    removed = {"GCS": 0, "ICUType": 0}
+    if recipe is not None:
+        train, removed = mask_features(
+            train, RECIPES[recipe], np.random.SeedSequence([MASK_SEED, fold_no, 0])
+        )
     x, missing = encode(train, schema)
     elapsed = time.perf_counter()
     with fast_scalar_splits():
