@@ -42,6 +42,12 @@ def confirm_namespace(source):
     return set(demo[PATIENT].astype(str)), len(demo)
 
 
+def verify_demo_patient_reference(expected):
+    patient_path = DEMO / "patient.csv.gz"
+    if sha(patient_path) != expected:
+        raise ValueError("The Demo patient reference differs from the frozen P28 evaluation")
+
+
 def choose_cohort(source, patients, smoke):
     cohort, _, _ = select_cohort(source)
     excluded, verified = (set(), 0) if smoke else confirm_namespace(source)
@@ -149,8 +155,12 @@ def evaluate(source, patients, smoke, *, ensemble=False, sequence=None):
         if not (source / f"{table}.csv.gz").is_file():
             raise FileNotFoundError(source / f"{table}.csv.gz")
     new, temporal, gcs, extras, protected = frozen_models()
+    demo_patient_sha = None
     if ensemble:
         rule, original_elastic, original_columns = frozen_ensemble(protected)
+        p28_evaluation = from_json(P28 / "evaluation" / "summary.json")
+        demo_patient_sha = p28_evaluation["eicu_raw_sha256"]["patient.csv.gz"]
+        verify_demo_patient_reference(demo_patient_sha)
     if sequence is not None:
         for name, digest in sequence.source_sha256.items():
             if name in protected and protected[name] != digest:
@@ -159,8 +169,10 @@ def evaluate(source, patients, smoke, *, ensemble=False, sequence=None):
         verify_sources(protected)
     candidate = "ensemble" if ensemble else "routed"
     baselines = ("frozen_elastic", "routed", *BASELINES) if ensemble else BASELINES
-    original, overlap = choose_cohort(source, patients, smoke)
     input_sha = {table: sha(source / f"{table}.csv.gz") for table in INPUT_TABLES}
+    original, overlap = choose_cohort(source, patients, smoke)
+    if demo_patient_sha is not None:
+        overlap["demo_patient_sha256"] = demo_patient_sha
     cols = pd.read_parquet(AB_FEATURES).columns.tolist() + extras
     with tempfile.TemporaryDirectory(dir=OUT, prefix="eicu-confirmation-") as temporary:
         stage = Path(temporary)
@@ -211,6 +223,8 @@ def evaluate(source, patients, smoke, *, ensemble=False, sequence=None):
                 }
             result.append(row)
         verify_sources(protected)
+        if demo_patient_sha is not None:
+            verify_demo_patient_reference(demo_patient_sha)
         if any(sha(source / f"{table}.csv.gz") != digest for table, digest in input_sha.items()):
             raise ValueError("The supplied eICU files changed during evaluation")
         deliverable = stage / "aggregate"

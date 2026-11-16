@@ -4,7 +4,7 @@
 
 - P38 使用原凍結的 18 通道四小時序列、靜態欄位、25% 權重與 ±2 對數勝算差上限。尿量與呼吸率只從卷積輸入移除。P28 表格成分沿用 P29 的尿量對齊及同一批 stay。
 - 次要比較為同一 stay 的 P38 減 P28，以及 P38 減凍結 Elastic。主要讀取整點 AP，在原始間隔另報同樣比較。AP 與 AUROC 的區間沿用 1,000 次患者層級配對 bootstrap。另報 Brier 和 0.5 門檻敏感度。這是次要分析，須連同 P29 主要對照及區間解讀。
-- Demo 試跑涵蓋全部合格 Demo 患者，逐值核對既有尿量對齊的 P28、P38 和原凍結 Elastic 指標。正式結果必須先與 Demo 核對識別鍵，再排除所有 Demo 患者。任何對照都不做再訓練。
+- Demo 試跑涵蓋全部合格 Demo 患者，逐值核對既有尿量對齊的 P28、P38 和原凍結 Elastic 指標。正式結果用 P28 評估時的 Demo 患者表雜湊核對排除參照，再以兩個版本的識別鍵排除所有 Demo 患者。任何對照都不做再訓練。
 
 在 `ML` 使用 [P21 CPU 環境](P21_predictive_boosting_protocol.md) 及 [P33 的 Torch CPU 產物](P33_hourly_sequence_protocol.md)。
 
