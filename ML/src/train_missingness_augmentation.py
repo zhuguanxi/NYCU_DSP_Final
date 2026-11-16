@@ -1,4 +1,4 @@
-"""Train GCS and urine missingness augmentation using P12 A/B only."""
+"""Train missingness augmentation using P12 A/B only."""
 
 import argparse
 import json
@@ -31,12 +31,12 @@ FROZEN = OUT / "final_models"
 FOLD_IDS = (0, 1, 2)
 MODELS = ("Full", "Elastic")
 DEFAULT_OUTPUT = OUT / "missingness_augmentation_AB"
+GCS_ONLY_OUTPUT = OUT / "gcs_only_augmentation_AB"
 CANDIDATES = {
     "moderate": {"GCS": 25, "Urine": 75},
     "strong": {"GCS": 60, "Urine": 100},
 }
 VALIDATION_MASKS = {"GCS": 25, "Urine": 100}
-FULL_MASKS = {"GCS": 100, "Urine": 100}
 SEED = 2026111601
 CLEAN_TOLERANCE = 0.01
 CONDITIONS = ("clean", "partial_joint", "full_joint")
@@ -91,9 +91,9 @@ def mask_observed(features, rates, seed):
     return masked, positions, {variable: len(positions) for variable, positions in masks.items()}
 
 
-def validation_views(features, fold):
-    partial = [mask_observed(features, VALIDATION_MASKS, SEED + 100 * fold + repeat + 20)[0] for repeat in range(3)]
-    full = mask_observed(features, FULL_MASKS, SEED + 100 * fold + 40)[0]
+def validation_views(features, fold, validation_masks=VALIDATION_MASKS):
+    partial = [mask_observed(features, validation_masks, SEED + 100 * fold + repeat + 20)[0] for repeat in range(3)]
+    full = mask_observed(features, dict.fromkeys(validation_masks, 100), SEED + 100 * fold + 40)[0]
     return {"clean": [features], "partial_joint": partial, "full_joint": [full]}
 
 
@@ -130,7 +130,7 @@ def validate_oof(pipe, columns, x, y, fold, oof):
     np.testing.assert_array_equal(score, original.score.to_numpy(dtype=score.dtype))
 
 
-def cv_family(name, candidates, x, y, folds, folder, feature_sha):
+def cv_family(name, candidates, x, y, folds, folder, feature_sha, validation_masks):
     cfg = from_json(folder / "config.json")
     expected = {"model": "XGBoost", "family": 2, "strategy": name, "nfold": 3, "adult": False, "data_sha": feature_sha}
     if any(cfg[key] != value for key, value in expected.items()):
@@ -145,10 +145,10 @@ def cv_family(name, candidates, x, y, folds, folder, feature_sha):
         train_x, train_y, valid_x, valid_y = x.loc[untouched], y[untouched], x.loc[~untouched], y[~untouched]
         template, columns = verified_template(folder / f"fold{fold}.joblib", feature_sha)
         validate_oof(template, columns, valid_x, valid_y, fold, oof)
-        views = validation_views(valid_x, fold)
+        views = validation_views(valid_x, fold, validation_masks)
         results.extend({"model": name, "recipe": "frozen", "fold": fold, **r} for r in evaluate_fold(template, columns, views, valid_y))
-        for recipe in candidates:
-            masked, changed, hidden = mask_observed(train_x, CANDIDATES[recipe], SEED + 100 * fold)
+        for recipe, rates in candidates.items():
+            masked, changed, hidden = mask_observed(train_x, rates, SEED + 100 * fold)
             augmented, elapsed = fit_augmented(template, columns, train_x, train_y, masked, changed)
             results.extend({"model": name, "recipe": recipe, "fold": fold, **r} for r in evaluate_fold(augmented, columns, views, valid_y))
             fit_log.append({
@@ -159,10 +159,10 @@ def cv_family(name, candidates, x, y, folds, folder, feature_sha):
     return results, fit_log
 
 
-def choose_recipe(results):
+def choose_recipe(results, candidates=CANDIDATES, clean_tolerance=CLEAN_TOLERANCE):
     rows = pd.DataFrame(results).groupby(["recipe", "condition"]).ap.mean().unstack()
     table = {}
-    for name in ("frozen", *CANDIDATES):
+    for name in ("frozen", *candidates):
         val = rows.loc[name]
         table[name] = {
             "clean_ap": float(val.clean),
@@ -171,18 +171,21 @@ def choose_recipe(results):
             "masked_ap": float((val.partial_joint + val.full_joint) / 2),
             "clean_ap_delta": float(val.clean - rows.loc["frozen", "clean"]),
         }
-    passed = [name for name in CANDIDATES if table[name]["clean_ap_delta"] >= -CLEAN_TOLERANCE]
+    passed = [name for name in candidates if table[name]["clean_ap_delta"] >= -clean_tolerance]
     ranking = "masked_ap" if passed else "clean_ap"
-    selected = max(passed or list(CANDIDATES), key=lambda name: table[name][ranking])
+    selected = max(passed or list(candidates), key=lambda name: table[name][ranking])
     return selected, bool(passed), table
 
 
-def run(output):
+def run(output, gcs_only=False):
     output = output.resolve()
     root = OUT.resolve()
     if output == root or not output.is_relative_to(root) or output.exists() or not output.parent.is_dir():
         raise ValueError("Use a new output directory under ML/artifacts")
 
+    candidates = {name: {"GCS": rates["GCS"]} for name, rates in CANDIDATES.items()} if gcs_only else CANDIDATES
+    validation_masks = {"GCS": VALIDATION_MASKS["GCS"]} if gcs_only else VALIDATION_MASKS
+    clean_tolerance = 0.005 if gcs_only else CLEAN_TOLERANCE
     runs = from_json(AB_SELECTION)
     folders = {name: OUT / "runs" / runs[f"XGBoost_{name}"] for name in MODELS}
     originals = {name: FROZEN / f"{name}.joblib" for name in MODELS}
@@ -196,13 +199,15 @@ def run(output):
     x, y, folds = ab_inputs()
 
     with threadpool_limits(limits=2):
-        full_rows, full_fits = cv_family("Full", CANDIDATES, x, y, folds, folders["Full"], feature_sha)
-        selected, guard, full_cv = choose_recipe(full_rows)
+        full_rows, full_fits = cv_family("Full", candidates, x, y, folds, folders["Full"], feature_sha, validation_masks)
+        selected, guard, full_cv = choose_recipe(full_rows, candidates, clean_tolerance)
         print(f"A/B Full selected {selected}. Clean guard passed: {guard}.", flush=True)
-        elastic_rows, elastic_fits = cv_family("Elastic", (selected,), x, y, folds, folders["Elastic"], feature_sha)
+        elastic_rows, elastic_fits = cv_family(
+            "Elastic", {selected: candidates[selected]}, x, y, folds, folders["Elastic"], feature_sha, validation_masks,
+        )
 
         fit_log = full_fits + elastic_fits
-        masked, changed, hidden = mask_observed(x, CANDIDATES[selected], SEED + 1000)
+        masked, changed, hidden = mask_observed(x, candidates[selected], SEED + 1000)
         final_meta = from_json(FROZEN / "metadata.json")
         with tempfile.TemporaryDirectory(dir=output.parent, prefix="ab-augmentation-") as temporary:
             directory = Path(temporary).resolve() / "run"
@@ -230,7 +235,9 @@ def run(output):
             manifest = {
                 "training_cohort": "P12 A/B", "stays": len(x), "deaths": int(y.sum()),
                 "device": "cpu", "threads": 2, "seed": SEED, "selected_recipe": selected,
-                "selected_rates_percent": CANDIDATES[selected], "full_guard_passed": guard,
+                "selected_rates_percent": candidates[selected], "full_guard_passed": guard,
+                "candidate_rates_percent": candidates, "validation_partial_rates_percent": validation_masks,
+                "clean_ap_tolerance": clean_tolerance,
                 "full_cv": full_cv, "new_fits": len(fit_log),
                 "original_model_sha256": {name: source_hashes[path] for name, path in originals.items()},
                 "model_sha256": model_hashes,
@@ -245,5 +252,8 @@ def run(output):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    run(parser.parse_args().output)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--gcs-only", action="store_true", help="Augment only GCS and select against GCS-masked A/B validation")
+    args = parser.parse_args()
+    default = GCS_ONLY_OUTPUT if args.gcs_only else DEFAULT_OUTPUT
+    run(args.output or default, gcs_only=args.gcs_only)
