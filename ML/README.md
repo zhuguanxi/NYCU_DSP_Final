@@ -6,6 +6,7 @@
 - [Set C 固定全遮蔽的配對比較](reports/P30_full_mask_paired_results.md) 報告相對凍結對照的 AP 與 AUROC 差及區間。
 - [eICU Demo 混合模型](reports/P28_robust_ensemble_results.md) 與 [GCS、通氣欄位對齊](reports/P32_eicu_ventilation_results.md) 保留兩種取樣與各對照的結果。
 - [P33 逐小時序列模型](reports/P33_hourly_sequence_results.md) 提高 Set C 未遮蔽 AP，eICU Demo 的 AP 點估計較 P28 低。
+- [P34 四小時序列與量測分布](reports/P34_sequence_cadence_results.md) 比較等量隨機與末段遮蔽，檢查逐小時模型的跨庫差異。
 - [P29 完整 eICU 確認規格](reports/P29_eicu_ensemble_confirmation_protocol.md) 有 CPU 執行入口。正式結果等已授權的 eICU v2.0 本機資料，先排除所有 Demo 患者再計分。
 
 組員分享版（2026-10-18）：[前處理、方法、實驗設定、結果與討論](實驗報告_組員分享版.md)。含實際摘要定義、模型參數、切分與統計方式、C 結果及重現入口，供組內審閱。
