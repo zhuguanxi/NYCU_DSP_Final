@@ -24,7 +24,7 @@ OUTPUT = OUT / "p23_eicu_explicit_urine"
 URINE_PATH = "flowsheet|flowsheet cell labels|i&o|output (ml)|urine"
 
 
-def urine_values(index):
+def urine_events(index):
     frame, late = windowed(
         DEMO, "intakeOutput", index, "intakeoutputoffset",
         ("cellpath", "celllabel", "cellvaluenumeric"), "intakeoutputentryoffset",
@@ -32,6 +32,13 @@ def urine_values(index):
     select = normalize(frame.cellpath).eq(URINE_PATH) & normalize(frame.celllabel).eq("urine")
     raw = numeric_events(chart_events(frame, select, "Urine", "cellvaluenumeric"))
     events = merge_minutes(raw)
+    return events, {
+        "matched_numeric_rows": len(raw), "deduplicated_events": len(events),
+        "observed_stays": events[STAY].nunique(), "cohort_stays": len(index), "all_io_rows_excluded_as_late": late,
+    }
+
+
+def urine_values(index, events):
     grouped = {key: subset for key, subset in events.groupby(STAY, sort=False)}
     rows = {}
     for stay in index:
@@ -47,10 +54,7 @@ def urine_values(index):
     output = output.reindex(index)
     if not output.index.equals(index) or int(output["Urine__count"].sum()) != len(events):
         raise ValueError("Urine event alignment changed")
-    return output, {
-        "matched_numeric_rows": len(raw), "deduplicated_events": len(events),
-        "observed_stays": len(grouped), "cohort_stays": len(index), "all_io_rows_excluded_as_late": late,
-    }
+    return output
 
 
 def run():
@@ -69,7 +73,8 @@ def run():
         raise ValueError("Expected the frozen GCS-only models")
     cohort, frames = eicu_inputs()
     y = cohort.y.to_numpy()
-    urine, coverage = urine_values(cohort.index)
+    events, coverage = urine_events(cohort.index)
+    urine = urine_values(cohort.index, events)
     remapped = {}
     for mode, frame in frames.items():
         if frame["Urine__count"].ne(0).any():
