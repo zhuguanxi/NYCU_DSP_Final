@@ -4,6 +4,7 @@ import argparse
 import os
 import subprocess
 import tempfile
+from dataclasses import dataclass
 from pathlib import Path
 
 from prepare_hourly_sequence import GROUPS, ID, MINUTE, PREPARED, ROOT, VALUE, hidden_channels, hourly_cube, static_values
@@ -36,6 +37,14 @@ WORKER = Path(__file__).with_name("infer_hourly_sequence.py")
 PYTORCH = OUT / "ma_gbt_runtime" / ".venv" / "Scripts" / "python.exe"
 
 
+@dataclass(frozen=True)
+class SequenceReference:
+    summary: dict
+    model: Path | None = None
+    channels: list[int] | None = None
+    rule: dict | None = None
+
+
 def infer(stage, model, *, four_hour=False, channels=None, **arrays):
     packet, result = stage / "packet.npz", stage / "predictions.npy"
     if channels is not None:
@@ -47,14 +56,18 @@ def infer(stage, model, *, four_hour=False, channels=None, **arrays):
         **os.environ, "CUDA_VISIBLE_DEVICES": "-1", "PYTHONDONTWRITEBYTECODE": "1",
         "PYTHONPATH": os.pathsep.join(map(str, (ROOT / "cpu_deps", WORKER.parent))),
     }
-    command = [str(PYTORCH), str(WORKER), str(model), str(packet), str(result)]
-    if four_hour:
-        command.append("--four-hour")
-    subprocess.run(command, check=True, env=env)
-    scores = np.load(result, allow_pickle=False)
-    if not (np.isfinite(scores) & (scores >= 0) & (scores <= 1)).all():
-        raise ValueError("Invalid frozen CNN output")
-    return scores
+    members = model if isinstance(model, tuple) else (model,)
+    predictions = []
+    for member in members:
+        command = [str(PYTORCH), str(WORKER), str(member), str(packet), str(result)]
+        if four_hour:
+            command.append("--four-hour")
+        subprocess.run(command, check=True, env=env)
+        scores = np.load(result, allow_pickle=False)
+        if not (np.isfinite(scores) & (scores >= 0) & (scores <= 1)).all():
+            raise ValueError("Invalid frozen CNN output")
+        predictions.append(scores)
+    return predictions[0] if len(predictions) == 1 else np.mean(predictions, axis=0, dtype=np.float64)
 
 
 def mask_key(hidden):
@@ -82,7 +95,7 @@ class SetCSequenceMixture:
 
 def set_c(
     stage, model, weight, frozen_routed, gcs, rule, prior, reference, p11, cadence, p33_control,
-    *, blend_rule=None, fixed_control=None, channels=None, fixed_model=None,
+    *, blend_rule=None, fixed_control=None, channels=None,
 ):
     raw, y, _ = load_cohort()
     positions, plan, mask_digest = plan_for(raw)
@@ -115,11 +128,14 @@ def set_c(
     controls = {**benchmarks(), P28: (anchor, cols)}
     if fixed_control:
         fixed_values = seq_scores
-        if fixed_model is not None:
-            (fixed_clean,) = infer(stage, fixed_model, four_hour=cadence, cubes=cube[None], statics=static[None])
+        if fixed_control.model is not None:
+            (fixed_clean,) = infer(
+                stage, fixed_control.model, four_hour=cadence, channels=fixed_control.channels,
+                cubes=cube[None], statics=static[None],
+            )
             fixed_values = {mask_key(no_mask): fixed_clean}
-        fixed = SetCSequenceMixture(raw, anchor, fixed_values, 0.25)
-        checked_metrics(y, fixed.predict_proba(raw)[:, 1], fixed_control["set_c"][0])
+        fixed = SetCSequenceMixture(raw, anchor, fixed_values, 0.25, fixed_control.rule)
+        checked_metrics(y, fixed.predict_proba(raw)[:, 1], fixed_control.summary["set_c"][0])
         controls["fixed_sequence"] = (fixed, cols)
     if p33_control:
         p33_path, p33_prior = p33_control
@@ -139,7 +155,7 @@ def set_c(
             row["ap_p33"] = p33_reference[row["scenario"]]["ap"]
             row["delta_ap_vs_p33"] = row["ap"] - row["ap_p33"]
     if fixed_control:
-        fixed_reference = {row["scenario"]: row for row in fixed_control["set_c"]}
+        fixed_reference = {row["scenario"]: row for row in fixed_control.summary["set_c"]}
         for row in summary:
             row["ap_fixed_sequence"] = fixed_reference[row["scenario"]]["ap"]
             row["delta_ap_vs_fixed_sequence"] = row["ap"] - row["ap_fixed_sequence"]
@@ -148,7 +164,7 @@ def set_c(
 
 def external(
     stage, model, weight, anchor, elastic, prior, columns, extras, cadence, p33_control,
-    *, blend_rule=None, fixed_control=None, channels=None, fixed_model=None,
+    *, blend_rule=None, fixed_control=None, channels=None,
 ):
     cubes = []
 
@@ -187,8 +203,10 @@ def external(
     old = {(r["alignment"], r["mode"]): r for r in prior["eicu"]}
     fixed_scores = {}
     if fixed_control:
-        fixed_seq = seq if fixed_model is None else infer(stage, fixed_model, four_hour=cadence, **batch)
-        fixed_reference = {(row["alignment"], row["mode"]): row["metrics"] for row in fixed_control["eicu"]}
+        fixed_seq = seq if fixed_control.model is None else infer(
+            stage, fixed_control.model, four_hour=cadence, channels=fixed_control.channels, **batch,
+        )
+        fixed_reference = {(row["alignment"], row["mode"]): row["metrics"] for row in fixed_control.summary["eicu"]}
     rows = []
     first, previous = {}, {}
     frozen_comparison, frozen_reference = {}, {}
@@ -202,7 +220,10 @@ def external(
             if blend_rule is not None else weight * seq[i].astype(float) + (1 - weight) * p28_score
         )
         if fixed_control:
-            fixed_scores[key] = 0.25 * fixed_seq[i].astype(float) + 0.75 * p28_score
+            fixed_scores[key] = (
+                blend(p28_score, fixed_seq[i], fixed_control.rule)
+                if fixed_control.rule is not None else 0.25 * fixed_seq[i].astype(float) + 0.75 * p28_score
+            )
             checked_metrics(y, fixed_scores[key], fixed_reference[alignment, mode])
         first[key], previous[key] = scores, p28_score
         control = no_category_warning(pipe, frame.loc[:, cols])
@@ -293,19 +314,20 @@ def evaluate(cadence=False, use_blend=False, ablation=False):
     fixed_control, fixed_model = None, None
     if selection is not None or ablation:
         fixed_path = reference_root / "evaluation" / "summary.json"
-        fixed_control = from_json(fixed_path)
-        if fixed_control["training"]["selected"] != ["plain", 8, 0.25]:
+        fixed_summary = from_json(fixed_path)
+        if fixed_summary["training"]["selected"] != ["plain", 8, 0.25]:
             raise ValueError("Unexpected frozen reference for the selected sequence branch")
         protected[fixed_path.relative_to(OUT).as_posix()] = sha(fixed_path)
         if ablation:
             fixed_model = reference_root / "fitted" / "sequence.pt"
-            protected[fixed_model.relative_to(OUT).as_posix()] = fixed_control["training"]["model_sha256"]
+            protected[fixed_model.relative_to(OUT).as_posix()] = fixed_summary["training"]["model_sha256"]
         else:
-            if fixed_control["training"] != fit:
+            if fixed_summary["training"] != fit:
                 raise ValueError("P37 checkpoint recipe differs from its frozen evaluation")
             verify_sources(selection["input_sha256"])
             protected.update(selection["input_sha256"])
             protected[selection_path.relative_to(OUT).as_posix()] = sha(selection_path)
+        fixed_control = SequenceReference(fixed_summary, fixed_model)
     p33_control = None
     if cadence:
         p33_path, p33_eval = ROOT / "fitted/sequence.pt", ROOT / "evaluation/summary.json"
@@ -322,12 +344,12 @@ def evaluate(cadence=False, use_blend=False, ablation=False):
         stage = Path(temporary)
         c, masks, c_ci = set_c(
             stage, model, weight, routed, gcs, rule, prior, reference, p11, cadence, p33_control,
-            blend_rule=blend_rule, fixed_control=fixed_control, channels=channels, fixed_model=fixed_model,
+            blend_rule=blend_rule, fixed_control=fixed_control, channels=channels,
         )
         anchor = Ensemble(routed, gcs, rule)
         eicu, raw_sources = external(
             stage, model, weight, anchor, (pipe, cols), prior, columns, extras, cadence, p33_control,
-            blend_rule=blend_rule, fixed_control=fixed_control, channels=channels, fixed_model=fixed_model,
+            blend_rule=blend_rule, fixed_control=fixed_control, channels=channels,
         )
         verify_sources(protected)
         deliverable = stage / "evaluation"

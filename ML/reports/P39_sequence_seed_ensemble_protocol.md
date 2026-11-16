@@ -4,6 +4,6 @@ P38 在 A/B 移除兩項的加權 AP 只比僅移除尿量高約 0.0000065。這
 
 - 比較四小時卷積的原 20 通道、移除尿量、移除尿量與呼吸率。用原種子 2026111733 和固定加 100、200 的種子，各跑原 A/B 三折。原種子逐值重現 P37、P38 的折外 AP。架構、資料擾動、八回合設定與 CPU 環境沿用。
 - 每種通道配置把三個卷積的機率取等權平均，再套 P37 的修正公式。固定序列權重 25%、對數勝算差上限 ±2。P28 表格輸入和分數維持原樣。各種子分別記錄 AP，候選平均按原 P37 八種情境的加權 AP 排序。
-- P33、P34、P37、P38 納入排序，P28 供對照。沿用相對原 P33 的兩個 AP 門檻。選中三網路平均後，才用完整 A/B 重擬三個種子並凍結，沿用原 Set C 遮蔽及 eICU Demo 設定。若維持既有模型，沿用已完成的評估。
+- P33、P34、P37、P38 納入排序，P28 供對照。沿用相對原 P33 的兩個 AP 門檻。選中三網路平均後，才用完整 A/B 重擬三個種子並凍結，沿用原 Set C 遮蔽及 eICU Demo 設定，主要對照 P38。若維持 P38，沿用原 Set C 結果，重現 P38 和 P37 在 Demo 相同病例的分數，補齊兩者原先只有點估計的 AP 配對差。兩種情況均沿用 1,000 次患者配對 bootstrap。
 
-在 `ML` 使用 [P33 的 Torch CPU 環境](P33_hourly_sequence_protocol.md)，執行 `src/train_sequence_seed_ensemble.py`。彙總和新模型保留在 Git 排除的 `artifacts/p39_sequence_seed_ensemble/fitted/`。
+在 `ML` 使用 [P33 的 Torch CPU 環境](P33_hourly_sequence_protocol.md)，執行 `src/train_sequence_seed_ensemble.py`。還原 [P21 的 CPU 環境](P21_predictive_boosting_protocol.md) 後，執行 `& $py src/evaluate_sequence_seed_ensemble.py`。彙總和新模型保留在 Git 排除的 `artifacts/p39_sequence_seed_ensemble/`。
