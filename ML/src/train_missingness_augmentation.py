@@ -32,6 +32,7 @@ FOLD_IDS = (0, 1, 2)
 MODELS = ("Full", "Elastic")
 DEFAULT_OUTPUT = OUT / "missingness_augmentation_AB"
 GCS_ONLY_OUTPUT = OUT / "gcs_only_augmentation_AB"
+URINE_ONLY_OUTPUT = OUT / "urine_only_augmentation_AB"
 CANDIDATES = {
     "moderate": {"GCS": 25, "Urine": 75},
     "strong": {"GCS": 60, "Urine": 100},
@@ -177,15 +178,27 @@ def choose_recipe(results, candidates=CANDIDATES, clean_tolerance=CLEAN_TOLERANC
     return selected, bool(passed), table
 
 
-def run(output, gcs_only=False):
+def run(output, gcs_only=False, *, urine_only=False):
     output = output.resolve()
     root = OUT.resolve()
     if output == root or not output.is_relative_to(root) or output.exists() or not output.parent.is_dir():
         raise ValueError("Use a new output directory under ML/artifacts")
 
-    candidates = {name: {"GCS": rates["GCS"]} for name, rates in CANDIDATES.items()} if gcs_only else CANDIDATES
-    validation_masks = {"GCS": VALIDATION_MASKS["GCS"]} if gcs_only else VALIDATION_MASKS
-    clean_tolerance = 0.005 if gcs_only else CLEAN_TOLERANCE
+    if gcs_only and urine_only:
+        raise ValueError("Select one single-channel mode")
+    channel = None
+    if gcs_only:
+        channel = "GCS"
+    elif urine_only:
+        channel = "Urine"
+    if channel:
+        candidates = {name: {channel: rates[channel]} for name, rates in CANDIDATES.items()}
+        validation_masks = {channel: CANDIDATES["moderate"][channel]}
+        clean_tolerance = 0.005
+    else:
+        candidates = CANDIDATES
+        validation_masks = VALIDATION_MASKS
+        clean_tolerance = CLEAN_TOLERANCE
     runs = from_json(AB_SELECTION)
     folders = {name: OUT / "runs" / runs[f"XGBoost_{name}"] for name in MODELS}
     originals = {name: FROZEN / f"{name}.joblib" for name in MODELS}
@@ -253,7 +266,13 @@ def run(output, gcs_only=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path)
-    parser.add_argument("--gcs-only", action="store_true", help="Augment only GCS and select against GCS-masked A/B validation")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--gcs-only", action="store_true", help="Augment only GCS and select with GCS-masked A/B validation")
+    mode.add_argument("--urine-only", action="store_true", help="Augment only urine and select with urine-masked A/B validation")
     args = parser.parse_args()
-    default = GCS_ONLY_OUTPUT if args.gcs_only else DEFAULT_OUTPUT
-    run(args.output or default, gcs_only=args.gcs_only)
+    default = DEFAULT_OUTPUT
+    if args.gcs_only:
+        default = GCS_ONLY_OUTPUT
+    elif args.urine_only:
+        default = URINE_ONLY_OUTPUT
+    run(args.output or default, gcs_only=args.gcs_only, urine_only=args.urine_only)
