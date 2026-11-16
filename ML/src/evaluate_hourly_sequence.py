@@ -1,0 +1,201 @@
+"""Evaluate a frozen P33 sequence mixture without fitting on either test cohort."""
+
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+
+from prepare_hourly_sequence import GROUPS, ID, MINUTE, PREPARED, ROOT, VALUE, hidden_channels, hourly_cube, static_values
+
+import numpy as np
+import pandas as pd
+
+from eicu_demo_features import DEMO, STAY
+from evaluate_eicu_confirmation import frozen_ensemble, frozen_models, mapped_inputs
+from evaluate_eicu_demo import source_hashes
+from evaluate_eicu_urine_mapping import urine_events
+from evaluate_gcs_routed_temporal import RoutedPredictor, checked_metrics
+from evaluate_ma_gbt_p12 import P11, REFERENCES, plan_for
+from evaluate_missingness_augmentation import paired_intervals
+from evaluate_predictive_boosting import benchmarks, compare_c, no_category_warning
+from evaluate_robust_ensemble import EVALUATION as P28_EVAL, Ensemble
+from evaluate_temporal_features import eicu_temporal, save_json, set_c_temporal
+from pilot_temporal_features import time_summary
+from prepare import OUT, sha
+from stress_missingness_c import METRICS, SCENARIOS, apply_masks, load_cohort, mask_draws, score_metrics
+from train_predictive_boosting import AB_FEATURES, from_json, verify_sources
+
+EVAL = ROOT / "evaluation"
+NEW = "sequence_mixture"
+P28 = "p28"
+WORKER = Path(__file__).with_name("infer_hourly_sequence.py")
+PYTORCH = OUT / "ma_gbt_runtime" / ".venv" / "Scripts" / "python.exe"
+
+
+def infer(stage, model, **arrays):
+    packet, result = stage / "packet.npz", stage / "predictions.npy"
+    np.savez_compressed(packet, **arrays)
+    env = {
+        **os.environ, "CUDA_VISIBLE_DEVICES": "-1", "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": os.pathsep.join(map(str, (ROOT / "cpu_deps", WORKER.parent))),
+    }
+    subprocess.run([str(PYTORCH), str(WORKER), str(model), str(packet), str(result)], check=True, env=env)
+    scores = np.load(result, allow_pickle=False)
+    if not (np.isfinite(scores) & (scores >= 0) & (scores <= 1)).all():
+        raise ValueError("Invalid frozen CNN output")
+    return scores
+
+
+def mask_key(hidden):
+    return np.packbits(hidden.reshape(-1)).tobytes()
+
+
+class SetCSequenceMixture:
+    def __init__(self, original, anchor, seq_scores, weight):
+        self.original, self.anchor, self.seq_scores, self.weight = original, anchor, seq_scores, weight
+
+    def predict_proba(self, frame):
+        if not self.original.index.equals(frame.index):
+            raise ValueError("Unexpected row order in Set C")
+        key = mask_key(hidden_channels(self.original, frame))
+        score = self.weight * self.seq_scores[key].astype(float)
+        if self.weight < 1.0:
+            score += (1 - self.weight) * self.anchor.predict_proba(frame)[:, 1]
+        return np.column_stack((1 - score, score))
+
+
+def set_c(stage, model, weight, frozen_routed, gcs, rule, prior, reference, p11):
+    raw, y, _ = load_cohort()
+    positions, plan, mask_digest = plan_for(raw)
+    if mask_digest != reference["mask_draws_sha256"]:
+        raise ValueError("Set C mask draw positions changed")
+    timing, cube = set_c_temporal(raw.index, extension=lambda records, index: (
+        time_summary(records, index), hourly_cube(records, index)
+    ))
+    no_mask = np.zeros(cube.shape[:2], dtype=bool)
+    all_cases = {mask_key(no_mask): no_mask}
+    draws = mask_draws(positions, plan)
+    for _, variables, design in SCENARIOS:
+        for draw in draws if design == "matched" else [{}]:
+            masked = apply_masks(raw, {key: draw.get(key, positions[key]) for key in variables}, plan, design)
+            hidden = hidden_channels(raw, masked)
+            all_cases.setdefault(mask_key(hidden), hidden)
+    values = infer(stage, model, cubes=cube, statics=static_values(raw), hidden=np.stack(list(all_cases.values())))
+    if values.shape != (len(all_cases), len(raw)):
+        raise ValueError("Invalid Set C sequence score shape")
+    seq_scores = dict(zip(all_cases, values, strict=True))
+    anchor = Ensemble(RoutedPredictor(frozen_routed.rule, frozen_routed.models, raw, timing), gcs, rule)
+    baseline = {row["scenario"]: row for row in prior["set_c"]}
+    checked_metrics(y, anchor.predict_proba(raw)[:, 1], baseline["clean"])
+    cols = raw.columns.tolist()
+    predictor = SetCSequenceMixture(raw, anchor, seq_scores, weight)
+    print(f"Verified {len(all_cases)} distinct Set C sequence masks", flush=True)
+    summary, masks, intervals = compare_c(
+        {NEW: (predictor, cols)}, {**benchmarks(), P28: (anchor, cols)}, reference, p11,
+    )
+    for row in summary:
+        for metric in METRICS:
+            row[f"{metric}_p28"] = baseline[row["scenario"]][metric]
+            row[f"delta_{metric}_vs_p28"] = row[metric] - row[f"{metric}_p28"]
+    return summary, masks, intervals
+
+
+def external(stage, model, weight, anchor, elastic, prior, columns, extras):
+    cubes = []
+
+    def extension(records, index):
+        cubes.append(hourly_cube(records, index))
+        return time_summary(records, index)
+
+    (cohort, raw), raw_hashes = eicu_temporal(extension=extension)
+    if raw_hashes != prior["eicu_raw_sha256"]:
+        raise ValueError("Demo sources differ from P28")
+    y = cohort.y.to_numpy()
+    urine_events_frame, _ = urine_events(cohort.index)
+    urine_records = urine_events_frame.rename(columns={STAY: ID, "minute": MINUTE, "value": VALUE})
+    urine = hourly_cube(urine_records, cohort.index)[:, GROUPS.index("Urine")]
+    mapped = {mode: frame.copy() for mode, frame in raw.items()}
+    mapped_inputs(DEMO, cohort, mapped)
+    cases = []
+    for alignment, frames in (("original", raw), ("urine_mapped", mapped)):
+        for (mode, frame), cube in zip(frames.items(), cubes, strict=True):
+            if alignment == "urine_mapped":
+                cube = cube.copy()
+                cube[:, GROUPS.index("Urine")] = urine
+            cases.append((alignment, mode, frame.loc[:, columns + extras], cube))
+    seq = infer(
+        stage, model, cubes=np.stack([cube for _, _, _, cube in cases]),
+        statics=np.stack([static_values(frame) for _, _, frame, _ in cases]),
+    )
+    if seq.shape != (len(cases), len(y)):
+        raise ValueError("Invalid eICU sequence score shape")
+    old = {(r["alignment"], r["mode"]): r for r in prior["eicu"]}
+    rows = []
+    first, previous = {}, {}
+    frozen_comparison, frozen_reference = {}, {}
+    pipe, cols = elastic
+    for i, (alignment, mode, frame, _) in enumerate(cases):
+        key = f"{alignment}:{mode}"
+        p28_score = anchor.predict_proba(frame)[:, 1]
+        checked_metrics(y, p28_score, old[alignment, mode]["metrics"])
+        scores = weight * seq[i].astype(float) + (1 - weight) * p28_score
+        first[key], previous[key] = scores, p28_score
+        control = no_category_warning(pipe, frame.loc[:, cols])
+        if alignment == "urine_mapped":
+            checked_metrics(y, control, old[alignment, mode]["comparison"]["frozen_elastic_mapped"]["metrics"])
+        frozen_comparison[key], frozen_reference[key] = scores, control
+        rows.append({
+            "alignment": alignment, "mode": mode, "key": key,
+            "metrics": score_metrics(y, scores), "sequence_only": score_metrics(y, seq[i]),
+            "p28": score_metrics(y, p28_score), "frozen_elastic": score_metrics(y, control),
+        })
+    versus_p28 = paired_intervals(cohort, previous, first)
+    versus_elastic = paired_intervals(cohort, frozen_reference, frozen_comparison)
+    for row in rows:
+        key = row.pop("key")
+        row["paired_ci_vs_p28"] = versus_p28[key]
+        row["paired_ci_vs_frozen_elastic"] = versus_elastic[key]
+    if source_hashes(DEMO) != raw_hashes:
+        raise ValueError("Demo sources changed during scoring")
+    return rows, raw_hashes
+
+
+def evaluate():
+    if EVAL.exists():
+        raise FileExistsError(EVAL)
+    fit_path, input_path, model = ROOT / "fitted/manifest.json", PREPARED / "manifest.json", ROOT / "fitted/sequence.pt"
+    fit, inputs = from_json(fit_path), from_json(input_path)
+    if fit["selected"] is None:
+        print("P33 retained P28. Existing holdout evaluations apply.", flush=True)
+        return
+    if fit["device"] != "cpu" or sha(input_path) != fit["input_manifest_sha256"] or sha(model) != fit["model_sha256"]:
+        raise ValueError("P33 frozen model and its A/B inputs do not match")
+    routed, _, gcs, extras, protected = frozen_models()
+    rule, pipe, cols = frozen_ensemble(protected)
+    paths = [P28_EVAL / "summary.json", P11 / "summary.json", REFERENCES / "manifest.json"]
+    prior, p11, reference = map(from_json, paths)
+    protected.update(inputs["source_sha256"])
+    protected.update(prior["source_sha256"])
+    protected.update({path.relative_to(OUT).as_posix(): sha(path) for path in (*paths, fit_path, input_path, model)})
+    verify_sources(protected)
+    _, _, weight = fit["selected"]
+    columns = pd.read_parquet(AB_FEATURES).columns.tolist()
+    with tempfile.TemporaryDirectory(dir=ROOT, prefix="sequence-evaluation-") as temporary:
+        stage = Path(temporary)
+        c, masks, c_ci = set_c(stage, model, weight, routed, gcs, rule, prior, reference, p11)
+        anchor = Ensemble(routed, gcs, rule)
+        eicu, raw_sources = external(stage, model, weight, anchor, (pipe, cols), prior, columns, extras)
+        verify_sources(protected)
+        deliverable = stage / "evaluation"
+        deliverable.mkdir()
+        masks.to_csv(deliverable / "set_c_paired_replicates.csv", index=False)
+        save_json(deliverable / "summary.json", {
+            "training": fit, "set_c": c, "set_c_clean_ci": c_ci, "eicu": eicu,
+            "source_sha256": protected, "eicu_raw_sha256": raw_sources,
+        })
+        deliverable.rename(EVAL)
+    print(f"Completed frozen CPU P33 evaluation at {EVAL}", flush=True)
+
+
+if __name__ == "__main__":
+    evaluate()

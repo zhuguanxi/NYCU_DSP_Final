@@ -21,3 +21,5 @@ if ($LASTEXITCODE -eq 0) {
     & .\artifacts\ma_gbt_runtime\.venv\Scripts\python.exe src/train_hourly_sequence.py
 }
 ```
+
+若選定使用序列模型，先恢復 P21 的 CPU 環境，再執行 `& $py src/evaluate_hourly_sequence.py`。兩個環境之間只在本機 Git 排除目錄傳遞暫存陣列。評估使用 P9 的遮蔽及 P28 已使用的兩種 eICU 取樣與對齊。

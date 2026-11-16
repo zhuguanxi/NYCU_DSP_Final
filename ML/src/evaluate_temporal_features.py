@@ -77,7 +77,7 @@ def freeze():
     print(f"Froze temporal XGBoost with {selected} rounds using A/B only", flush=True)
 
 
-def set_c_temporal(stays):
+def set_c_temporal(stays, *, extension=time_summary):
     expected = from_json(OUT / "preparation_manifest.json")["C_sha256"]
     if sha(ARCHIVE) != expected:
         raise ValueError("Set C archive changed")
@@ -104,17 +104,17 @@ def set_c_temporal(stays):
         raise ValueError("Set C is missing archive records")
     if sha(ARCHIVE) != expected:
         raise ValueError("Set C archive changed during feature extraction")
-    return time_summary(pd.DataFrame(accepted, columns=[ID, MINUTE, "variable", VALUE]), stays)
+    return extension(pd.DataFrame(accepted, columns=[ID, MINUTE, "variable", VALUE]), stays)
 
 
-def eicu_temporal():
+def eicu_temporal(*, extension=time_summary):
     original_cohort, original_frames = eicu_inputs()
     old_sources = from_json(EICU_SCORES / "summary.json")["data_sha256"]
     if source_hashes(DEMO) != old_sources:
         raise ValueError("eICU raw files differ from P8")
 
     def augment(events, index):
-        return time_summary(events.rename(columns={STAY: ID, "minute": MINUTE, "value": VALUE}), index)
+        return extension(events.rename(columns={STAY: ID, "minute": MINUTE, "value": VALUE}), index)
 
     cohort, features, _, _ = build_features(DEMO, feature_extension=augment)
     pd.testing.assert_frame_equal(cohort, original_cohort, check_dtype=False, check_exact=True)
