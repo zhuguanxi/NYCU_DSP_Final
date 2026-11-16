@@ -41,3 +41,6 @@ checkpoints/
 *.ckpt
 *.onnx
 *.safetensors
+
+# Local Python runtime
+.venv-runtime/

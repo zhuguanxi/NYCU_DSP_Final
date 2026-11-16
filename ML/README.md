@@ -111,3 +111,36 @@ ML/.venv/Scripts/python.exe ML/src/complete_reports.py
 ```
 
 訓練量已按本次追加核准設為最多170次；目前158次。調參、selector與最終模型保存皆計入。最高RSS數字僅涵蓋訓練採樣，不代表SHAP／序列讀取的整個流程峰值。
+
+
+## Windows 本機設定
+
+本機以 `DSP` 為專題根目錄，`ML` 和 `data` 位於同一層。建立新環境時，從 `DSP` 的 PowerShell 執行：
+
+```powershell
+uv venv .\ML\.venv --python 3.12
+uv pip sync --python .\ML\.venv\Scripts\python.exe .\ML\requirements-lock.txt
+uv pip check --python .\ML\.venv\Scripts\python.exe
+```
+
+PhysioNet 2012 的本機資料路徑如下。A/B 的個案文字檔直接放在各自的目錄內。
+
+```text
+data/predicting-mortality-of-icu-patients-the-physionet-computing-in-cardiology-challenge-2012-1.0.0/
+├── set-a/*.txt
+├── set-b/*.txt
+├── Outcomes-a.txt
+├── Outcomes-b.txt
+├── set-c.tar.gz
+└── Outcomes-c.txt
+```
+
+`prepare.py` 以 A/B 重建開發特徵，並讀取 C 壓縮檔以記錄筆數與 SHA-256。匯入的 `ML/artifacts/` 已含 A/B 特徵與執行快取，可先從 `study.py baseline` 驗證既有流程。從原始資料重建前，請在獨立副本保留原本的 `ML/artifacts/`、報告和圖表，因為程式會寫回這些位置。
+
+重跑已凍結模型的 C 評估時，需備妥上述所有檔案及 `ML/artifacts/final_models/`。C 壓縮檔需符合 `preparation_manifest.json` 中的原始 SHA-256，程式也會先驗證 A/B 特徵。
+
+```powershell
+.\ML\.venv\Scripts\python.exe .\ML\src\evaluate_c.py
+```
+
+原始資料與逐筆預測、快取、模型等 `ML/artifacts/` 產物保留在本機。從 Git 取回程式後，如需查閱已保存的實驗產物，可從原 Drive 專案補入 `ML/artifacts/`。
