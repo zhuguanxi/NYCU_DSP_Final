@@ -1,5 +1,6 @@
 """Measure selected observed-hour differences on the existing P12 and eICU cohorts."""
 
+import argparse
 import tempfile
 from pathlib import Path
 
@@ -20,20 +21,24 @@ MONITOR = {"heartrate": "HR", "respiration": "RespRate", "systemicmean": "MAP"}
 CHANNELS = ("HR", "RespRate", "MAP", "GCS", "Urine")
 
 
-def counts(cube, channel):
+def counts(cube, channel, histogram=False):
     present = np.isfinite(cube[:, GROUPS.index(channel)])
     total = present.sum(axis=1)
     observed = total > 0
-    return {
+    summary = {
         "stays": len(total), "observed_stays": int(observed.sum()),
         "median_hours_among_observed": float(np.median(total[observed])) if observed.any() else None,
         "no_last_12h_among_observed": int((observed & ~present[:, 36:].any(axis=1)).sum()),
     }
+    if histogram:
+        summary["hour_histogram"] = np.bincount(total, minlength=49).tolist()
+    return summary
 
 
-def run():
-    if OUTPUT.exists():
-        raise FileExistsError(OUTPUT)
+def run(histograms=False):
+    output = OUT / "p35_sequence_gate" / "observation_profiles" if histograms else OUTPUT
+    if output.exists():
+        raise FileExistsError(output)
     manifest = from_json(PREPARED / "manifest.json")
     bundle = PREPARED / "ab.npz"
     verify_sources(manifest["source_sha256"])
@@ -57,24 +62,26 @@ def run():
     observed = original.loc[original.cohort.eq("native")].set_index("variable")["observed_n"]
     result = {}
     for channel in CHANNELS:
-        row = {"ab": counts(ab, channel), "eicu": counts(demo, channel)}
+        row = {"ab": counts(ab, channel, histogram=histograms), "eicu": counts(demo, channel, histogram=histograms)}
         expected_count = urine_coverage["observed_stays"] if channel == "Urine" else observed[channel]
         if row["eicu"]["observed_stays"] != expected_count:
             raise ValueError(f"Coverage changed for {channel}")
         result[channel] = row
     if source_hashes(DEMO) != raw or sha(bundle) != manifest["bundle_sha256"]:
         raise ValueError("An input changed during the audit")
-    OUTPUT.parent.mkdir(exist_ok=True)
-    with tempfile.TemporaryDirectory(dir=OUTPUT.parent, prefix="observation-audit-") as temporary:
-        stage = Path(temporary) / OUTPUT.name
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=output.parent, prefix="observation-audit-") as temporary:
+        stage = Path(temporary) / output.name
         stage.mkdir()
         save_json(stage / "summary.json", {
             "channels": result, "device": "cpu", "uses_outcomes_in_statistics": False,
             "ab_bundle_sha256": manifest["bundle_sha256"], "eicu_raw_sha256": raw,
         })
-        stage.rename(OUTPUT)
+        stage.rename(output)
     print("Verified five P12 and eICU observation-hour comparisons", flush=True)
 
 
 if __name__ == "__main__":
-    run()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--histograms", action="store_true")
+    run(histograms=parser.parse_args().histograms)
