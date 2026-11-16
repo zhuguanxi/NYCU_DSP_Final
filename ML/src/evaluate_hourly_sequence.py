@@ -162,10 +162,7 @@ def set_c(
     return summary, masks, intervals
 
 
-def external(
-    stage, model, weight, anchor, elastic, prior, columns, extras, cadence, p33_control,
-    *, blend_rule=None, fixed_control=None, channels=None,
-):
+def eicu_sequence_cases(prior, columns, extras):
     cubes = []
 
     def extension(records, index):
@@ -175,7 +172,6 @@ def external(
     (cohort, raw), raw_hashes = eicu_temporal(extension=extension)
     if raw_hashes != prior["eicu_raw_sha256"]:
         raise ValueError("Demo sources differ from P28")
-    y = cohort.y.to_numpy()
     urine_events_frame, _ = urine_events(cohort.index)
     urine_records = urine_events_frame.rename(columns={STAY: ID, "minute": MINUTE, "value": VALUE})
     urine = hourly_cube(urine_records, cohort.index)[:, GROUPS.index("Urine")]
@@ -192,6 +188,15 @@ def external(
         "cubes": np.stack([cube for _, _, _, cube in cases]),
         "statics": np.stack([static_values(frame) for _, _, frame, _ in cases]),
     }
+    return cohort, cases, batch, raw_hashes
+
+
+def external(
+    stage, model, weight, anchor, elastic, prior, columns, extras, cadence, p33_control,
+    *, blend_rule=None, fixed_control=None, channels=None,
+):
+    cohort, cases, batch, raw_hashes = eicu_sequence_cases(prior, columns, extras)
+    y = cohort.y.to_numpy()
     seq = infer(stage, model, four_hour=cadence, channels=channels, **batch)
     p33_scores, p33_old = {}, {}
     if p33_control:

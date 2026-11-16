@@ -95,16 +95,8 @@ def ap_intervals(y, predictions, comparisons):
     return {name: np.quantile(draws, (0.025, 0.975)).tolist() for name, draws in samples.items()}
 
 
-def evaluate():
-    if OUTPUT.exists():
-        raise FileExistsError(OUTPUT)
-    timing, audit, outcome_hashes = outcome_timing()
+def replay_frozen_c(stage):
     raw, y, historical = load_cohort()
-    if set(raw.index) != set(timing.index) or {LOS, SURVIVAL, DEATH}.intersection(raw.columns):
-        raise ValueError("Unexpected Set C keys or model schema")
-    timing = timing.loc[raw.index]
-    np.testing.assert_array_equal(y, timing[DEATH])
-    cohorts = cohort_masks(raw, timing, y)
     positions, plan, mask_sha = plan_for(raw)
     reference_path = REFERENCES / "manifest.json"
     if from_json(reference_path)["mask_draws_sha256"] != mask_sha:
@@ -156,32 +148,45 @@ def evaluate():
     routed_c = RoutedPredictor(routed.rule, routed.models, raw, timing_features)
     anchor = Ensemble(routed_c, gcs, rule)
     full = {key: {row["scenario"]: row for row in ref["set_c"]} for key, ref in history.items()}
+    batch = {"cubes": cubes, "statics": static_values(raw), "hidden": hidden}
+    hourly = infer(stage, models["p33"], **batch)
+    reduced = infer(stage, models["p38"], four_hour=True, channels=channels, **batch)
+    scores = {}
+    for i, (case, frame) in enumerate(cases.items()):
+        table = anchor.predict_proba(frame)[:, 1]
+        predictions = {
+            "frozen_full": no_category_warning(full_pipe, frame.loc[:, full_cols]),
+            "frozen_elastic": no_category_warning(elastic_pipe, frame.loc[:, elastic_cols]),
+            "gcs_only_full": no_category_warning(gcs_pipe, frame.loc[:, gcs_cols]),
+            "p26": routed_c.predict_proba(frame)[:, 1],
+            "p28": table,
+            "p33": 0.75 * table + 0.25 * hourly[i].astype(float),
+            "p38": blend(table, reduced[i], p38["selected"]),
+        }
+        for tag in full:
+            checked_metrics(y, predictions[tag], full[tag][case])
+        for tag in ("frozen_full", "gcs_only_full"):
+            checked_metrics(y, predictions[tag], {m: full["p26"][case][f"{m}_{tag}"] for m in METRICS})
+        if case == "clean":
+            for tag, name in (("frozen_full", "Full"), ("frozen_elastic", "Elastic")):
+                np.testing.assert_array_equal(predictions[tag], historical[f"score_{name}"].to_numpy(dtype=predictions[tag].dtype))
+        scores[case] = predictions
+    print("Verified all three Set C views against the existing frozen metrics", flush=True)
+    return raw, y, scores, last, protected, mask_sha
+
+
+def evaluate():
+    if OUTPUT.exists():
+        raise FileExistsError(OUTPUT)
+    timing, audit, outcome_hashes = outcome_timing()
     with tempfile.TemporaryDirectory(dir=OUTPUT.parent, prefix="p41-timing-") as tmp:
         stage = Path(tmp)
-        batch = {"cubes": cubes, "statics": static_values(raw), "hidden": hidden}
-        hourly = infer(stage, models["p33"], **batch)
-        reduced = infer(stage, models["p38"], four_hour=True, channels=channels, **batch)
-        scores = {}
-        for i, (case, frame) in enumerate(cases.items()):
-            table = anchor.predict_proba(frame)[:, 1]
-            predictions = {
-                "frozen_full": no_category_warning(full_pipe, frame.loc[:, full_cols]),
-                "frozen_elastic": no_category_warning(elastic_pipe, frame.loc[:, elastic_cols]),
-                "gcs_only_full": no_category_warning(gcs_pipe, frame.loc[:, gcs_cols]),
-                "p26": routed_c.predict_proba(frame)[:, 1],
-                "p28": table,
-                "p33": 0.75 * table + 0.25 * hourly[i].astype(float),
-                "p38": blend(table, reduced[i], p38["selected"]),
-            }
-            for tag in full:
-                checked_metrics(y, predictions[tag], full[tag][case])
-            for tag in ("frozen_full", "gcs_only_full"):
-                checked_metrics(y, predictions[tag], {m: full["p26"][case][f"{m}_{tag}"] for m in METRICS})
-            if case == "clean":
-                for tag, name in (("frozen_full", "Full"), ("frozen_elastic", "Elastic")):
-                    np.testing.assert_array_equal(predictions[tag], historical[f"score_{name}"].to_numpy(dtype=predictions[tag].dtype))
-            scores[case] = predictions
-        print("Verified all three Set C views against the existing frozen metrics", flush=True)
+        raw, y, scores, last, protected, mask_sha = replay_frozen_c(stage)
+        if set(raw.index) != set(timing.index) or {LOS, SURVIVAL, DEATH}.intersection(raw.columns):
+            raise ValueError("Unexpected Set C keys or model schema")
+        timing = timing.loc[raw.index]
+        np.testing.assert_array_equal(y, timing[DEATH])
+        cohorts = cohort_masks(raw, timing, y)
         stats, intervals = {}, {}
         for name, take in cohorts.items():
             group = y[take]
