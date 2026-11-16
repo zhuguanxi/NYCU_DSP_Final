@@ -239,7 +239,7 @@ def p12_features(events, static):
     return pd.DataFrame.from_dict(rows, orient="index").rename_axis(STAY)
 
 
-def build_features(directory: Path):
+def build_features(directory: Path, feature_extension=None):
     cohort, static, counts = select_cohort(directory)
     periodic = monitor_events(directory, "vitalPeriodic", cohort.index, PERIODIC)
     aperiodic = monitor_events(directory, "vitalAperiodic", cohort.index, APERIODIC)
@@ -268,5 +268,10 @@ def build_features(directory: Path):
             raise ValueError("Misaligned P12 input shape or stay order")
         if result[[f"{variable}__count" for variable in UNMAPPED]].to_numpy().any():
             raise ValueError("An unmapped signal unexpectedly has observations")
+        if feature_extension is not None:
+            extra = feature_extension(events, cohort.index)
+            if not extra.index.equals(result.index) or set(extra.columns) & set(result.columns):
+                raise ValueError("Extra features differ in stay order or overlap with original features")
+            result = pd.concat([result, extra], axis=1)
         features[name] = result
     return cohort, features, counts, dropped_late

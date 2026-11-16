@@ -117,7 +117,7 @@ def compare_c(pipes, controls, reference, prior):
             columns={f"{m}_{tag}": f"{m}_{key}" for m in METRICS}
         )
         result = result.merge(full[key], on=mask_keys, validate="many_to_one")
-    if len(result) != 336 or any(len(ref) != 168 for ref in full.values()):
+    if len(result) != 168 * len(pipes) or any(len(ref) != 168 for ref in full.values()):
         raise ValueError("Set C case counts differ from P9/P11")
     rows = []
     for pick, actual in baseline.items():
@@ -142,8 +142,8 @@ def compare_c(pipes, controls, reference, prior):
     return rows, result, intervals
 
 
-def compare_eicu(pipes, reference, prior):
-    cohort, frames = eicu_inputs()
+def compare_eicu(pipes, reference, prior, inputs=None):
+    cohort, frames = eicu_inputs() if inputs is None else inputs
     y = cohort.y.to_numpy()
     gcs_path = REFERENCES / "gcs_eicu_scores.parquet"
     if sha(gcs_path) != reference["gcs_scores_sha256"]:
