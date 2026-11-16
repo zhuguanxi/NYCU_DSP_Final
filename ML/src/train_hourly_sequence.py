@@ -84,14 +84,14 @@ def predict(model, dynamic, static):
         return torch.cat([torch.sigmoid(model(block, base)) for block, base in tensors]).numpy()
 
 
-def fit(data, train, fold, policy, epochs, views):
+def fit(data, train, fold, policy, epochs, views, *, alternate_cube=None):
     torch.manual_seed(SEED + fold)
     cube, static = data["cube"][train], data["static"][train]
     observations = cube.transpose(0, 2, 1).reshape(-1, cube.shape[1])
     model = HourlyCNN(*moments(observations), *moments(static)).cpu()
     label = data["y"][train].astype(np.float32)
     if policy == "augmented":
-        modified = masked(cube, data["aug_hidden"][fold, train])
+        modified = masked(cube, data["aug_hidden"][fold, train]) if alternate_cube is None else alternate_cube
         cube = np.concatenate((cube, modified))
         static = np.concatenate((static, data["aug_static"][fold, train]))
         label = np.tile(label, 2)
