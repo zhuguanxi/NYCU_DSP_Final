@@ -14,6 +14,7 @@
 - [P29 完整 eICU 確認規格](reports/P29_eicu_ensemble_confirmation_protocol.md) 有 CPU 執行入口。正式結果等已授權的 eICU v2.0 本機資料，先排除所有 Demo 患者再計分。
 - [P40 完整 eICU 次要比較](reports/P40_eicu_sequence_confirmation_results.md) 可在 P29 同一隊列上核對 P38。Demo 試跑檢查 CPU 流程和凍結分數。
 - [P41 P12 時間欄位稽核](reports/P41_p12_outcome_timing_results.md) 核對官方結果表與時間敏感度隊列的凍結 Set C 分數。
+- [P42 機率校準與分類門檻](reports/P42_frozen_calibration_results.md) 用 A/B 折外預測擬合，檢查 Set C 與 eICU Demo 的機率誤差和分類表現。
 
 組員分享版（2026-10-18）：[前處理、方法、實驗設定、結果與討論](實驗報告_組員分享版.md)。含實際摘要定義、模型參數、切分與統計方式、C 結果及重現入口，供組內審閱。
 
