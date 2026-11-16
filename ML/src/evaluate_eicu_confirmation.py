@@ -136,8 +136,10 @@ def frozen_ensemble(protected):
     return selected["rule"], pipe, columns
 
 
-def evaluate(source, patients, smoke, *, ensemble=False):
-    prefix = "p29" if ensemble else "p27"
+def evaluate(source, patients, smoke, *, ensemble=False, sequence=None):
+    if sequence is not None and not ensemble:
+        raise ValueError("Sequence evaluation requires the frozen P28 comparison")
+    prefix = "p40" if sequence is not None else "p29" if ensemble else "p27"
     output = OUT / f"{prefix}_{'demo_smoke' if smoke else 'independent_eicu'}"
     if output.exists():
         raise FileExistsError(output)
@@ -149,6 +151,12 @@ def evaluate(source, patients, smoke, *, ensemble=False):
     new, temporal, gcs, extras, protected = frozen_models()
     if ensemble:
         rule, original_elastic, original_columns = frozen_ensemble(protected)
+    if sequence is not None:
+        for name, digest in sequence.source_sha256.items():
+            if name in protected and protected[name] != digest:
+                raise ValueError(f"Conflicting sequence source digest for {name}")
+            protected[name] = digest
+        verify_sources(protected)
     candidate = "ensemble" if ensemble else "routed"
     baselines = ("frozen_elastic", "routed", *BASELINES) if ensemble else BASELINES
     original, overlap = choose_cohort(source, patients, smoke)
@@ -157,7 +165,8 @@ def evaluate(source, patients, smoke, *, ensemble=False):
     with tempfile.TemporaryDirectory(dir=OUT, prefix="eicu-confirmation-") as temporary:
         stage = Path(temporary)
         copied = subset_tables(source, stage, original.index)
-        cohort, frames, _, _ = build_features(stage, feature_extension=temporal_extension)
+        extension = temporal_extension if sequence is None else sequence.features
+        cohort, frames, _, _ = build_features(stage, feature_extension=extension)
         pd.testing.assert_frame_equal(cohort, original, check_dtype=False, check_exact=True)
         coverage = mapped_inputs(stage, cohort, frames)
         y = cohort.y.to_numpy()
@@ -173,33 +182,51 @@ def evaluate(source, patients, smoke, *, ensemble=False):
                 predicted["ensemble"][mode] = anchor if rule is None else blend(
                     anchor, predicted["gcs_only_elastic"][mode], frame["GCS__count"].eq(0).to_numpy(), rule,
                 )
+        if sequence is not None:
+            predicted["p38"] = sequence.predict(stage, frames, predicted["ensemble"])
+            sequence_intervals = {
+                name: paired_intervals(cohort, predicted[name], predicted["p38"])
+                for name in ("ensemble", "frozen_elastic")
+            }
         intervals = {
             name: paired_intervals(cohort, predicted[name], predicted[candidate]) for name in baselines
         }
         result = []
         for mode in frames:
             stats = {name: score_metrics(y, group[mode]) for name, group in predicted.items()}
-            result.append({
+            row = {
                 "mode": mode, "metrics": stats,
                 "delta_vs_baseline": {
                     name: {metric: stats[candidate][metric] - stats[name][metric] for metric in METRICS}
                     for name in baselines
                 },
                 "paired_ci": {name: ci[mode] for name, ci in intervals.items()},
-            })
+            }
+            if sequence is not None:
+                row["sequence_comparison"] = {
+                    name: {
+                        "delta": {metric: stats["p38"][metric] - stats[name][metric] for metric in METRICS},
+                        "paired_ci": ci[mode],
+                    } for name, ci in sequence_intervals.items()
+                }
+            result.append(row)
         verify_sources(protected)
         if any(sha(source / f"{table}.csv.gz") != digest for table, digest in input_sha.items()):
             raise ValueError("The supplied eICU files changed during evaluation")
         deliverable = stage / "aggregate"
         deliverable.mkdir()
-        save_json(deliverable / "summary.json", {
+        summary = {
             "kind": "demo_runtime_test" if smoke else "patient_disjoint_eicu_confirmation",
             "device": "cpu", "fits": 0, "stays": len(cohort), "patients": int(cohort[PATIENT].nunique()),
             "candidate": candidate, "primary_baseline": baselines[0],
             "deaths": int(y.sum()), "sample_seed": SEED, "patient_cap": patients,
             "overlap_audit": overlap, "retained_source_rows": copied, "urine_coverage": coverage,
             "rows": result, "source_sha256": protected, "raw_eicu_sha256": input_sha,
-        })
+        }
+        if sequence is not None:
+            summary["secondary_candidate"] = "p38"
+            summary["sequence_recipe"] = sequence.recipe
+        save_json(deliverable / "summary.json", summary)
         deliverable.rename(output)
     print(f"Frozen confirmation pipeline completed in {output}", flush=True)
 
