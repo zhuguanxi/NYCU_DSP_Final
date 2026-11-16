@@ -24,9 +24,9 @@ OUTPUT = OUT / "p23_eicu_explicit_urine"
 URINE_PATH = "flowsheet|flowsheet cell labels|i&o|output (ml)|urine"
 
 
-def urine_events(index):
+def urine_events(index, directory=DEMO):
     frame, late = windowed(
-        DEMO, "intakeOutput", index, "intakeoutputoffset",
+        directory, "intakeOutput", index, "intakeoutputoffset",
         ("cellpath", "celllabel", "cellvaluenumeric"), "intakeoutputentryoffset",
     )
     select = normalize(frame.cellpath).eq(URINE_PATH) & normalize(frame.celllabel).eq("urine")
