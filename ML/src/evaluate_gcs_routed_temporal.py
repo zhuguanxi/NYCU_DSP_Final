@@ -58,7 +58,7 @@ def checked_metrics(y, probabilities, prior):
     np.testing.assert_allclose([measured[key] for key in METRICS], [prior[key] for key in METRICS], rtol=0, atol=1e-12)
 
 
-def compare_eicu(model, ref_model, raw_cols, extras, previous, p23, p24):
+def compare_eicu(model, ref_model, raw_cols, extras, previous, p23, p24, *, additional=None):
     (cohort, frames), raw_sha = eicu_temporal()
     y = cohort.y.to_numpy()
     if raw_sha != p23["raw_sha256"] or raw_sha != p24["eicu_raw_sha256"]:
@@ -89,6 +89,11 @@ def compare_eicu(model, ref_model, raw_cols, extras, previous, p23, p24):
     for alignment, inputs in (("original", frames), ("urine_mapped", mapped)):
         reference_temporal = {mode: ref_model.predict_proba(inputs[mode].loc[:, full_cols])[:, 1] for mode in MODES}
         controls = {"temporal": reference_temporal}
+        if additional:
+            controls.update({
+                tag: {mode: pipe.predict_proba(inputs[mode].loc[:, full_cols])[:, 1] for mode in MODES}
+                for tag, pipe in additional.items()
+            })
         if alignment == "urine_mapped":
             controls.update(mapped_elastic_controls({mode: f.loc[:, raw_cols] for mode, f in mapped.items()}, y, p23))
         else:
