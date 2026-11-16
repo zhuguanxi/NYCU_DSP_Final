@@ -24,6 +24,21 @@ from train_missingness_augmentation import MODELS, from_json
 OUTPUT = OUT / "p24_eicu_temporal_urine"
 
 
+def mapped_elastic_controls(frames, y, p23):
+    original_paths = {name: FROZEN / f"{name}.joblib" for name in MODELS}
+    gcs_paths, _, _ = augmented_models(GCS_ONLY_OUTPUT)
+    p23_rows = {(row["variant"], row["model"], row["mode"]): row for row in p23["rows"]}
+    output = {}
+    for tag, paths in (("frozen", original_paths), ("gcs", gcs_paths)):
+        scores, _, _ = score_frozen(frames, frames["hourly"], paths)
+        output[f"{tag}_elastic_mapped"] = {mode: scores[f"{mode}_Elastic"] for mode in MODES}
+        for mode, probabilities in output[f"{tag}_elastic_mapped"].items():
+            measured = score_metrics(y, probabilities)
+            expected = p23_rows[tag, "Elastic", mode]["urine_mapped"]
+            np.testing.assert_allclose([measured[m] for m in METRICS], [expected[m] for m in METRICS], atol=1e-12, rtol=0)
+    return output
+
+
 def run():
     if OUTPUT.exists():
         raise FileExistsError(OUTPUT)
@@ -61,23 +76,13 @@ def run():
         next_score[mode] = model.predict_proba(updated.loc[:, columns])[:, 1]
         swapped[mode] = updated.loc[:, raw]
 
-    original_paths = {name: FROZEN / f"{name}.joblib" for name in MODELS}
-    gcs_paths, _, _ = augmented_models(GCS_ONLY_OUTPUT)
-    controls = {"temporal_unmapped": old}
-    for tag, paths in (("frozen", original_paths), ("gcs", gcs_paths)):
-        scores, _, _ = score_frozen(swapped, swapped["hourly"], paths)
-        controls[f"{tag}_elastic_mapped"] = {mode: scores[f"{mode}_Elastic"] for mode in MODES}
+    controls = {"temporal_unmapped": old, **mapped_elastic_controls(swapped, y, p23)}
     p22_rows = {row["mode"]: row for row in p22["eicu"]}
-    p23_rows = {(row["variant"], row["model"], row["mode"]): row for row in p23["rows"]}
     for mode in MODES:
         np.testing.assert_allclose(
             [score_metrics(y, old[mode])[m] for m in METRICS],
             [p22_rows[mode][m] for m in METRICS], atol=1e-12, rtol=0,
         )
-        for tag in ("frozen", "gcs"):
-            measured = score_metrics(y, controls[f"{tag}_elastic_mapped"][mode])
-            expected = p23_rows[tag, "Elastic", mode]["urine_mapped"]
-            np.testing.assert_allclose([measured[m] for m in METRICS], [expected[m] for m in METRICS], atol=1e-12, rtol=0)
     intervals = {tag: paired_intervals(cohort, scores, next_score) for tag, scores in controls.items()}
     results = []
     for mode in MODES:
