@@ -6,9 +6,18 @@
 
 沿用 P28 的六個驗證畫面、分數加權和兩個 AP 門檻。先逐值重現 P28 的 A/B 分數。比較 P28 單獨，以及卷積分數的機率混合權重 0.15、0.25、0.50、1.00。若 A/B 選定卷積配置，才用全 A/B 重擬並凍結，在原 Set C 及 eICU Demo 的 P28 設定確認。若 P28 保留，沿用已完成的評估。
 
-`ML` 的 CPU 環境使用 P21 與原 P13 的 Torch 2.1.2+cpu。輸入和模型、選型彙總存於 Git 排除的 `ML/artifacts/p33_hourly_sequence/`。
+`ML` 的 CPU 環境使用 P21 與原 P13 的 Torch 2.1.2+cpu。Torch 的 AdamW 另需 `packaging`，本機從主環境重用 26.3 到 P33 專用的 `cpu_deps`。輸入、模型與選型彙總存於 Git 排除的 `ML/artifacts/p33_hourly_sequence/`。
 
 ```powershell
 & $py src/prepare_hourly_sequence.py
-& .\artifacts\ma_gbt_runtime\.venv\Scripts\python.exe src/train_hourly_sequence.py
+if ($LASTEXITCODE -eq 0) {
+    $sequenceDeps = Join-Path (Get-Location) 'artifacts/p33_hourly_sequence/cpu_deps'
+    $module = & $py -c 'from pathlib import Path; import packaging; print(Path(packaging.__file__).parent)'
+    if (!(Test-Path -LiteralPath $sequenceDeps)) {
+        New-Item -ItemType Directory -Path $sequenceDeps | Out-Null
+        Copy-Item -LiteralPath $module -Destination $sequenceDeps -Recurse
+    }
+    $env:PYTHONPATH = "$sequenceDeps;$(Join-Path (Get-Location) 'src')"
+    & .\artifacts\ma_gbt_runtime\.venv\Scripts\python.exe src/train_hourly_sequence.py
+}
 ```
