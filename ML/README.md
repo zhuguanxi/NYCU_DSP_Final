@@ -1,5 +1,12 @@
 # ICU 機器學習探索：階段報告索引與總結
 
+## 目前研究進度
+
+- [組員研究報告第 10 節](實驗報告_組員分享版.md#10-缺失韌性與跨資料集評估) 整理原版 MA-GBT、缺失增強、時間窗分流與混合模型的共同設定。
+- [Set C 固定全遮蔽的配對比較](reports/P30_full_mask_paired_results.md) 報告相對凍結對照的 AP 與 AUROC 差及區間。
+- [eICU Demo 混合模型](reports/P28_robust_ensemble_results.md) 與 [GCS、通氣欄位對齊](reports/P32_eicu_ventilation_results.md) 保留兩種取樣與各對照的結果。
+- [P29 完整 eICU 確認規格](reports/P29_eicu_ensemble_confirmation_protocol.md) 有 CPU 執行入口。正式結果等已授權的 eICU v2.0 本機資料，先排除所有 Demo 患者再計分。
+
 組員分享版（2026-10-18）：[前處理、方法、實驗設定、結果與討論](實驗報告_組員分享版.md)。含實際摘要定義、模型參數、切分與統計方式、C 結果及重現入口，供組內審閱。
 
 R1 專項比較（2026-10-18）：[前處理、特徵公式、模型、選模與驗證異同](../13_R1與本組流程比較_前處理特徵模型與驗證.md)，包含具體計算例子與尚未確認的作者實作細節；未新增訓練。
