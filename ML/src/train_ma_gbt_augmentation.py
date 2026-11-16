@@ -39,7 +39,7 @@ def mask_features(frame, rates, seed):
         "GCS": np.flatnonzero(frame["GCS__count"].gt(0).to_numpy()),
         "ICUType": np.flatnonzero(frame[ICU_TYPE].notna().to_numpy()),
     }
-    for channel in ("Urine", "Lactate"):
+    for channel in ("Urine", "Lactate", "Bilirubin"):
         if channel in rates:
             observed[channel] = np.flatnonzero(frame[f"{channel}__count"].gt(0).to_numpy())
     selected = {
