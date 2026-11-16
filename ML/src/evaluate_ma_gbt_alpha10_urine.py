@@ -146,24 +146,23 @@ def ma_urine_rho(pipe, frame):
     return float(pipe.model.compute_missingness_reliance(features, urine_mask(mask, pipe.schema)))
 
 
-def compare_set_c(pipes, reference, prior, gcs):
+def paired_set_c(new, reference, prior, previous_replicates, baselines, new_tag):
     frame, y, positions, plan, views = c_inputs(reference)
-    new = pipes[NEW]
     scores = {
         f"score_{name}": pipe.predict_proba(frame.loc[:, columns])[:, 1] for name, (pipe, columns) in new.items()
     }
     baseline, replicates = stress(frame, y, pd.DataFrame(scores, index=frame.index), new, positions, plan)
-    old = pd.read_csv(P15_EVALUATION / "set_c_paired_replicates.csv")
-    columns = [f"{metric}_{tag}" for tag in BASELINES for metric in METRICS]
+    old = pd.read_csv(previous_replicates)
+    columns = [f"{metric}_{tag}" for tag in baselines for metric in METRICS]
     paired = old[KEYS + columns].merge(
-        replicates[KEYS + list(METRICS)].rename(columns={metric: f"{metric}_{NEW}" for metric in METRICS}),
+        replicates[KEYS + list(METRICS)].rename(columns={metric: f"{metric}_{new_tag}" for metric in METRICS}),
         on=KEYS, validate="one_to_one",
     )
     if not len(paired) == len(old) == len(replicates) == 336:
-        raise ValueError("Set C did not reproduce every P15 mask replicate")
-    for tag in BASELINES:
+        raise ValueError("Set C did not reproduce every frozen mask replicate")
+    for tag in baselines:
         for metric in METRICS:
-            paired[f"delta_{metric}_vs_{tag}"] = paired[f"{metric}_{NEW}"] - paired[f"{metric}_{tag}"]
+            paired[f"delta_{metric}_vs_{tag}"] = paired[f"{metric}_{new_tag}"] - paired[f"{metric}_{tag}"]
     groups = {key: rows for key, rows in paired.groupby(["scenario", "model"], sort=False)}
     rows = []
     for previous in prior["set_c"]:
@@ -177,19 +176,28 @@ def compare_set_c(pipes, reference, prior, gcs):
         elif scenario != "clean":
             raise ValueError("Set C was missing a masked scenario")
         for metric in METRICS:
-            current = baseline[name][metric] if group is None else float(group[f"{metric}_{NEW}"].mean())
-            row[f"{metric}_{NEW}"] = current
-            for tag in BASELINES:
+            current = baseline[name][metric] if group is None else float(group[f"{metric}_{new_tag}"].mean())
+            row[f"{metric}_{new_tag}"] = current
+            for tag in baselines:
                 col = f"delta_{metric}_vs_{tag}"
                 row[col] = current - row[f"{metric}_{tag}"]
                 if group is not None:
                     row[f"{col}_p10_p90"] = group[col].quantile([0.1, 0.9]).tolist()
+        rows.append(row)
+    return rows, paired, views
+
+
+def compare_set_c(pipes, reference, prior, gcs):
+    rows, paired, views = paired_set_c(
+        pipes[NEW], reference, prior, P15_EVALUATION / "set_c_paired_replicates.csv", BASELINES, NEW
+    )
+    for row in rows:
+        scenario, name = row["scenario"], row["model"]
         if scenario in RHO_SCENARIOS:
             row["urine_rho_gcs"] = gcs["set_c"][f"{scenario}_{name}"]
             for tag, model_group in pipes.items():
                 pipe, features = model_group[name]
                 row[f"urine_rho_{tag}"] = ma_urine_rho(pipe, views[scenario].loc[:, features])
-        rows.append(row)
     return rows, paired
 
 

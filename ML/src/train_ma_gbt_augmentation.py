@@ -39,8 +39,9 @@ def mask_features(frame, rates, seed):
         "GCS": np.flatnonzero(frame["GCS__count"].gt(0).to_numpy()),
         "ICUType": np.flatnonzero(frame[ICU_TYPE].notna().to_numpy()),
     }
-    if "Urine" in rates:
-        observed["Urine"] = np.flatnonzero(frame["Urine__count"].gt(0).to_numpy())
+    for channel in ("Urine", "Lactate"):
+        if channel in rates:
+            observed[channel] = np.flatnonzero(frame[f"{channel}__count"].gt(0).to_numpy())
     selected = {
         key: rng.permutation(rows)[: (len(rows) * rates[key] + 50) // 100]
         for key, rows in observed.items()
