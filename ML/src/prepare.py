@@ -43,7 +43,7 @@ def stats_spec(var):
  if var=='Urine': return {'min':0,'max':0,'mean':0,'last':0,'first':1,'std':1}
  return {'min':0,'max':0,'mean':0,'last':0,'first':1,'std':1,'delta':1,'slope':1}
 
-def extract_record(content, rid):
+def extract_record(content, rid, *, end_minute=2880):
  """Fixed encounter-local extraction, shared by development and C evaluation."""
  obs={v:[] for v in UNITS};adm={v:np.nan for v in STATIC};records=[]
  for seq,r in enumerate(csv.DictReader(content.decode().splitlines())):
@@ -59,7 +59,7 @@ def extract_record(content, rid):
   except Exception:raw=np.nan
   v,flag=clean(var,raw)
   if var not in UNITS and var not in STATIC:flag='blank_parameter' if not var else 'unknown_parameter';v=np.nan
-  if minute<0 or minute>2880:flag='outside_window';v=np.nan
+  if minute<0 or minute>end_minute:flag='outside_window';v=np.nan
   records.append((rid,minute,var,raw,v,flag,seq))
   if var in STATIC and minute==0 and np.isnan(adm[var]):adm[var]=v
   if var in UNITS and flag=='valid':obs[var].append((minute/60,seq,v))

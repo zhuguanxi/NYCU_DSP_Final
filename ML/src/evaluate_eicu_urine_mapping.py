@@ -12,7 +12,7 @@ for key in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
 import numpy as np
 import pandas as pd
 
-from eicu_demo_features import DEMO, STAY, chart_events, merge_minutes, normalize, numeric_events, windowed
+from eicu_demo_features import DEMO, STAY, WINDOW, chart_events, merge_minutes, normalize, numeric_events, windowed
 from evaluate_eicu_demo import DEFAULT_OUTPUT, FROZEN, MODES, score_frozen, source_hashes
 from evaluate_ma_gbt_p12 import REFERENCES, eicu_inputs
 from evaluate_missingness_augmentation import augmented_models, paired_intervals
@@ -24,10 +24,11 @@ OUTPUT = OUT / "p23_eicu_explicit_urine"
 URINE_PATH = "flowsheet|flowsheet cell labels|i&o|output (ml)|urine"
 
 
-def urine_events(index, directory=DEMO):
+def urine_events(index, directory=DEMO, *, end_minute=WINDOW):
     frame, late = windowed(
         directory, "intakeOutput", index, "intakeoutputoffset",
         ("cellpath", "celllabel", "cellvaluenumeric"), "intakeoutputentryoffset",
+        end_minute=end_minute,
     )
     select = normalize(frame.cellpath).eq(URINE_PATH) & normalize(frame.celllabel).eq("urine")
     raw = numeric_events(chart_events(frame, select, "Urine", "cellvaluenumeric"))

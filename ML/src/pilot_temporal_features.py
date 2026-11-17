@@ -26,23 +26,24 @@ ID, MINUTE, VALUE = "RecordID", "elapsed_minute", "clean_value"
 STATS = ("early_mean", "late_mean", "late_min", "late_max", "late_minus_early", "hours_since_last", "covered_hours")
 
 
-def time_summary(records, index):
+def time_summary(records, index, *, end_minute=2880):
     """Build a fixed schema with equal weight for each observed hour."""
+    end_hour = end_minute // 60
     rows = records.loc[
-        records["variable"].isin(GROUPS) & records[MINUTE].between(0, 2880) & records[VALUE].notna(),
+        records["variable"].isin(GROUPS) & records[MINUTE].between(0, end_minute) & records[VALUE].notna(),
         [ID, "variable", MINUTE, VALUE],
     ]
     if not pd.Index(rows[ID].unique()).isin(index).all():
         raise ValueError("Temporal rows include an ID outside the intended cohort")
     if not np.isfinite(rows[VALUE].to_numpy()).all():
         raise ValueError("Nonfinite entries in the accepted observations")
-    hours = rows.assign(hour=(rows[MINUTE] // 60).clip(upper=47)).groupby(
+    hours = rows.assign(hour=(rows[MINUTE] // 60).clip(upper=end_hour - 1)).groupby(
         [ID, "variable", "hour"], sort=False, observed=True
     )[VALUE].median().rename("value").reset_index()
-    early = hours.loc[hours.hour.lt(12)].groupby([ID, "variable"], sort=False, observed=True).value.mean()
-    late = hours.loc[hours.hour.ge(36)].groupby([ID, "variable"], sort=False, observed=True).value
+    early = hours.loc[hours.hour.lt(end_hour // 4)].groupby([ID, "variable"], sort=False, observed=True).value.mean()
+    late = hours.loc[hours.hour.ge(3 * end_hour // 4)].groupby([ID, "variable"], sort=False, observed=True).value
     full = hours.groupby([ID, "variable"], sort=False, observed=True)
-    age = (2880 - rows.groupby([ID, "variable"], sort=False, observed=True)[MINUTE].max()) / 60
+    age = (end_minute - rows.groupby([ID, "variable"], sort=False, observed=True)[MINUTE].max()) / 60
     measures = {
         "early_mean": early, "late_mean": late.mean(), "late_min": late.min(), "late_max": late.max(),
         "hours_since_last": age, "covered_hours": full.size(),

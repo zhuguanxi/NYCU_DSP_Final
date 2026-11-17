@@ -71,7 +71,7 @@ def normalize(values):
     return values.astype("string").str.strip().str.casefold()
 
 
-def select_cohort(directory):
+def select_cohort(directory, *, end_minute=WINDOW):
     fields = [
         STAY, "uniquepid", "hospitalid", "hospitaldischargestatus",
         "hospitaldischargeoffset", "unitdischargeoffset", "unitvisitnumber",
@@ -86,9 +86,9 @@ def select_cohort(directory):
     filters = {
         "adult": age.ge(18),
         "first_icu_in_hospitalization": patients.unitvisitnumber.eq(1),
-        "icu_stay_at_least_48h": patients.unitdischargeoffset.ge(WINDOW),
+        f"icu_stay_at_least_{end_minute // 60}h": patients.unitdischargeoffset.ge(end_minute),
         "known_hospital_outcome": label.notna(),
-        "hospital_exit_after_48h": patients.hospitaldischargeoffset.gt(WINDOW),
+        f"hospital_exit_after_{end_minute // 60}h": patients.hospitaldischargeoffset.gt(end_minute),
     }
     counts = {"all_stays": len(patients)}
     eligible = pd.Series(True, index=patients.index)
@@ -111,15 +111,17 @@ def select_cohort(directory):
     return cohort, static.loc[:, list(STATIC)], counts
 
 
-def windowed(directory, table, cohort, offset, values, entry=None):
+def windowed(directory, table, cohort, offset, values, entry=None, *, end_minute=WINDOW):
     columns = [STAY, offset, *values]
     if entry:
         columns.append(entry)
     raw = read_table(directory, table, columns)
-    allowed = raw[STAY].isin(cohort) & raw[offset].between(0, WINDOW)
-    late = raw[entry].gt(WINDOW) if entry else pd.Series(False, index=raw.index)
-    excluded = int((allowed & late).sum())
-    frame = raw.loc[allowed & ~late].rename(columns={offset: "minute"})
+    eligible = raw[STAY].isin(cohort) & raw[offset].between(0, end_minute)
+    late = raw[entry].gt(end_minute) if entry else pd.Series(False, index=raw.index)
+    if entry and end_minute < WINDOW:
+        late |= raw[entry].isna()
+    excluded = int((eligible & late).sum())
+    frame = raw.loc[eligible & ~late].rename(columns={offset: "minute"})
     frame["minute"] = frame.minute.astype("int32")
     return frame, excluded
 
@@ -140,8 +142,8 @@ def chart_events(frame, selected, variable, field):
     return frame.loc[selected, [STAY, "minute", field]].rename(columns={field: "value"}).assign(variable=variable)
 
 
-def monitor_events(directory, table, cohort, mapping):
-    frame, _ = windowed(directory, table, cohort, "observationoffset", mapping)
+def monitor_events(directory, table, cohort, mapping, *, end_minute=WINDOW):
+    frame, _ = windowed(directory, table, cohort, "observationoffset", mapping, end_minute=end_minute)
     frame = frame.rename(columns=mapping).melt(
         id_vars=[STAY, "minute"], var_name="variable", value_name="value",
     )
@@ -152,11 +154,12 @@ def merge_minutes(frame, method="median"):
     return frame.groupby([STAY, "minute", "variable"], sort=False, as_index=False).value.agg(method)
 
 
-def lab_events(directory, cohort):
+def lab_events(directory, cohort, *, end_minute=WINDOW):
     frame, late = windowed(
         directory, "lab", cohort, "labresultoffset",
         ("labname", "labtypeid", "labmeasurenamesystem", "labresult"),
         "labresultrevisedoffset",
+        end_minute=end_minute,
     )
     keys = zip(normalize(frame.labname), frame.labtypeid, normalize(frame.labmeasurenamesystem).fillna(""))
     frame["variable"] = [LAB.get(key) for key in keys]
@@ -168,11 +171,12 @@ def lab_events(directory, cohort):
     return merge_minutes(numeric_events(frame)), late
 
 
-def nurse_events(directory, cohort):
+def nurse_events(directory, cohort, *, end_minute=WINDOW):
     frame, late = windowed(
         directory, "nurseCharting", cohort, "nursingchartoffset",
         ("nursingchartcelltypevallabel", "nursingchartcelltypevalname", "nursingchartvalue"),
         "nursingchartentryoffset",
+        end_minute=end_minute,
     )
     label = normalize(frame.nursingchartcelltypevallabel)
     name = normalize(frame.nursingchartcelltypevalname)
@@ -185,10 +189,11 @@ def nurse_events(directory, cohort):
     return gcs, merge_minutes(numeric_events(temp)), late
 
 
-def respiratory_events(directory, cohort):
+def respiratory_events(directory, cohort, *, end_minute=WINDOW):
     frame, late = windowed(
         directory, "respiratoryCharting", cohort, "respchartoffset",
         ("respchartvaluelabel", "respchartvalue"), "respchartentryoffset",
+        end_minute=end_minute,
     )
     label = normalize(frame.respchartvaluelabel)
     allowed = label.isin({"fio2", "fio2 (%)", "o2 percentage", "set fraction of inspired oxygen (fio2)"})
@@ -201,10 +206,11 @@ def respiratory_events(directory, cohort):
     return merge_minutes(numeric_events(frame.assign(variable="FiO2"))), late
 
 
-def weight_events(directory, cohort):
+def weight_events(directory, cohort, *, end_minute=WINDOW):
     frame, late = windowed(
         directory, "intakeOutput", cohort, "intakeoutputoffset",
         ("celllabel", "cellvaluenumeric"), "intakeoutputentryoffset",
+        end_minute=end_minute,
     )
     weight = chart_events(frame, normalize(frame.celllabel).eq("bodyweight (kg)"), "Weight", "cellvaluenumeric")
     weight = numeric_events(weight)
@@ -239,14 +245,16 @@ def p12_features(events, static):
     return pd.DataFrame.from_dict(rows, orient="index").rename_axis(STAY)
 
 
-def build_features(directory: Path, feature_extension=None):
-    cohort, static, counts = select_cohort(directory)
-    periodic = monitor_events(directory, "vitalPeriodic", cohort.index, PERIODIC)
-    aperiodic = monitor_events(directory, "vitalAperiodic", cohort.index, APERIODIC)
-    lab, lab_late = lab_events(directory, cohort.index)
-    gcs, temp, nurse_late = nurse_events(directory, cohort.index)
-    resp, resp_late = respiratory_events(directory, cohort.index)
-    weight, weight_late = weight_events(directory, cohort.index)
+def build_features(directory: Path, feature_extension=None, *, end_minute=WINDOW):
+    if end_minute not in (1440, WINDOW):
+        raise ValueError("Expected the 24-hour or 48-hour observation window")
+    cohort, static, counts = select_cohort(directory, end_minute=end_minute)
+    periodic = monitor_events(directory, "vitalPeriodic", cohort.index, PERIODIC, end_minute=end_minute)
+    aperiodic = monitor_events(directory, "vitalAperiodic", cohort.index, APERIODIC, end_minute=end_minute)
+    lab, lab_late = lab_events(directory, cohort.index, end_minute=end_minute)
+    gcs, temp, nurse_late = nurse_events(directory, cohort.index, end_minute=end_minute)
+    resp, resp_late = respiratory_events(directory, cohort.index, end_minute=end_minute)
+    weight, weight_late = weight_events(directory, cohort.index, end_minute=end_minute)
 
     periodic = periodic.loc[~(periodic.variable.eq("Temp") & periodic[STAY].isin(temp[STAY]))]
     lab_oxygen = lab.loc[lab.variable.eq("FiO2"), [STAY, "minute"]]
@@ -261,8 +269,8 @@ def build_features(directory: Path, feature_extension=None):
         raise ValueError("The eICU mapping does not cover the expected P12 variables")
     for name, measurements in modes.items():
         events = pd.concat([measurements, fixed], ignore_index=True)
-        if not events.minute.between(0, WINDOW).all():
-            raise ValueError("An observation falls outside the first 48 hours")
+        if not events.minute.between(0, end_minute).all():
+            raise ValueError("An observation falls outside the requested window")
         result = p12_features(events, static)
         if not result.index.equals(cohort.index) or result.shape[1] != 435:
             raise ValueError("Misaligned P12 input shape or stay order")
