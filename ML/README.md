@@ -31,6 +31,7 @@ P33、P26 評估沿用完全未用於擬合的 Set C。Set C 曾多次用於比�
 - [P46 完整 eICU 的 P45 比較](reports/P46_eicu_adaptation_confirmation_results.md) 提供含 P45 的 CPU 驗證入口及患者排除測試結果。
 - [P47 P12 拆分稽核](reports/P47_p12_split_overlap_results.md) 核對原始紀錄、435 維凍結特徵與高重疊動態觀測。
 - [P48 臨床評分配對比較](reports/P48_clinical_score_baselines_results.md) 在共同隊列比較 SAPS-I、SOFA、APACHE IVa 和凍結模型，附近年文獻的切分及標籤差異。
+- [P49 24 小時觀察窗](reports/P49_24h_landmark_results.md) 用 A/B 選定 CPU 模型，在 Set C 測試遮蔽，並於 eICU 同一隊列比較前 24 小時的模型和 APACHE IVa。
 
 組員分享版包含完整前處理、模型參數、切分、指標與文獻比較限制。第 10 節整理缺失韌性、外部增強及確認入口。 [組員研究報告](實驗報告_組員分享版.md)
 
