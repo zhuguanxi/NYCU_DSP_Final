@@ -241,7 +241,7 @@ def warp_smoke_ids(workspace):
 
 
 def run_wavegnn(run_dir, workspace, profile):
-    overrides = []
+    overrides = ["--dropout", "0.1"]
     if profile == "smoke":
         main = workspace / "run.py"
         replace(main, "            stats = train_dataset.get_dims()\n\n", "")
