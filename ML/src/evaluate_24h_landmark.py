@@ -153,9 +153,7 @@ def select_candidate(y, folds, observed, missing):
     return metrics, recipes, eligible, selected
 
 
-def fit():
-    if ROOT.exists():
-        raise FileExistsError(ROOT)
+def development_24h():
     input_files = (AB_FEATURES, AB_LABELS, AB_FOLDS, ALIGNMENT, P0)
     protected = {path.relative_to(OUT).as_posix(): sha(path) for path in input_files}
     raw, y, folds = ab_inputs()
@@ -165,7 +163,13 @@ def fit():
     pd.testing.assert_frame_equal(x.filter(like="static_"), raw.filter(like="static_"), check_dtype=False)
     if not (x.filter(like="__count") <= raw.filter(like="__count")).all().all():
         raise ValueError("A/B feature counts increased after shortening the window")
-    x, timing, y, folds = x.loc[eligible], timing.loc[eligible], y[eligible], folds[eligible]
+    return x.loc[eligible], timing.loc[eligible], y[eligible], folds[eligible], protected
+
+
+def fit():
+    if ROOT.exists():
+        raise FileExistsError(ROOT)
+    x, timing, y, folds, protected = development_24h()
     observed, missing = development_risks(x, timing, y, folds)
     metrics, recipes, passed, selected = select_candidate(y, folds, observed, missing)
     recipe = recipes[selected]
@@ -226,7 +230,7 @@ def model_risks(models, recipe, original, altered, timing):
     return {SUMMARIES: summary, "selected": selected}
 
 
-def set_c(models, recipe):
+def set_c_24h():
     paths = (C_FEATURES, C_LABELS, C_PREDICTIONS)
     hashes = {path.relative_to(OUT).as_posix(): sha(path) for path in paths}
     reference, y, historical = load_cohort()
@@ -235,25 +239,44 @@ def set_c(models, recipe):
     pd.testing.assert_frame_equal(base.filter(like="static_"), reference.filter(like="static_"), check_dtype=False)
     base, timing, target = base.loc[included], timing.loc[included], y[included]
     views = {"clean": base, "gcs_full": gcs_full(base, SHIFT_SEED), "mapped1": build_views(base, FOLD_IDS[0])["mapped1"]}
+    verify_sources(hashes)
+    metadata = {"stays": len(target), "deaths": int(target.sum()), "excluded_deaths": int(y[~included].sum()),
+                "source_sha256": hashes}
+    return base, timing, target, views, historical.loc[included], metadata
+
+
+def set_c(models, recipe):
+    base, timing, target, views, historical, metadata = set_c_24h()
     results = {}
     for key, frame in views.items():
         risk = model_risks(models, recipe, base, frame, timing)
         metrics = {tag: score_metrics(target, values) for tag, values in risk.items()}
         if key == "clean":
             for tag in ("Full", "Elastic"):
-                metrics[f"frozen48_{tag}"] = score_metrics(target, historical[f"score_{tag}"].to_numpy()[included])
+                metrics[f"frozen48_{tag}"] = score_metrics(target, historical[f"score_{tag}"].to_numpy())
         results[key] = {
             "metrics": metrics,
             "paired_ci": contrast_c(target, {SUMMARIES: risk[SUMMARIES]}, {"selected": risk["selected"]}),
         }
-    verify_sources(hashes)
-    return {"stays": len(target), "deaths": int(target.sum()), "excluded_deaths": int(y[~included].sum()),
-            "views": results, "source_sha256": hashes}
+    return {**metadata, "views": results}
 
 
 def temporal_extension(events, index):
     columns = {STAY: ID, "minute": MINUTE, "value": VALUE}
     return time_summary(events.rename(columns=columns), index, end_minute=END_MINUTE)
+
+
+def demo_inputs_24h(columns):
+    cohort, frames, counts, excluded = build_features(DEMO, temporal_extension, end_minute=END_MINUTE)
+    events, urine_coverage = urine_events(cohort.index, end_minute=END_MINUTE)
+    urine_base = urine_values(cohort.index, events)
+    urine_timing = temporal_extension(events, cohort.index).filter(like="temporal_Urine__")
+    inputs = {}
+    for mode, frame in frames.items():
+        frame.loc[:, urine_base.columns] = urine_base
+        frame.loc[:, urine_timing.columns] = urine_timing
+        inputs[mode] = (frame.loc[:, columns], frame.drop(columns=columns))
+    return cohort, inputs, counts, excluded, urine_coverage
 
 
 def demo_result(cohort, scores):
@@ -287,21 +310,13 @@ def evaluate():
     hashes = source_hashes(DEMO)
     if hashes != from_json(P8 / "summary.json")["data_sha256"]:
         raise ValueError("Unexpected eICU Demo release inputs")
-    cohort, frames, counts, excluded = build_features(DEMO, temporal_extension, end_minute=END_MINUTE)
+    columns = pd.read_parquet(AB_FEATURES).columns
+    cohort, inputs, counts, excluded, urine_coverage = demo_inputs_24h(columns)
     old_cohort, _, _ = select_cohort(DEMO)
     if not old_cohort.index.isin(cohort.index).all():
         raise ValueError("The 48-hour Demo cohort is not a subset")
     pd.testing.assert_frame_equal(cohort.loc[old_cohort.index], old_cohort)
-    events, urine_coverage = urine_events(cohort.index, end_minute=END_MINUTE)
-    urine_base = urine_values(cohort.index, events)
-    urine_timing = temporal_extension(events, cohort.index).filter(like="temporal_Urine__")
-    columns = pd.read_parquet(AB_FEATURES).columns
-    scores = {}
-    for mode, frame in frames.items():
-        frame.loc[:, urine_base.columns] = urine_base
-        frame.loc[:, urine_timing.columns] = urine_timing
-        base = frame.loc[:, columns]
-        scores[mode] = model_risks(models, recipe, base, base, frame.drop(columns=columns))
+    scores = {mode: model_risks(models, recipe, base, base, timing) for mode, (base, timing) in inputs.items()}
     landmark = demo_result(cohort, scores)
     contained = cohort.index.isin(old_cohort.index)
     old = demo_result(cohort.loc[contained], {
