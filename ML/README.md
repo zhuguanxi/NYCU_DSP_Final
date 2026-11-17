@@ -33,6 +33,7 @@ P33、P26 評估沿用完全未用於擬合的 Set C。Set C 曾多次用於比�
 - [P48 臨床評分配對比較](reports/P48_clinical_score_baselines_results.md) 在共同隊列比較 SAPS-I、SOFA、APACHE IVa 和凍結模型，附近年文獻的切分及標籤差異。
 - [P49 24 小時觀察窗](reports/P49_24h_landmark_results.md) 用 A/B 選定 CPU 模型，在 Set C 測試遮蔽，並於 eICU 同一隊列比較前 24 小時的模型和 APACHE IVa。
 - [P50 24 小時真實外部增強](reports/P50_24h_eicu_augmentation_results.md) 使用互斥的患者與院鍵區塊五折，檢查增強後 AP 與 Set C 的 GCS 全遮結果。
+- [P51 課程資料包](reports/P51_course_dataset_package_results.md) 保存截至 P50 的模型輸入、分折與本機 ZIP 驗證紀錄。
 
 組員分享版包含完整前處理、模型參數、切分、指標與文獻比較限制。第 10 節整理缺失韌性、外部增強及確認入口。 [組員研究報告](實驗報告_組員分享版.md)
 
