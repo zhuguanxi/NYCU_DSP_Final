@@ -17,6 +17,7 @@
 - [P42 機率校準與分類門檻](reports/P42_frozen_calibration_results.md) 用 A/B 折外預測擬合，檢查 Set C 與 eICU Demo 的機率誤差和分類表現。
 - [P43 eICU 醫院層級敏感度](reports/P43_eicu_hospital_variation_results.md) 用原凍結分數核對醫院重抽、逐區塊省略及院內排序。
 - [P44 真實外部病例增強](reports/P44_real_eicu_augmentation_results.md) 將 eICU Demo 合格病例納入 P12 A/B 訓練，評估獨立 Set C 與患者分折的 Demo。
+- [P45 外部增強分支消融](reports/P45_augmentation_branch_ablation_results.md) 在同一隊列拆開有 GCS 與無 GCS 分支的外部增強。
 
 組員分享版（2026-10-18）：[前處理、方法、實驗設定、結果與討論](實驗報告_組員分享版.md)。含實際摘要定義、模型參數、切分與統計方式、C 結果及重現入口，供組內審閱。
 
