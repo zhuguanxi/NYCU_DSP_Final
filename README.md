@@ -45,6 +45,8 @@
 
 P33 提高了 Set C 未遮蔽的排序表現，P26 在兩種固定全遮蔽下優於 GCS-only Full。P26 自身仍會因遮蔽掉分。eICU Demo 的兩個主要差值區間均跨零，外部改善仍不確定。 [期末研究報告與完整結果](ML/reports/期末研究報告.md)
 
+後續 24 小時 P52 在有 GCS 時加入 CatBoost。Set C 未遮蔽 AP 由 0.46555 升至 0.48012，配對差 +0.01457［+0.00417, +0.02599］。GCS 全遮 AP 為 0.41539。eICU Demo 整點 AP 由 0.38057 升至 0.40124，差值區間跨零。 [P52 結果與分層分析](ML/reports/P52_24h_catboost_blend_results.md)
+
 ![Set C 與 eICU Demo 的配對 AP 差及 95% 區間](ML/figures/期末報告_配對AP差.png)
 
 ## 解讀範圍與待驗證事項
@@ -58,11 +60,11 @@ P33 提高了 Set C 未遮蔽的排序表現，P26 在兩種固定全遮蔽下�
 | 方法 | 本機進度 |
 | --- | --- |
 | MA-GBT | 已完成本專題 P12／eICU Demo 同流程的基準與缺失增強實驗。 |
-| KEDGN | 作者的 PhysioNet 住院死亡設定已跑完完整切分一輪，測試 AP 34.95%、AUROC 73.91%，完整種子排程待跑。 |
+| KEDGN | 作者的 PhysioNet 住院死亡設定已跑完完整切分一輪，測試 AP 34.95%、AUROC 73.91%，完整種子排程已啟動。 |
 | ATENet、Warpformer、WaveGNN、ViTST | 作者程式已通過真實小樣本的 CPU 訓練、驗證與測試。完整論文成績、相容性修正與估計成本逐篇記錄。 |
 | DBGL | 尚未查到作者公開 GitHub，待討論。 |
 
-作者切分用來核對論文設定。例如 WaveGNN、ATENet 和 ViTST 所用的 Raindrop P12 第一折，訓練集包含本專題 Set C 的 3,201 筆病例。要與本專題比較，需統一病例、切分、標籤、觀察窗和指標。 [逐篇進度、GitHub 與論文](ML/related_work/README.md) · [文獻 CPU 重跑方式](ML/related_work/SETUP.md)
+作者切分用來核對論文設定。例如 WaveGNN、ATENet 和 ViTST 所用的 Raindrop P12 第一折，訓練集包含本專題 Set C 的 3,201 筆病例。要與本專題比較，需統一病例、切分、標籤、觀察窗和指標。 [逐篇進度、GitHub 與論文](ML/related_work/README.md) · [文獻 CPU 重跑方式](ML/related_work/SETUP.md) · [作者同切分的 XGBoost 對照](ML/related_work/AUTHOR_SPLIT_COMPARISON.md)
 
 ## 本機 CPU 重跑
 
