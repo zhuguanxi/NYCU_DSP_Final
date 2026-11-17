@@ -84,7 +84,7 @@ def train_pair(x, timing, y, extra, selected, y_demo):
     }
 
 
-def external(x, timing, y, routed, gcs, rule, elastic, cols, extras, prior, old38):
+def demo_setup(x, extras, prior, old38):
     (cohort, original), hashes = eicu_temporal()
     if hashes != prior["eicu_raw_sha256"] or hashes != old38["eicu_raw_sha256"]:
         raise ValueError("Expected the original Demo sources and cohort")
@@ -105,6 +105,12 @@ def external(x, timing, y, routed, gcs, rule, elastic, cols, extras, prior, old3
     counts = len(cohort), int(y_demo.sum()), grouping["patients"]
     if counts != (782, 91, 719):
         raise ValueError("Unexpected eICU Demo population")
+    return cohort, frames, extra, hashes, folds, fold_sizes, grouping, sources
+
+
+def external(x, timing, y, routed, gcs, rule, elastic, cols, extras, prior, old38):
+    cohort, frames, extra, hashes, folds, fold_sizes, grouping, sources = demo_setup(x, extras, prior, old38)
+    y_demo = cohort.y.to_numpy()
     previous, predictions, original_elastic = {}, {}, {}
     anchor = Ensemble(routed, gcs, rule)
     old = {(row["alignment"], row["mode"]): row["metrics"] for row in prior["eicu"]}
