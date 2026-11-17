@@ -16,6 +16,7 @@ set-[abc].zip
 
 # Local Python environments and caches
 .venv/
+.venv-*/
 venv/
 __pycache__/
 *.py[cod]
@@ -47,3 +48,31 @@ checkpoints/
 
 # Downloaded datasets
 dataset/
+
+# Local credentials and environment configuration
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+
+# Downloaded archives and generated array data
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.npy
+*.npz
+
+# Operating system, editor, and temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.log
+*.tmp
+*.bak
+~$*

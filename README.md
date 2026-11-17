@@ -109,7 +109,7 @@ if ($LASTEXITCODE -eq 0) { & $py .\ML\src\study.py baseline }
 
 | 工作 | 入口與所需設定 |
 | --- | --- |
-| MA-GBT 原版 | `ma_gbt_p12_inputs.py` → `run_ma_gbt_p12.py` → `evaluate_ma_gbt_p12.py)。[作者版本及獨立 Python 環境](ML/reports/P13_ma_gbt_protocol.md) |
+| MA-GBT 原版 | `ma_gbt_p12_inputs.py` → `run_ma_gbt_p12.py` → `evaluate_ma_gbt_p12.py`。[作者版本及獨立 Python 環境](ML/reports/P13_ma_gbt_protocol.md) |
 | P33 訓練、Set C 主結果重評 | `prepare_hourly_sequence.py` → `train_hourly_sequence.py` → `evaluate_hourly_sequence.py`。有凍結產物時，可用 `audit_p12_outcome_timing.py` 重跑主比較。[Torch CPU 環境](ML/reports/P33_hourly_sequence_protocol.md) |
 | 48 小時外部增強與完整版驗證 | `evaluate_real_eicu_augmentation.py` → `audit_eicu_augmentation_branches.py`。有完整資料與凍結產物時，`evaluate_eicu_adaptation_confirmation.py --full-directory` 接收資料目錄。[P45 依賴](ML/reports/P45_augmentation_branch_ablation_protocol.md) · [P46 執行指令](ML/reports/P46_eicu_adaptation_confirmation_protocol.md) |
 | 24 小時與 APACHE IVa | `evaluate_24h_landmark.py fit` → `evaluate_24h_landmark.py evaluate` → `evaluate_eicu_24h_augmentation.py`。[P49 設定](ML/reports/P49_24h_landmark_protocol.md) · [P50 設定](ML/reports/P50_24h_eicu_augmentation_protocol.md) |
