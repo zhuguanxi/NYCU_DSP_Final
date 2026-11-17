@@ -36,3 +36,9 @@ $env:PYTHONDONTWRITEBYTECODE = '1'
 `smoke` 只驗證作者程式在真實資料上的前處理、訓練、驗證及測試。採固定種子從作者切分內各自抽出兩個類別，所以 AP 和 AUROC 不能拿來對比原論文。較大的 `paper_schedule` 才使用完整資料及論文排程，其驗證狀態以各模型報告為準。ViTST 另將訓練期間的評估資料改為驗證折，並在試跑凍結公開預訓練編碼器。
 
 正式比較 DSP P33 應另建 A/B → Set C 的適配。作者 P12 第一折訓練含 3,201 筆官方 Set C，驗證含 389 筆，測試含 408 筆。兩個評估設定會用到不同的訓練病例。
+
+ViTST 可用 `first_fold` 只跑作者第一折的完整資料與四輪微調設定。`paper_schedule` 則產生五折資料。這兩種設定都重用 Matplotlib 的子圖，保留原刻度、線條和折內尺度。完整影像與訓練仍耗時。
+
+```powershell
+& $py related_work/run_cpu.py ViTST --profile first_fold --tag local_vit_fold1
+```

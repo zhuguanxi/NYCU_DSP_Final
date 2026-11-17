@@ -262,6 +262,35 @@ def run_wavegnn(run_dir, workspace, profile):
     ])
 
 
+def reuse_vitst_grid(path):
+    replace(path, "def draw_image(pid,", """from functools import lru_cache
+
+@lru_cache(maxsize=1)
+def reusable_grid(grid_height, grid_width, img_height, img_width, dpi):
+    fig, axes = plt.subplots(grid_height, grid_width, squeeze=False,
+                             figsize=(img_width / dpi, img_height / dpi), dpi=dpi, frameon=False)
+    fig.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
+    return fig, axes.ravel()
+
+def draw_image(pid,""")
+    replace(path, "    drawed_params = []", """    fig, axes = reusable_grid(grid_height, grid_width, img_height, img_width, dpi)
+    lines = []
+    drawed_params = []""")
+    replace(path, "        plt.subplot(grid_height, grid_width, idx+1) # 6*6", "        ax = axes[idx]")
+    replace(path, "            plt.plot(", "            line, = ax.plot(")
+    replace(path, "        else:\n            line, = ax.plot(", "        else:\n            ax.set_prop_cycle(None)\n            line, = ax.plot(")
+    for name in ("xlim", "ylim", "xticks", "yticks"):
+        replace(path, f"        plt.{name}(", f"        ax.set_{name}(")
+    replace(path, "        drawed_params.append(param)", "        lines.append(line)\n        drawed_params.append(param)")
+    replace(path, """    plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
+    plt.margins(0,0)
+    plt.savefig(img_path, pad_inches=0)
+    plt.clf()""", """    axes[len(lines) - 1].margins(0, 0)
+    fig.savefig(img_path, pad_inches=0)
+    for line in lines:
+        line.remove()""")
+
+
 def run_vitst(run_dir, workspace, profile):
     import numpy as np
 
@@ -272,8 +301,11 @@ def run_vitst(run_dir, workspace, profile):
     images = dataset / "process_scripts" / "ConstructImage.py"
     replace(images, 'base_path = "../processed_data/" + base_path',
             'base_path = "../processed_data/" + base_path.replace("*", "x")')
-    if profile == "smoke":
+    if profile != "smoke":
+        reuse_vitst_grid(images)
+    if profile != "paper_schedule":
         replace(images, "for split_idx in range(5):", "for split_idx in range(1):")
+    if profile == "smoke":
         replace(images, """        # second round, draw the image for each patient
         for idx, p in tqdm(enumerate(Pdict_list)):""", """        # second round, draw a bounded subset from the original split
         from run_cpu import smoke_indices
@@ -334,7 +366,7 @@ def run_vitst(run_dir, workspace, profile):
         train.name, "--dataset", "P12", "--dataset_prefix", prefix, "--image_model", "swin",
         "--image_model_path", settings / "swin", "--text_model", "roberta", "--text_model_path", settings / "roberta",
         "--output_dir", "local_cpu", "--do_train", "--epochs", "4",
-        "--n_splits", "1" if profile == "smoke" else "5",
+        "--n_splits", "5" if profile == "paper_schedule" else "1",
         "--train_batch_size", "2" if profile == "smoke" else "48",
         "--eval_batch_size", "2" if profile == "smoke" else "128",
         "--logging_steps", "1" if profile == "smoke" else "20",
@@ -349,13 +381,15 @@ def main():
     runners = {"ATENet": run_atenet, "KEDGN": run_kedgn, "Warpformer": run_warpformer, "WaveGNN": run_wavegnn,
                "ViTST": run_vitst}
     parser.add_argument("model", choices=tuple(runners))
-    parser.add_argument("--profile", choices=("smoke", "first_epoch", "paper_schedule"), default="smoke")
+    parser.add_argument("--profile", choices=("smoke", "first_epoch", "first_fold", "paper_schedule"), default="smoke")
     parser.add_argument("--tag", required=True)
     args = parser.parse_args()
     if not args.tag.replace("_", "").isalnum():
         raise ValueError("Run tag must contain only letters, numbers and underscores")
     if args.profile == "first_epoch" and args.model != "KEDGN":
         parser.error("first_epoch is available for KEDGN")
+    if args.profile == "first_fold" and args.model != "ViTST":
+        parser.error("first_fold is available for ViTST")
     run_dir, workspace = prepare(args.model, args.profile, args.tag)
     runners[args.model](run_dir, workspace, args.profile)
 
