@@ -142,10 +142,12 @@ def frozen_ensemble(protected):
     return selected["rule"], pipe, columns
 
 
-def evaluate(source, patients, smoke, *, ensemble=False, sequence=None):
+def evaluate(source, patients, smoke, *, ensemble=False, sequence=None, adaptation=None):
     if sequence is not None and not ensemble:
         raise ValueError("Sequence evaluation requires the frozen P28 comparison")
-    prefix = "p40" if sequence is not None else "p29" if ensemble else "p27"
+    if adaptation is not None and sequence is None:
+        raise ValueError("P46 adaptation evaluation includes the frozen P38 comparison")
+    prefix = "p46" if adaptation is not None else "p40" if sequence is not None else "p29" if ensemble else "p27"
     output = OUT / f"{prefix}_{'demo_smoke' if smoke else 'independent_eicu'}"
     if output.exists():
         raise FileExistsError(output)
@@ -165,6 +167,14 @@ def evaluate(source, patients, smoke, *, ensemble=False, sequence=None):
         for name, digest in sequence.source_sha256.items():
             if name in protected and protected[name] != digest:
                 raise ValueError(f"Conflicting sequence source digest for {name}")
+            protected[name] = digest
+        verify_sources(protected)
+    if adaptation is not None:
+        if adaptation.demo_patient_sha256 != demo_patient_sha:
+            raise ValueError("The P45 training patients differ from the pinned Demo reference")
+        for name, digest in adaptation.source_sha256.items():
+            if name in protected and protected[name] != digest:
+                raise ValueError(f"Conflicting adaptation source digest for {name}")
             protected[name] = digest
         verify_sources(protected)
     candidate = "ensemble" if ensemble else "routed"
@@ -200,6 +210,15 @@ def evaluate(source, patients, smoke, *, ensemble=False, sequence=None):
                 name: paired_intervals(cohort, predicted[name], predicted["p38"])
                 for name in ("ensemble", "frozen_elastic")
             }
+        adaptation_checks = {}
+        if adaptation is not None:
+            adapted, adaptation_checks = adaptation.predict(frames, new, gcs, rule, cols, predicted["ensemble"])
+            if not smoke:
+                predicted["p45"] = adapted
+                adaptation_intervals = {
+                    name: paired_intervals(cohort, predicted[name], adapted)
+                    for name in ("ensemble", "frozen_elastic", "p38")
+                }
         intervals = {
             name: paired_intervals(cohort, predicted[name], predicted[candidate]) for name in baselines
         }
@@ -221,6 +240,13 @@ def evaluate(source, patients, smoke, *, ensemble=False, sequence=None):
                         "paired_ci": ci[mode],
                     } for name, ci in sequence_intervals.items()
                 }
+            if adaptation is not None and not smoke:
+                row["adaptation_comparison"] = {
+                    name: {
+                        "delta": {metric: stats["p45"][metric] - stats[name][metric] for metric in METRICS},
+                        "paired_ci": ci[mode],
+                    } for name, ci in adaptation_intervals.items()
+                }
             result.append(row)
         verify_sources(protected)
         if demo_patient_sha is not None:
@@ -240,6 +266,10 @@ def evaluate(source, patients, smoke, *, ensemble=False, sequence=None):
         if sequence is not None:
             summary["secondary_candidate"] = "p38"
             summary["sequence_recipe"] = sequence.recipe
+        if adaptation is not None:
+            summary["adaptation_candidate"] = "p45"
+            summary["adaptation_recipe"] = adaptation.recipe
+            summary["adaptation_checks"] = adaptation_checks
         save_json(deliverable / "summary.json", summary)
         deliverable.rename(output)
     print(f"Frozen confirmation pipeline completed in {output}", flush=True)
