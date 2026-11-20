@@ -2,6 +2,8 @@
 
 資料科學專題（DSP）｜Fall 2026｜PhysioNet 2012 與 eICU Demo
 
+**研究進度更新至 2026 年 11 月 20 日。** [完整研究進度與 P0–P52 索引](ML/reports/研究進度總覽.md) 整理模型演進、陰性結果、資料稽核、論文完整重跑、重現入口與待完成事項。
+
 本專題用 ICU 入住後前 48 小時或前 24 小時可得的資料，預測病人是否在**這次住院期間死亡**。主要評估模型能否把高風險住院排在前面，以及量測欄位缺失或換到另一個資料庫時，排序表現會下降多少。
 
 ## 研究目標
@@ -60,8 +62,9 @@ P33 提高了 Set C 未遮蔽的排序表現，P26 在兩種固定全遮蔽下�
 | 方法 | 本機進度 |
 | --- | --- |
 | MA-GBT | 已完成本專題 P12／eICU Demo 同流程的基準與缺失增強實驗。 |
-| KEDGN | 作者的 PhysioNet 住院死亡設定已跑完完整切分一輪，測試 AP 34.95%、AUROC 73.91%，完整種子排程已啟動。 |
-| ATENet、Warpformer、WaveGNN、ViTST | 作者程式已通過真實小樣本的 CPU 訓練、驗證與測試。完整論文成績、相容性修正與估計成本逐篇記錄。 |
+| KEDGN | 完整五種子、每種子 10 輪已完成。平均 AP 56.8% ± 1.7%、AUROC 88.0% ± 0.8%，接近論文報值 57.1%／87.9%。 |
+| Warpformer、ViTST | 完整排程尚未完成。Warpformer 止於首種子第 17 輪，ViTST 完成第一折影像、微調止於 6／340 更新步，目前未找到相關重跑程序。 |
+| ATENet、WaveGNN | 小樣本 CPU 流程通過，完整測試待完成。ATENet 完整第一折曾中止，WaveGNN 原尺寸前段估計約 12 小時／輪。 |
 | DBGL | 尚未查到作者公開 GitHub，待討論。 |
 
 作者切分用來核對論文設定。例如 WaveGNN、ATENet 和 ViTST 所用的 Raindrop P12 第一折，訓練集包含本專題 Set C 的 3,201 筆病例。要與本專題比較，需統一病例、切分、標籤、觀察窗和指標。 [逐篇進度、GitHub 與論文](ML/related_work/README.md) · [文獻 CPU 重跑方式](ML/related_work/SETUP.md) · [作者同切分的 XGBoost 對照](ML/related_work/AUTHOR_SPLIT_COMPARISON.md)
@@ -121,7 +124,7 @@ if ($LASTEXITCODE -eq 0) { & $py .\ML\src\study.py baseline }
 | 路徑 | 內容 |
 | --- | --- |
 | [ML/src/](ML/src/) | 資料重建、訓練、評估與稽核程式 |
-| [ML/reports/](ML/reports/) | 各階段設定、彙總結果、[期末研究報告](ML/reports/期末研究報告.md) |
+| [ML/reports/](ML/reports/) | [完整研究進度](ML/reports/研究進度總覽.md)、各階段設定、彙總結果、[期末研究報告](ML/reports/期末研究報告.md) |
 | [ML/figures/](ML/figures/) | 評估曲線、特徵分析與配對比較圖 |
 | [ML/related_work/](ML/related_work/) | 逐篇文獻結果、CPU 入口與復現卡點 |
 | [ML/README.md](ML/README.md) | 歷史實驗索引及原表格模型的完整重建步驟 |
