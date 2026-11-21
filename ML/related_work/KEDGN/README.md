@@ -33,3 +33,17 @@
 $py = '.\artifacts\ma_gbt_runtime\.venv\Scripts\python.exe'
 & $py related_work/run_cpu.py KEDGN --profile paper_schedule --tag kedgn_cpu_rerun
 ```
+
+## P53：凍結模型的 Set C 與 eICU Demo
+
+2026 年 11 月 21 日已使用上述五個驗證 AP 最佳權重，先逐種子重現作者測試 AP／AUROC，再評估本組兩個資料集。模型擬合 0 次，全程 CPU；主要分數事先固定為五種子機率等權平均。
+
+| 測試隊列 | 住院／死亡 | KEDGN AP | KEDGN AUROC |
+| --- | ---: | ---: | ---: |
+| P12 Set C | 4,000／585 | 0.54977 | 0.86636 |
+| eICU Demo 整點 | 782／91 | 0.44998 | 0.81177 |
+| eICU Demo 原始間隔 | 782／91 | 0.44596 | 0.81209 |
+
+這些是凍結模型的測試結果。前文 56.8%／88.0% 是作者 Set A 內 399 筆測試的五種子指標平均，不能當成本組 Set C 成績。完整種子、七組原模型、配對差值區間及前處理限制見 [P53 結果](../../reports/P53_kedgn_frozen_transfer_results.md) 和 [凍結評估規格](FROZEN_TRANSFER_PROTOCOL.md)。
+
+本輪 KEDGN 訓練為作者 Set A 的 3,198 筆，本組原模型訓練為 A+B 8,000 筆。若比較共同資料下的架構，建議另外以本組 A+B 三折開發並重訓；本輪依凍結模型要求未進行。R1 已取消。

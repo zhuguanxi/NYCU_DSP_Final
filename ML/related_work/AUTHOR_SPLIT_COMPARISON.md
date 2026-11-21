@@ -57,4 +57,4 @@ $env:PYTHONDONTWRITEBYTECODE = '1'
 
 2026 年 11 月 20 日已核對落盤日誌及存活程序。上述未完成的排程目前未找到執行程序，中止原因在 Warpformer 與 ViTST 日誌中不明。 [完整進度](../reports/研究進度總覽.md)
 
-2026 年 11 月 21 日已更正 ViTST 的變體對應，並建立單程序依序執行的可恢復作者排程。當前進度以 complete_author_schedules/status.json 為準。 [原參數與共同測試](COMPLETE_REPRODUCTION_PROTOCOL.md)
+2026 年 11 月 21 日已更正 ViTST 的變體對應，並建立可恢復作者排程；依後續使用者縮小範圍的指示，其他論文背景重跑已停止、R1 取消。只保留 KEDGN 的 Set C／eICU Demo 凍結評估，結果與訓練量差異見 [P53](../reports/P53_kedgn_frozen_transfer_results.md)。[原參數與共同測試（歷史規格）](COMPLETE_REPRODUCTION_PROTOCOL.md)

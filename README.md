@@ -2,11 +2,11 @@
 
 資料科學專題（DSP）｜Fall 2026｜PhysioNet 2012 與 eICU Demo
 
-**研究進度更新至 2026 年 11 月 20 日。** [完整研究進度與 P0–P52 索引](ML/reports/研究進度總覽.md) 整理模型演進、陰性結果、資料稽核、論文完整重跑、重現入口與待完成事項。
+**研究進度更新至 2026 年 11 月 21 日。** [完整研究進度與 P0–P53 索引](ML/reports/研究進度總覽.md) 整理模型演進、陰性結果、資料稽核、論文完整重跑、重現入口與待完成事項。
 
 本專題用 ICU 入住後前 48 小時或前 24 小時可得的資料，預測病人是否在**這次住院期間死亡**。主要評估模型能否把高風險住院排在前面，以及量測欄位缺失或換到另一個資料庫時，排序表現會下降多少。
 
-2026 年 11 月 21 日已啟動可恢復的完整作者 CPU 排程，先完成各篇原設定，再在 P12 A/B 訓練後進行 Set C 與 eICU Demo 的共同測試。 [參數與執行規格](ML/related_work/COMPLETE_REPRODUCTION_PROTOCOL.md)
+依最新指示，R1 取消，其他論文的背景重跑已停止。本輪完成既有五個凍結 KEDGN 的 Set C 與 eICU Demo 轉移比較，全程 CPU、沒有重新訓練。KEDGN 使用作者 Set A 的 3,198 筆訓練，本組對照使用 A+B 8,000 筆；共同 A+B 重訓屬後續獨立實驗。 [P53 結果與限制](ML/reports/P53_kedgn_frozen_transfer_results.md) · [凍結評估規格](ML/related_work/KEDGN/FROZEN_TRANSFER_PROTOCOL.md)
 
 ## 研究目標
 
