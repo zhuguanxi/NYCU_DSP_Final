@@ -46,4 +46,18 @@ $py = '.\artifacts\ma_gbt_runtime\.venv\Scripts\python.exe'
 
 這些是凍結模型的測試結果。前文 56.8%／88.0% 是作者 Set A 內 399 筆測試的五種子指標平均，不能當成本組 Set C 成績。完整種子、七組原模型、配對差值區間及前處理限制見 [P53 結果](../../reports/P53_kedgn_frozen_transfer_results.md) 和 [凍結評估規格](FROZEN_TRANSFER_PROTOCOL.md)。
 
-本輪 KEDGN 訓練為作者 Set A 的 3,198 筆，本組原模型訓練為 A+B 8,000 筆。若比較共同資料下的架構，建議另外以本組 A+B 三折開發並重訓；本輪依凍結模型要求未進行。R1 已取消。
+P53 KEDGN 訓練為作者 Set A 的 3,198 筆，本組原模型訓練為 A+B 8,000 筆。當時依凍結模型要求未重訓；後續 A+B 比較見 P54。R1 已取消。
+
+## P54：A+B 三折開發與五種子重訓
+
+依使用者後續指示，使用原 A/B 8,000 筆、1,122 次死亡和原三折，固定作者參數，只以三折合併折外 AP 從 1–10 輪中選共同輪次。選出 **9 輪**，A/B pooled OOF AP **0.52450**、AUROC **0.85330**。之後全 A+B 以 seed 0–4 各訓練 9 輪，凍結後才做同病例的 Set C 與 eICU Demo 推論。
+
+使用 RTX 4060 Laptop GPU 與獨立 Torch 2.1.2+cu121 環境。保留作者架構、平衡採樣及有效 batch 256，將逐觀測節點的索引計算改成等價遮罩批次運算；與原作者 CPU 輸出及有效參數梯度核對通過，初始最大差約 8.94×10⁻⁸。資料、折外預測、checkpoint、權重及逐筆測試預測只留本機。
+
+[P54 完整結果、各種子及配對區間](../../reports/P54_kedgn_ab_transfer_results.md) · [A+B 規格與重跑方式](AB_RETRAIN_PROTOCOL.md)。同訓練病例數下仍有特徵表示、前處理、五種子平均和選模規則的差異，限制保留於報告。
+
+| 同病例測試 | A+B KEDGN AP | Set A KEDGN AP | A+B KEDGN AUROC |
+| --- | ---: | ---: | ---: |
+| P12 Set C | 0.57502 | 0.54977 | 0.87790 |
+| eICU Demo 整點 | 0.46375 | 0.44998 | 0.81484 |
+| eICU Demo 原始間隔 | 0.44640 | 0.44596 | 0.81308 |

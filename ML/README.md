@@ -1,8 +1,8 @@
 # ICU 機器學習探索：階段報告索引與總結
 
-[2026 年 11 月 21 日完整研究進度](reports/研究進度總覽.md) 涵蓋 P0–P53 和論文重現。原期末 PDF 整理截至 P51，P52 及後續文獻日誌核對另見最新進度。
+[2026 年 11 月 21 日完整研究進度](reports/研究進度總覽.md) 涵蓋 P0–P54 和論文重現。原期末 PDF 整理截至 P51，P52 及後續文獻日誌核對另見最新進度。
 
-[P53：凍結 KEDGN 的 Set C／eICU Demo 結果](reports/P53_kedgn_frozen_transfer_results.md) 使用作者 Set A 訓練的五個凍結模型，與本組 A+B 模型做同病例轉移比較。訓練量不同；共同 A+B 重訓仍是獨立後續問題。R1 已取消，其他論文背景重跑已停止。
+[P54：A+B 重訓 KEDGN 的 Set C／eICU Demo 結果](reports/P54_kedgn_ab_transfer_results.md) 使用原 A/B 三折選共同輪次，全 A+B 訓練五個種子，再與 [P53 Set A 凍結版](reports/P53_kedgn_frozen_transfer_results.md) 及原模型做同病例比較。訓練使用 GPU，資料與權重不提交 Git。R1 已取消，其他論文背景重跑已停止。
 
 ## 目前可核對的主要結果
 

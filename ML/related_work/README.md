@@ -22,4 +22,4 @@
 
 ## 2026 年 11 月 21 日後續完整重跑
 
-使用者已縮小範圍：R1 取消，其餘論文的背景重跑停止，保留既有紀錄。只執行已完成 KEDGN 五個凍結模型的 Set C／eICU Demo 轉移評估，這輪不重新訓練。作者訓練為 Set A 的 3,198 筆，本組對照使用 A+B；共同 A+B 重新訓練屬後續獨立問題。 [KEDGN 凍結轉移規格](KEDGN/FROZEN_TRANSFER_PROTOCOL.md) · [原完整排程規格（歷史）](COMPLETE_REPRODUCTION_PROTOCOL.md)
+使用者已縮小範圍：R1 取消，其餘論文背景重跑停止，保留既有紀錄。P53 已完成作者 Set A 3,198 筆訓練之 KEDGN 凍結轉移。P54 接著用原 A/B 三折選輪次、全 A+B 訓練五個種子，再評估同一 Set C／eICU Demo；訓練可用 GPU。 [P54 結果](../reports/P54_kedgn_ab_transfer_results.md) · [A+B 重訓規格](KEDGN/AB_RETRAIN_PROTOCOL.md) · [P53 規格](KEDGN/FROZEN_TRANSFER_PROTOCOL.md) · [原完整排程規格（歷史）](COMPLETE_REPRODUCTION_PROTOCOL.md)

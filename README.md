@@ -2,11 +2,11 @@
 
 資料科學專題（DSP）｜Fall 2026｜PhysioNet 2012 與 eICU Demo
 
-**研究進度更新至 2026 年 11 月 21 日。** [完整研究進度與 P0–P53 索引](ML/reports/研究進度總覽.md) 整理模型演進、陰性結果、資料稽核、論文完整重跑、重現入口與待完成事項。
+**研究進度更新至 2026 年 11 月 21 日。** [完整研究進度與 P0–P54 索引](ML/reports/研究進度總覽.md) 整理模型演進、陰性結果、資料稽核、論文完整重跑、重現入口與待完成事項。
 
 本專題用 ICU 入住後前 48 小時或前 24 小時可得的資料，預測病人是否在**這次住院期間死亡**。主要評估模型能否把高風險住院排在前面，以及量測欄位缺失或換到另一個資料庫時，排序表現會下降多少。
 
-依最新指示，R1 取消，其他論文的背景重跑已停止。本輪完成既有五個凍結 KEDGN 的 Set C 與 eICU Demo 轉移比較，全程 CPU、沒有重新訓練。KEDGN 使用作者 Set A 的 3,198 筆訓練，本組對照使用 A+B 8,000 筆；共同 A+B 重訓屬後續獨立實驗。 [P53 結果與限制](ML/reports/P53_kedgn_frozen_transfer_results.md) · [凍結評估規格](ML/related_work/KEDGN/FROZEN_TRANSFER_PROTOCOL.md)
+依最新指示，R1 取消，其他論文背景重跑已停止。P54 使用原 A/B 三折決定 KEDGN 的共同輪次，再以 A+B 8,000 筆訓練五個種子，凍結後評估 Set C 與 eICU Demo，與 P53 的 Set A 3,198 筆版本及原模型比較。GPU 運算與原作者輸出及梯度已核對。 [P54 結果與限制](ML/reports/P54_kedgn_ab_transfer_results.md) · [A+B 重訓規格](ML/related_work/KEDGN/AB_RETRAIN_PROTOCOL.md) · [P53 Set A 凍結結果](ML/reports/P53_kedgn_frozen_transfer_results.md)
 
 ## 研究目標
 
