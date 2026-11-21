@@ -22,7 +22,7 @@
 | 論文 | 對應的 XGBoost 切分 | 論文 AUPRC／AUROC（%） | AP／AUROC 差（百分點） |
 | --- | --- | ---: | ---: |
 | ATENet | Raindrop 五折平均 | 53.31／85.54 | +2.50／+1.25 |
-| ViTST | Raindrop 五折平均 | 51.10／85.10 | +4.71／+1.69 |
+| ViTST Swin–RoBERTa（附錄表 9） | Raindrop 五折平均 | 49.80／85.60 | +6.01／+1.19 |
 | WaveGNN | Raindrop 第一折 | 49.40／83.90 | +2.26／+3.13 |
 | KEDGN | Physionet 第 5 折 | 57.10／87.90 | −10.51／−2.84 |
 | Warpformer | Set A | 56.70／86.60 | −1.23／−0.95 |
@@ -56,3 +56,5 @@ $env:PYTHONDONTWRITEBYTECODE = '1'
 彙總與逐筆分數在 Git 排除的 `artifacts/related_work/matched_xgboost/`。重跑前另存既有輸出。
 
 2026 年 11 月 20 日已核對落盤日誌及存活程序。上述未完成的排程目前未找到執行程序，中止原因在 Warpformer 與 ViTST 日誌中不明。 [完整進度](../reports/研究進度總覽.md)
+
+2026 年 11 月 21 日已更正 ViTST 的變體對應，並建立單程序依序執行的可恢復作者排程。當前進度以 complete_author_schedules/status.json 為準。 [原參數與共同測試](COMPLETE_REPRODUCTION_PROTOCOL.md)

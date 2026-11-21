@@ -47,3 +47,9 @@ $py = '.\artifacts\ma_gbt_runtime\.venv\Scripts\python.exe'
 共同彙總應包含未遮蔽、GCS 全遮與六項全遮的 Set C AP／AUROC／Brier，eICU 兩種取樣的 AP／AUROC／Brier，以及相對凍結 Full／Elastic、GCS-only、P26／P33 的同病例配對差。若模型採用較少動態通道，需記錄實際對齊欄位和缺失處理。
 
 作者排程全部完成後才進行正式的共同測試計分。輸入適配、三折開發和最終模型仍待實作與驗證。DBGL 前次未找到作者程式，需先確認實作來源才能納入完整重現。
+
+## 本輪已完成的輸入準備
+
+共同序列保留未縮放的 36 個動態通道和五個靜態欄位。P12 A/B 保留 8,000 次住院及原三折，Set C 保留 4,000 次，兩種 eICU 取樣均保留 782 次。有效事件分別為 A/B 3,221,861 筆、Set C 1,614,314 筆、eICU 整點 354,898 筆及原始間隔 1,269,223 筆。尿量使用既定 mL 對齊。來源、病例互斥、標籤、36 通道、時間範圍與資料前後雜湊已核對。此階段模型擬合與測試預測均為零。
+
+輸入在 artifacts/related_work/common_sequence_inputs/。主 Python 環境可執行 related_work/prepare_common_sequence_inputs.py，既有輸出會阻止覆寫。模型專用的序列長度、padding、缺失數值慣例及訓練折內統計仍須在各架構接入時核對。此資料包包含原始不規則時間，未替模型決定裁切或重採樣規則。

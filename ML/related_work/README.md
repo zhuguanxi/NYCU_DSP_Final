@@ -19,3 +19,7 @@
 [作者切分的 XGBoost 對照與完整 CPU 排程](AUTHOR_SPLIT_COMPARISON.md)
 
 [全專案研究進度與階段索引](../reports/研究進度總覽.md)
+
+## 2026 年 11 月 21 日後續完整重跑
+
+已準備 ATENet 五折、Warpformer 五種子、WaveGNN 三次重複和 ViTST 五折的作者參數與可恢復排程。KEDGN 沿用已完成結果。背景排程先執行 ATENet，完成後依序執行其他模型。本組 Set C／eICU 的共同序列輸入已完成病例、欄位與來源核對，模型專用張量轉換、A/B 訓練和共同測試尚待完成。 [完整參數、進度與共同測試規格](COMPLETE_REPRODUCTION_PROTOCOL.md)
