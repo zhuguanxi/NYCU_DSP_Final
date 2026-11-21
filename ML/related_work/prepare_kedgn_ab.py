@@ -67,5 +67,5 @@ def main(folder):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=OUT / 'related_work/KEDGN/ab_gpu_20261121/inputs')
+    parser.add_argument('--output', type=Path, default=OUT / 'related_work/KEDGN/ab_dense_gpu_20261121/inputs')
     main(parser.parse_args().output.resolve())

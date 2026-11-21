@@ -16,6 +16,7 @@ for key in ('OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS'):
 import numpy as np
 import torch
 from sklearn.metrics import average_precision_score, roc_auc_score
+from kedgn_dense_runtime import install as install_dense
 
 ML = Path(__file__).resolve().parents[1]
 AUTHOR = ML / 'artifacts/related_work/KEDGN/cpu_paper_01/code'
@@ -99,10 +100,11 @@ def statistics(rows, require_finite=True):
     return values
 
 
-def model_for(device, seed):
+def model_for(device, seed, dense=True):
     torch.manual_seed(seed)
     if device.type == 'cuda': torch.cuda.manual_seed_all(seed)
-    return KEDGN(DEVICE=device, **CONFIG)
+    model=KEDGN(DEVICE=device, **CONFIG)
+    return install_dense(model) if dense else model
 
 
 def forward(model, tensors, positions, embeddings, device):
@@ -110,7 +112,7 @@ def forward(model, tensors, positions, embeddings, device):
     return model(*batch, embeddings)
 
 
-def predict(model, tensors, embeddings, device, batch=64):
+def predict(model, tensors, embeddings, device, batch=256):
     result = np.empty(len(tensors[0]), dtype=np.float64)
     model.eval()
     with torch.no_grad():
@@ -216,6 +218,8 @@ def fit(args, device, embeddings):
     frozen_protocol={'model':CONFIG,'training':PROTOCOL,'input_manifest_sha256':sha(root/'inputs/manifest.json'),
                      'microbatch':args.microbatch,'torch':torch.__version__,'numpy':np.__version__,
                      'runner_sha256':sha(Path(__file__)),
+                     'dense_runtime_sha256':sha(Path(__file__).with_name('kedgn_dense_runtime.py')),
+                     'runtime':'Dense masked GPU cell; original architecture and parameter names',
                      'device':str(device),'gpu':torch.cuda.get_device_name(device) if device.type=='cuda' else None}
     path=root/'protocol.json'
     if path.exists():
@@ -300,12 +304,14 @@ def verify(args, device, embeddings):
     rows,data=records(args.output/'inputs/ab.npz')
     # Exercise real missingness and the full time window with a small gradient check.
     idx=np.linspace(0,len(rows)-1,8,dtype=int)
+    empty=np.flatnonzero(data['lengths']==0)
+    if len(empty): idx[0]=empty[0]
     checked=rows[idx]
     sample=statistics(checked,require_finite=False)
     original=getStats(np.stack([row['arr'] for row in padded(checked)]))
     for a,b in zip(sample[:2],original): np.testing.assert_array_equal(a,b)
     tensors=tensorize(rows[idx],data['y'][idx],statistics(rows))
-    reference=model_for(torch.device('cpu'),17)
+    reference=model_for(torch.device('cpu'),17,dense=False)
     actual=model_for(device,17)
     actual.load_state_dict(reference.state_dict())
     reference.eval(); actual.eval()
@@ -317,6 +323,14 @@ def verify(args, device, embeddings):
     out=forward(actual,tensors,slice(None),embeddings,device)
     torch.nn.functional.cross_entropy(out,tensors[5].to(device)).backward()
     full={k:p.grad.detach().clone() for k,p in actual.named_parameters() if p.grad is not None}
+    reference.train()
+    original_out=forward(reference,tensors,slice(None),embeddings.cpu(),torch.device('cpu'))
+    torch.nn.functional.cross_entropy(original_out,tensors[5]).backward()
+    gradient_error=0.
+    for key,p in reference.named_parameters():
+        if key in full:
+            torch.testing.assert_close(p.grad,full[key].cpu(),rtol=8e-4,atol=5e-5)
+            gradient_error=max(gradient_error,float((p.grad-full[key].cpu()).abs().max()))
     actual.zero_grad(set_to_none=True)
     for start in (0,4):
         out=forward(actual,tensors,slice(start,start+4),embeddings,device)
@@ -324,6 +338,8 @@ def verify(args, device, embeddings):
     for key,p in actual.named_parameters():
         if key in full: torch.testing.assert_close(full[key],p.grad,rtol=5e-4,atol=3e-5)
     write_json(args.output/'runtime_verification.json',dict(cpu_gpu_logits_max_abs=float((expected-got).abs().max()),
+                                                          dense_original_gradient_max_abs=gradient_error,
+                                                          original_dense_gradients_verified=True,
                                                           gradient_accumulation_verified=True,device=str(device),
                                                           torch=torch.__version__,samples=8))
     print('CPU/GPU inference and gradient accumulation checks passed.',flush=True)
@@ -332,9 +348,9 @@ def verify(args, device, embeddings):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('phase',choices=('verify','fit','infer'))
-    parser.add_argument('--output',type=Path,default=ML/'artifacts/related_work/KEDGN/ab_gpu_20261121')
+    parser.add_argument('--output',type=Path,default=ML/'artifacts/related_work/KEDGN/ab_dense_gpu_20261121')
     parser.add_argument('--device',default='cuda:0')
-    parser.add_argument('--microbatch',type=int,default=64)
+    parser.add_argument('--microbatch',type=int,default=256)
     args=parser.parse_args()
     args.output=args.output.resolve()
     torch.set_num_threads(2)

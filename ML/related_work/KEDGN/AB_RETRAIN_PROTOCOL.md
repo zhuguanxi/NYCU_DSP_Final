@@ -8,7 +8,9 @@
 
 固定作者已完成復現的模型參數：36 動態通道、9 維靜態、hidden 8、query 5、node 9、BERT 768 維與 GPT 欄位表示、rarity alpha 1、Adam lr 0.001。這輪不搜尋其他模型參數。每折 seed 0 訓練 10 輪，保存每輪驗證機率；將三個驗證折還原成完整 A/B 折外預測，按 **pooled OOF AP 最大**選共同輪次，平手取較早輪次。
 
-沿用作者兩類平衡採樣：陽性索引複製三次，每次更新各取陰性與陽性 128 筆，有效 batch 256。以 microbatch 64、梯度加總做一次 optimizer 更新，保留作者每輪 batch 計算與採樣；模型無 batch normalization 或 dropout。正式訓練前核對分批與整批梯度，及 CPU／GPU logits。FP32，不使用混合精度或 TF32；啟用確定性運算。
+沿用作者兩類平衡採樣：陽性索引複製三次，每次更新各取陰性與陽性 128 筆，有效 batch 256。預設整批 256，若指定較小 microbatch 則累積梯度後做一次 optimizer 更新，保留作者每輪 batch 計算與採樣；模型無 batch normalization 或 dropout。FP32，不使用混合精度或 TF32；啟用確定性運算。
+
+原作者逐觀測節點的動態索引在 GPU 上效率偏低，改用 `kedgn_dense_runtime.py` 的等價遮罩運算：參數、圖、門控與每病例結束狀態保留，文字表示及其門控投影在時間迴圈外重用，未觀測節點用遮罩保留原狀態。正式訓練前核對原作者 CPU 與 GPU 批次版本的輸出及全部有效參數梯度，包含零觀測病例，另核對整批與分批梯度。初次 microbatch 64 的逐點執行因效率中止，紀錄保留在 `ab_gpu_20261121/`，未用於選輪次或測試。
 
 作者驗證程式以單一正類 logit 的 sigmoid 算 AP，原最終測試使用雙類 softmax。本輪為配合最終評估，輪次選擇統一用雙類 softmax AP；此差異明確保留。固定參數仍來自作者復現，未用外部成績修改。
 
@@ -34,6 +36,7 @@ uv pip install --python $gpu --index-url https://download.pytorch.org/whl/cu121 
 uv pip install --python $gpu 'numpy==1.25.2' 'scikit-learn==1.3.2' 'pandas==2.1.4' 'pyarrow==14.0.2' 'einops==0.8.0' 'packaging==24.2'
 $env:PYTHONDONTWRITEBYTECODE = '1'
 & '.\.venv\Scripts\python.exe' related_work/prepare_kedgn_ab.py
+uv pip freeze --python $gpu | Out-File artifacts/related_work/KEDGN/ab_dense_gpu_20261121/environment.txt -Encoding utf8
 & $gpu related_work/run_kedgn_ab.py verify
 & $gpu related_work/run_kedgn_ab.py fit
 & $gpu related_work/run_kedgn_ab.py infer
@@ -41,7 +44,7 @@ $env:PYTHONPATH = Join-Path (Get-Location) 'artifacts/p21_cpu_packages/site'
 & '.\.venv\Scripts\python.exe' related_work/evaluate_kedgn_ab.py
 ```
 
-預設根目錄 `artifacts/related_work/KEDGN/ab_gpu_20261121/`，準備／訓練／比較腳本均支援 `--output` 指定新的目錄（準備腳本指向其 inputs 子目錄）。原始輸入準備若已有輸出會停止以保護既有檔案；訓練從完整輪次恢復，已完成模型不覆寫。訓練需提供可用 CUDA GPU；可明確指定 `--device cpu` 另做 CPU 執行。完整套件清單保存於本機產物及結果彙總。
+預設根目錄 `artifacts/related_work/KEDGN/ab_dense_gpu_20261121/`，準備／訓練／比較腳本均支援 `--output` 指定新的目錄（準備腳本指向其 inputs 子目錄）。原始輸入準備若已有輸出會停止以保護既有檔案；訓練從完整輪次恢復，已完成模型不覆寫。訓練需提供可用 CUDA GPU；可明確指定 `--device cpu` 另做 CPU 執行。完整套件清單保存於本機產物及結果彙總。
 
 CUDA 安裝版本依 [PyTorch 官方歷史版本說明](https://pytorch.org/get-started/previous-versions/#v212)。原作者版本與文獻見 [KEDGN README](README.md)，前輪測試見 [P53](../../reports/P53_kedgn_frozen_transfer_results.md)。
 

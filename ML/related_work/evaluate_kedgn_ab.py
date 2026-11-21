@@ -134,12 +134,12 @@ def report(summary,folder):
         lines.append(f'| {seed} | '+' | '.join(f'{v:.5f}' for v in scores)+' |')
     lines+=['','五種子指標平均／SD 及逐種子 Brier、敏感度完整保存於彙總 JSON。平均機率的指標與種子指標平均分別保存。','',
             '## 判讀與限制','',
-            '本輪與本組原模型的訓練病例量皆為 A+B 8,000 筆，但 KEDGN 使用作者 36 通道、9 維靜態和正值 mask，表格模型使用不同特徵表示。保留作者平衡採樣與有效 batch 256。GPU microbatch 64 累積梯度，正式訓練前核對 CPU／GPU logits 和整批／分批梯度；FP32、關閉 TF32，啟用確定性運算。','',
+            '本輪與本組原模型的訓練病例量皆為 A+B 8,000 筆，但 KEDGN 使用作者 36 通道、9 維靜態和正值 mask，表格模型使用不同特徵表示。保留作者平衡採樣與有效 batch 256。GPU 使用等價遮罩圖運算及 batch 256，正式訓練前核對與原作者的 logits、全部有效參數梯度，以及整批／分批梯度；FP32、關閉 TF32，啟用確定性運算。','',
             'P53 Set A 模型只有 3,198 筆訓練，且以作者 400 筆驗證選 checkpoint；本輪以三折選共同輪次。差值同時包含訓練資料、選擇方式與五種子訓練變異，不宜單獨歸因於訓練量。作者驗證程式用 sigmoid 單類 logit，本輪沿最終測試用雙類 softmax，輪次選擇也一致使用 softmax AP。','',
             'Set C 使用 P53 相同完整 4,000 筆，與 A/B ID 互斥；eICU 使用相同尿量 mL 對齊及兩種取樣，長序列不截斷。Set C 已反覆查看，eICU Demo 僅 91 次死亡；固定模型的配對區間未涵蓋重新訓練及跨醫院變異。P45 使用 Demo 做增強、P52 使用 24 小時窗，未在本輪 48 小時純轉移比較中混合排名。本輪沒有新增遮蔽測試。','',
             '## 重跑與來源','',
             '[A+B 重訓規格及命令](../related_work/KEDGN/AB_RETRAIN_PROTOCOL.md) · [Set A 凍結版 P53](P53_kedgn_frozen_transfer_results.md) · [整體彙總 JSON](P54_kedgn_ab_transfer_summary.json)','',
-            '本機產物：`ML/artifacts/related_work/KEDGN/ab_gpu_20261121/`。inputs 保存 A/B 與原三折，protocol／selection／frozen 依序封存規則、輪次及最終權重；各模型有每輪恢復 checkpoint，inference 保存測試預測雜湊，summary 保存配對結果。完整環境清單包含於 JSON。程式與結果分開提交；資料及模型不提交 Git。','']
+            '本機產物：`ML/artifacts/related_work/KEDGN/ab_dense_gpu_20261121/`。inputs 保存 A/B 與原三折，protocol／selection／frozen 依序封存規則、輪次及最終權重；各模型有每輪恢復 checkpoint，inference 保存測試預測雜湊，summary 保存配對結果。完整環境清單包含於 JSON。程式與結果分開提交；資料及模型不提交 Git。','']
     folder.mkdir(parents=True,exist_ok=True)
     (folder/'P54_kedgn_ab_transfer_results.md').write_text('\n'.join(lines),encoding='utf-8')
     (folder/'P54_kedgn_ab_transfer_summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
@@ -147,7 +147,7 @@ def report(summary,folder):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output',type=Path,default=OUT/'related_work/KEDGN/ab_gpu_20261121')
+    parser.add_argument('--output',type=Path,default=OUT/'related_work/KEDGN/ab_dense_gpu_20261121')
     parser.add_argument('--report-directory',type=Path)
     args=parser.parse_args()
     with threadpool_limits(limits=2):
