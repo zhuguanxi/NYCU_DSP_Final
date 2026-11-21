@@ -22,4 +22,4 @@
 
 ## 2026 年 11 月 21 日後續完整重跑
 
-已準備 ATENet 五折、Warpformer 五種子、WaveGNN 三次重複和 ViTST 五折的作者參數與可恢復排程。KEDGN 沿用已完成結果。背景排程先執行 ATENet，完成後依序執行其他模型。本組 Set C／eICU 的共同序列輸入已完成病例、欄位與來源核對，模型專用張量轉換、A/B 訓練和共同測試尚待完成。 [完整參數、進度與共同測試規格](COMPLETE_REPRODUCTION_PROTOCOL.md)
+使用者已縮小範圍：R1 取消，其餘論文的背景重跑停止，保留既有紀錄。只執行已完成 KEDGN 五個凍結模型的 Set C／eICU Demo 轉移評估，這輪不重新訓練。作者訓練為 Set A 的 3,198 筆，本組對照使用 A+B；共同 A+B 重新訓練屬後續獨立問題。 [KEDGN 凍結轉移規格](KEDGN/FROZEN_TRANSFER_PROTOCOL.md) · [原完整排程規格（歷史）](COMPLETE_REPRODUCTION_PROTOCOL.md)

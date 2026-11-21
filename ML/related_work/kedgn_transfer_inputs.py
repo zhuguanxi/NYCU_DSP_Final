@@ -2,6 +2,7 @@
 
 import io
 import json
+import argparse
 from pathlib import Path
 import sys
 import tarfile
@@ -45,15 +46,20 @@ def pack(stay, admission, rows, variables):
 
 def raw_record(content, stay, variables):
     data = pd.read_csv(io.BytesIO(content), header=1, names=["time", "param", "value"])
-    admission = data.iloc[:5].value.to_numpy(dtype=float)
-    if tuple(data.iloc[:5].param) != STATIC:
-        raise ValueError("P12 admission fields differ from the author's assumed order")
+    repaired_order = tuple(data.iloc[:5].param) != STATIC
+    admission = {}
+    for clock, variable, value in data.itertuples(index=False, name=None):
+        if variable in STATIC and str(clock) == "00:00":
+            admission.setdefault(variable, float(value))
+    admission = [admission.get(name, -1.0) for name in STATIC]
     rows = []
-    for clock, variable, value in data.iloc[5:].itertuples(index=False, name=None):
+    for clock, variable, value in data.itertuples(index=False, name=None):
         if variable in variables:
             hour, minute = map(float, str(clock).split(":"))
             rows.append((60 * hour + minute, variable, float(value)))
-    return pack(stay, admission, rows, variables)
+    record = pack(stay, admission, rows, variables)
+    record["static_order_repaired"] = repaired_order
+    return record
 
 
 def write_records(stage, name, records, labels):
@@ -67,7 +73,32 @@ def write_records(stage, name, records, labels):
         "zero_length_stays": sum(row["length"] == 0 for row in records),
         "maximum_length": max(row["length"] for row in records),
         "stays_over_215_times": sum(row["length"] > 215 for row in records),
+        "static_order_repaired": sum(row.get("static_order_repaired", False) for row in records),
     }
+
+
+def portable_records(folder):
+    manifest_path = folder / "inputs.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    for name in manifest["cohorts"]:
+        destination = folder / f"{name}_portable.npz"
+        if destination.exists():
+            raise FileExistsError(destination)
+        records = np.load(folder / f"{name}_records.npy", allow_pickle=True)
+        sizes = np.asarray([len(row["arr"]) for row in records], dtype=np.int64)
+        offsets = np.r_[0, np.cumsum(sizes)]
+        np.savez_compressed(
+            destination, offsets=offsets,
+            arr=np.concatenate([row["arr"] for row in records]),
+            time=np.concatenate([row["time"] for row in records]),
+            static=np.asarray([row["extended_static"] for row in records], dtype=np.float64),
+            lengths=np.asarray([row["length"] for row in records], dtype=np.int64),
+        )
+        manifest["files_sha256"][destination.name] = sha(destination)
+    manifest["portable_arrays"] = True
+    temporary = manifest_path.with_suffix(".pending")
+    temporary.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    temporary.replace(manifest_path)
 
 
 def main():
@@ -141,4 +172,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--portable-cache", action="store_true")
+    args = parser.parse_args()
+    if args.portable_cache:
+        portable_records(OUTPUT)
+    else:
+        main()
+        portable_records(OUTPUT)

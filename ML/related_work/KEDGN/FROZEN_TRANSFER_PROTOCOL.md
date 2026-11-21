@@ -33,5 +33,8 @@ $env:PYTHONPATH = Join-Path (Get-Location) 'artifacts/related_work/cpu_packages'
 & '.\artifacts\ma_gbt_runtime\.venv\Scripts\python.exe' related_work/infer_frozen_kedgn.py
 # 比較階段使用 P21 主環境附加套件
 $env:PYTHONPATH = Join-Path (Get-Location) 'artifacts/p21_cpu_packages/site'
-& '.\.venv\Scripts\python.exe' related_work/compare_frozen_kedgn.py
+& '.\.venv\Scripts\python.exe' related_work/compare_frozen_kedgn.py references
+& '.\.venv\Scripts\python.exe' related_work/compare_frozen_kedgn.py compare
 ```
+
+輸入準備另輸出不使用 pickle 的數值 NPZ，供主環境 NumPy 2 與 KEDGN NumPy 1.25 共用。已完成準備的目錄會阻止覆寫；只缺跨版本快取時可在主環境執行準備腳本的 `--portable-cache`。推論可保留完整完成的隊列輸出，原模型均不更新。

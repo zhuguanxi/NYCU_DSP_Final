@@ -102,7 +102,14 @@ def main():
             print(f"Retaining completed {name} inference", flush=True)
             results[name] = {"sha256": sha(destination)}
             continue
-        records = np.load(OUTPUT / f"{name}_records.npy", allow_pickle=True)
+        with np.load(OUTPUT / f"{name}_portable.npz", allow_pickle=False) as source:
+            raw = {key: source[key] for key in source.files}
+        records = np.asarray([
+            {"arr": raw["arr"][start:end], "time": raw["time"][start:end],
+             "extended_static": static, "length": length}
+            for start, end, static, length in zip(raw["offsets"][:-1], raw["offsets"][1:],
+                                                 raw["static"], raw["lengths"])
+        ], dtype=object)
         with np.load(OUTPUT / f"{name}_labels.npz") as labels:
             ids, y = labels["ids"], labels["y"]
         if name == "set_c" and set(ids) & training_ids:
