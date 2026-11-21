@@ -39,6 +39,7 @@ $env:PYTHONDONTWRITEBYTECODE = '1'
 uv pip freeze --python $gpu | Out-File artifacts/related_work/KEDGN/ab_dense_gpu_20261121/environment.txt -Encoding utf8
 & $gpu related_work/run_kedgn_ab.py verify
 & $gpu related_work/run_kedgn_ab.py fit
+& $gpu related_work/verify_kedgn_ab_frozen.py
 & $gpu related_work/run_kedgn_ab.py infer
 $env:PYTHONPATH = Join-Path (Get-Location) 'artifacts/p21_cpu_packages/site'
 & '.\.venv\Scripts\python.exe' related_work/evaluate_kedgn_ab.py

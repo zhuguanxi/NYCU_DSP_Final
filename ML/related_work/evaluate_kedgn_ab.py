@@ -93,6 +93,7 @@ def main(root):
     summary=dict(training_stays=8000,training_deaths=1122,training_fits=8,evaluation_fits=0,
                  selected_epoch=selection['selected_epoch'],selection=selection,protocol=protocol,
                  runtime_verification=read(root/'runtime_verification.json'),
+                 frozen_runtime_verification=read(root/'frozen_runtime_verification.json'),
                  results=results,primary_prediction=inference['primary_prediction'],
                  bootstrap=dict(set_c=dict(replicates=2000,seed=20261013,unit='stay'),
                                 eicu=dict(replicates=1000,seed=42,unit='patient')),
