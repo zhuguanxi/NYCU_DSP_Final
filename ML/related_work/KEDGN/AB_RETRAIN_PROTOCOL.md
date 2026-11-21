@@ -31,7 +31,7 @@ $env:UV_CACHE_DIR = Join-Path (Get-Location) 'artifacts/related_work/uv_cache'
 uv venv artifacts/related_work/kedgn_gpu_runtime/.venv --python 'C:/Users/user/AppData/Local/Programs/Python/Python311/python.exe'
 $gpu = '.\artifacts\related_work\kedgn_gpu_runtime\.venv\Scripts\python.exe'
 uv pip install --python $gpu --index-url https://download.pytorch.org/whl/cu121 'torch==2.1.2+cu121'
-uv pip install --python $gpu 'numpy==1.25.2' 'scikit-learn==1.3.2' 'pandas==2.1.4' 'pyarrow==14.0.2' 'einops==0.8.0'
+uv pip install --python $gpu 'numpy==1.25.2' 'scikit-learn==1.3.2' 'pandas==2.1.4' 'pyarrow==14.0.2' 'einops==0.8.0' 'packaging==24.2'
 $env:PYTHONDONTWRITEBYTECODE = '1'
 & '.\.venv\Scripts\python.exe' related_work/prepare_kedgn_ab.py
 & $gpu related_work/run_kedgn_ab.py verify
