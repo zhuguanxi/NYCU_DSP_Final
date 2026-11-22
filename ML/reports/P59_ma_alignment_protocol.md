@@ -7,3 +7,12 @@
 Set C 另列 clean、GCS 全遮、六項全遮三個固定情境並核對原已保存指標。只推論，不改 α、增強強度、輪次、門檻或病例。MA-GBT 的原選擇目標包括補值依賴，不假稱與 AP-only 模型使用相同的選模目標。
 
 主要新增患者配對比較為「尿量對齊後減對齊前」，沿用 1,000 次、seed 42。其餘與 P33/Full 的同對齊點估計提供參照，不以選擇其中較好版本改寫結果。資料與逐筆分數放在 `artifacts/p59_ma_gbt_alignment/`，公開只含整體統計。
+
+從 ML 執行，使用 P13 鎖定的 CPU 環境：
+
+```powershell
+$env:CUDA_VISIBLE_DEVICES='-1'
+$env:PYTHONDONTWRITEBYTECODE='1'
+$env:PYTHONPATH=Join-Path (Get-Location) 'artifacts/ma_gbt_runtime/upstream'
+& '.\artifacts\ma_gbt_runtime\.venv\Scripts\python.exe' related_work/audit_ma_alignment.py
+```
