@@ -1,0 +1,677 @@
+{
+  "model_fits": 0,
+  "stays": 782,
+  "deaths": 91,
+  "set_c": [
+    {
+      "variant": "original_1000",
+      "model": "Full",
+      "scenario": "clean",
+      "metrics": {
+        "ap": 0.4463719799623775,
+        "auroc": 0.813216453304301,
+        "brier": 0.10618840349697257,
+        "sensitivity": 0.005128205128205128
+      },
+      "rho": 0.0305
+    },
+    {
+      "variant": "original_1000",
+      "model": "Full",
+      "scenario": "full_GCS",
+      "metrics": {
+        "ap": 0.24648592258931187,
+        "auroc": 0.6572657081002615,
+        "brier": 0.12290988295513824,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "original_1000",
+      "model": "Full",
+      "scenario": "full_all_six",
+      "metrics": {
+        "ap": 0.24648592258931187,
+        "auroc": 0.6572657081002615,
+        "brier": 0.12290988295513824,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "original_1000",
+      "model": "Elastic",
+      "scenario": "clean",
+      "metrics": {
+        "ap": 0.4463719799623775,
+        "auroc": 0.813216453304301,
+        "brier": 0.10618840349697257,
+        "sensitivity": 0.005128205128205128
+      },
+      "rho": 0.0305
+    },
+    {
+      "variant": "original_1000",
+      "model": "Elastic",
+      "scenario": "full_GCS",
+      "metrics": {
+        "ap": 0.24648592258931187,
+        "auroc": 0.6572657081002615,
+        "brier": 0.12290988295513824,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "original_1000",
+      "model": "Elastic",
+      "scenario": "full_all_six",
+      "metrics": {
+        "ap": 0.24648592258931187,
+        "auroc": 0.6572657081002615,
+        "brier": 0.12290988295513824,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "original_10",
+      "model": "Full",
+      "scenario": "clean",
+      "metrics": {
+        "ap": 0.44604347202545586,
+        "auroc": 0.8102739297468434,
+        "brier": 0.10578495981059205,
+        "sensitivity": 0.003418803418803419
+      },
+      "rho": 0.03975
+    },
+    {
+      "variant": "original_10",
+      "model": "Full",
+      "scenario": "full_GCS",
+      "metrics": {
+        "ap": 0.26233428794410324,
+        "auroc": 0.6653434445820976,
+        "brier": 0.12158924323033199,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "original_10",
+      "model": "Full",
+      "scenario": "full_all_six",
+      "metrics": {
+        "ap": 0.2171023375194796,
+        "auroc": 0.6260895245961131,
+        "brier": 0.124191747841134,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "original_10",
+      "model": "Elastic",
+      "scenario": "clean",
+      "metrics": {
+        "ap": 0.4509341759642439,
+        "auroc": 0.8124113075796825,
+        "brier": 0.10568132059534778,
+        "sensitivity": 0.003418803418803419
+      },
+      "rho": 0.03975
+    },
+    {
+      "variant": "original_10",
+      "model": "Elastic",
+      "scenario": "full_GCS",
+      "metrics": {
+        "ap": 0.26044198485108383,
+        "auroc": 0.6681998723579983,
+        "brier": 0.12153457966576024,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "original_10",
+      "model": "Elastic",
+      "scenario": "full_all_six",
+      "metrics": {
+        "ap": 0.20825183058247423,
+        "auroc": 0.6160776363704621,
+        "brier": 0.12479716298326994,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "augmented_10",
+      "model": "Full",
+      "scenario": "clean",
+      "metrics": {
+        "ap": 0.4083499869617886,
+        "auroc": 0.7844599617073995,
+        "brier": 0.11059325749376095,
+        "sensitivity": 0.0
+      },
+      "rho": 0.04175
+    },
+    {
+      "variant": "augmented_10",
+      "model": "Full",
+      "scenario": "full_GCS",
+      "metrics": {
+        "ap": 0.31047867115390826,
+        "auroc": 0.7349684023476118,
+        "brier": 0.11715162487925904,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "augmented_10",
+      "model": "Full",
+      "scenario": "full_all_six",
+      "metrics": {
+        "ap": 0.2784979380935808,
+        "auroc": 0.6849985608990001,
+        "brier": 0.11976720616102314,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "augmented_10",
+      "model": "Elastic",
+      "scenario": "clean",
+      "metrics": {
+        "ap": 0.41623462065260064,
+        "auroc": 0.7862196693821877,
+        "brier": 0.11016129919526245,
+        "sensitivity": 0.0017094017094017094
+      },
+      "rho": 0.0415
+    },
+    {
+      "variant": "augmented_10",
+      "model": "Elastic",
+      "scenario": "full_GCS",
+      "metrics": {
+        "ap": 0.31970789697407953,
+        "auroc": 0.7368570034163007,
+        "brier": 0.11699301584209477,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    },
+    {
+      "variant": "augmented_10",
+      "model": "Elastic",
+      "scenario": "full_all_six",
+      "metrics": {
+        "ap": 0.28507642933591765,
+        "auroc": 0.6884398893769319,
+        "brier": 0.11970464438675006,
+        "sensitivity": 0.0
+      },
+      "rho": 1.0
+    }
+  ],
+  "eicu": [
+    {
+      "variant": "original_1000",
+      "model": "Full",
+      "mode": "hourly",
+      "before": {
+        "ap": 0.34788058251930903,
+        "auroc": 0.7394045896216663,
+        "brier": 0.09295729982233761,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.34583271639373364,
+        "auroc": 0.7387684674225918,
+        "brier": 0.09260634586015237,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": -0.0020478661255753927,
+        "auroc": -0.0006361221990744959,
+        "brier": -0.00035095396218523534,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          -0.03765282452364999,
+          0.028301428745573398
+        ],
+        "auroc": [
+          -0.0018225001269453784,
+          0.0005257394099800111
+        ],
+        "n": 1000
+      },
+      "rho_before": 0.9373401534526854,
+      "rho_after": 0.7979539641943734
+    },
+    {
+      "variant": "original_1000",
+      "model": "Full",
+      "mode": "native",
+      "before": {
+        "ap": 0.34788058251930903,
+        "auroc": 0.7394045896216663,
+        "brier": 0.09295729982233761,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.34583271639373364,
+        "auroc": 0.7387684674225918,
+        "brier": 0.09260634586015237,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": -0.0020478661255753927,
+        "auroc": -0.0006361221990744959,
+        "brier": -0.00035095396218523534,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          -0.03765282452364999,
+          0.028301428745573398
+        ],
+        "auroc": [
+          -0.0018225001269453784,
+          0.0005257394099800111
+        ],
+        "n": 1000
+      },
+      "rho_before": 0.9373401534526854,
+      "rho_after": 0.7979539641943734
+    },
+    {
+      "variant": "original_1000",
+      "model": "Elastic",
+      "mode": "hourly",
+      "before": {
+        "ap": 0.34788058251930903,
+        "auroc": 0.7394045896216663,
+        "brier": 0.09295729982233761,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.34583271639373364,
+        "auroc": 0.7387684674225918,
+        "brier": 0.09260634586015237,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": -0.0020478661255753927,
+        "auroc": -0.0006361221990744959,
+        "brier": -0.00035095396218523534,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          -0.03765282452364999,
+          0.028301428745573398
+        ],
+        "auroc": [
+          -0.0018225001269453784,
+          0.0005257394099800111
+        ],
+        "n": 1000
+      },
+      "rho_before": 0.9373401534526854,
+      "rho_after": 0.7979539641943734
+    },
+    {
+      "variant": "original_1000",
+      "model": "Elastic",
+      "mode": "native",
+      "before": {
+        "ap": 0.34788058251930903,
+        "auroc": 0.7394045896216663,
+        "brier": 0.09295729982233761,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.34583271639373364,
+        "auroc": 0.7387684674225918,
+        "brier": 0.09260634586015237,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": -0.0020478661255753927,
+        "auroc": -0.0006361221990744959,
+        "brier": -0.00035095396218523534,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          -0.03765282452364999,
+          0.028301428745573398
+        ],
+        "auroc": [
+          -0.0018225001269453784,
+          0.0005257394099800111
+        ],
+        "n": 1000
+      },
+      "rho_before": 0.9373401534526854,
+      "rho_after": 0.7979539641943734
+    },
+    {
+      "variant": "original_10",
+      "model": "Full",
+      "mode": "hourly",
+      "before": {
+        "ap": 0.34161576601390076,
+        "auroc": 0.7335840715001352,
+        "brier": 0.09275874009921721,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.34648477767438796,
+        "auroc": 0.7404223851401854,
+        "brier": 0.09227441807348136,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": 0.004869011660487199,
+        "auroc": 0.006838313640050275,
+        "brier": -0.00048432202573585326,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          -0.030211416533782016,
+          0.040680351349649334
+        ],
+        "auroc": [
+          -0.005591775133423926,
+          0.02245314245036305
+        ],
+        "n": 1000
+      },
+      "rho_before": 1.0,
+      "rho_after": 0.4475703324808184
+    },
+    {
+      "variant": "original_10",
+      "model": "Full",
+      "mode": "native",
+      "before": {
+        "ap": 0.34161576601390076,
+        "auroc": 0.7335840715001352,
+        "brier": 0.09275874009921721,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.34648477767438796,
+        "auroc": 0.7404223851401854,
+        "brier": 0.09227441807348136,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": 0.004869011660487199,
+        "auroc": 0.006838313640050275,
+        "brier": -0.00048432202573585326,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          -0.030211416533782016,
+          0.040680351349649334
+        ],
+        "auroc": [
+          -0.005591775133423926,
+          0.02245314245036305
+        ],
+        "n": 1000
+      },
+      "rho_before": 1.0,
+      "rho_after": 0.4475703324808184
+    },
+    {
+      "variant": "original_10",
+      "model": "Elastic",
+      "mode": "hourly",
+      "before": {
+        "ap": 0.34740218149208624,
+        "auroc": 0.7332103497081789,
+        "brier": 0.0925099934119398,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.35206089291267056,
+        "auroc": 0.7372974348372322,
+        "brier": 0.09202887804153817,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": 0.004658711420584327,
+        "auroc": 0.004087085129053314,
+        "brier": -0.0004811153704016302,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          -0.02823210580860499,
+          0.03939908918935854
+        ],
+        "auroc": [
+          -0.011135177891441014,
+          0.022872739481101377
+        ],
+        "n": 1000
+      },
+      "rho_before": 1.0,
+      "rho_after": 0.4437340153452685
+    },
+    {
+      "variant": "original_10",
+      "model": "Elastic",
+      "mode": "native",
+      "before": {
+        "ap": 0.34740218149208624,
+        "auroc": 0.7332103497081789,
+        "brier": 0.0925099934119398,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.35206089291267056,
+        "auroc": 0.7372974348372322,
+        "brier": 0.09202887804153817,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": 0.004658711420584327,
+        "auroc": 0.004087085129053314,
+        "brier": -0.0004811153704016302,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          -0.02823210580860499,
+          0.03939908918935854
+        ],
+        "auroc": [
+          -0.011135177891441014,
+          0.022872739481101377
+        ],
+        "n": 1000
+      },
+      "rho_before": 1.0,
+      "rho_after": 0.4437340153452685
+    },
+    {
+      "variant": "augmented_10",
+      "model": "Full",
+      "mode": "hourly",
+      "before": {
+        "ap": 0.3177777250220147,
+        "auroc": 0.7227540910608927,
+        "brier": 0.09508152272648131,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.3177777250220147,
+        "auroc": 0.7227540910608927,
+        "brier": 0.09508152272648131,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": 0.0,
+        "auroc": 0.0,
+        "brier": 0.0,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          0.0,
+          0.0
+        ],
+        "auroc": [
+          0.0,
+          0.0
+        ],
+        "n": 1000
+      },
+      "rho_before": 0.3312020460358056,
+      "rho_after": 0.3312020460358056
+    },
+    {
+      "variant": "augmented_10",
+      "model": "Full",
+      "mode": "native",
+      "before": {
+        "ap": 0.3177777250220147,
+        "auroc": 0.7227540910608927,
+        "brier": 0.09508152272648131,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.3177777250220147,
+        "auroc": 0.7227540910608927,
+        "brier": 0.09508152272648131,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": 0.0,
+        "auroc": 0.0,
+        "brier": 0.0,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          0.0,
+          0.0
+        ],
+        "auroc": [
+          0.0,
+          0.0
+        ],
+        "n": 1000
+      },
+      "rho_before": 0.3312020460358056,
+      "rho_after": 0.3312020460358056
+    },
+    {
+      "variant": "augmented_10",
+      "model": "Elastic",
+      "mode": "hourly",
+      "before": {
+        "ap": 0.33630517580013053,
+        "auroc": 0.7322323118271021,
+        "brier": 0.09502260164919372,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.33630517580013053,
+        "auroc": 0.7322323118271021,
+        "brier": 0.09502260164919372,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": 0.0,
+        "auroc": 0.0,
+        "brier": 0.0,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          0.0,
+          0.0
+        ],
+        "auroc": [
+          0.0,
+          0.0
+        ],
+        "n": 1000
+      },
+      "rho_before": 0.329923273657289,
+      "rho_after": 0.329923273657289
+    },
+    {
+      "variant": "augmented_10",
+      "model": "Elastic",
+      "mode": "native",
+      "before": {
+        "ap": 0.33630517580013053,
+        "auroc": 0.7322323118271021,
+        "brier": 0.09502260164919372,
+        "sensitivity": 0.0
+      },
+      "after": {
+        "ap": 0.33630517580013053,
+        "auroc": 0.7322323118271021,
+        "brier": 0.09502260164919372,
+        "sensitivity": 0.0
+      },
+      "delta": {
+        "ap": 0.0,
+        "auroc": 0.0,
+        "brier": 0.0,
+        "sensitivity": 0.0
+      },
+      "paired_ci": {
+        "ap": [
+          0.0,
+          0.0
+        ],
+        "auroc": [
+          0.0,
+          0.0
+        ],
+        "n": 1000
+      },
+      "rho_before": 0.329923273657289,
+      "rho_after": 0.329923273657289
+    }
+  ],
+  "source_sha256": {
+    "ma_gbt_p12\\encoded_schemas.json": "603cdaf2e341cf465f2a3d1b9c43dca349f5ea21c3bd62dd0e36cce639d297bf",
+    "ma_gbt_p12\\fitted\\Full.joblib": "dd80af3142f65122c7dcc5a59eb66a72f545caf788a75a79f7fbe94ffb3bc885",
+    "ma_gbt_p12\\fitted\\Elastic.joblib": "d8dede69c511034c033a64651c88e7d8940fdda00d6733544cc635913691280c",
+    "ma_gbt_p12\\evaluation\\summary.json": "ebde711c2c7ecf440cf5803ea479e05052204fba687dcc50ade143654eb1cd0b",
+    "ma_gbt_p12\\fitted\\manifest.json": "689a24515dec26097e81322f835a7967b0ed16f9113816845102ab6c74d4313b",
+    "ma_gbt_alpha10\\ma10\\Full.joblib": "9f0c616bde3b19b35cd8c1c21dd26d177c0ae14af3f6bcdc8e1aaf9cf9a50fa2",
+    "ma_gbt_alpha10\\ma10\\Elastic.joblib": "148e26fa8e010628bfe5dc3093b739d32bd4ddce1bcfecac2dc59c0efeee669b",
+    "ma_gbt_alpha10\\evaluation\\summary.json": "4b35300fb1e4c5c0def8bb9d52b7fb4ba5fea9014bbb924a52f73aa5545278be",
+    "ma_gbt_alpha10\\manifest.json": "797ce133e917d3cb43dd09d18f3e8c2c4dd00ce643a651e95e48235fa81a5fa1",
+    "ma_gbt_alpha10_bilirubin\\Full.joblib": "0fca5c8e7e836f086a5144b1933f2f9309c13588b9fe40666a9a46b75ada465a",
+    "ma_gbt_alpha10_bilirubin\\Elastic.joblib": "b6f82f6bd1d8ae073f7ba7c82e51f3b7eb6513b15170be7da087dc98adc2fc2d",
+    "ma_gbt_alpha10_bilirubin\\evaluation\\summary.json": "91a8eb844bd0a7bb038b65a8cc42ccb9480a5003b036bbf892fff1ec159fab44",
+    "ma_gbt_alpha10_bilirubin\\manifest.json": "273dd9897296ba82d3e80b77aa03e9838348e5d39039a88c2964588fd4c9d209"
+  },
+  "bootstrap": {
+    "replicates": 1000,
+    "seed": 42,
+    "unit": "patient"
+  }
+}
