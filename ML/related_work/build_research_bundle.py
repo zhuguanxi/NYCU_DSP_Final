@@ -191,6 +191,9 @@ def main():
                       [OUT/'p45_augmentation_branch_ablation/summary.json',OUT/'p52_24h_catboost_blend/evaluation.json',
                        REPORT/'P54_kedgn_ab_transfer_summary.json']})
     (REPORT/'研究實驗登錄.json').write_text(json.dumps(registry,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+    if (REPORT/'P60_P61_verification.json').exists():
+        from integrate_p60_p61 import main as integrate_followup
+        integrate_followup()
     print(f'Published {len(rows)} aggregate metric rows, scientific figures, registry and research story.',flush=True)
 
 

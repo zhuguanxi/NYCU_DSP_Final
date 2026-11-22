@@ -206,6 +206,11 @@ def stress_report(data,outcomes,specs,sources,kedgn):
     for key,comparators in contrasts.items():
         for ref,r in comparators.items():
             lines.append(f'| {key} | {NAMES[ref]} | {r["ap_delta"]:+.5f} | [{r["ap_ci"][0]:+.5f}, {r["ap_ci"][1]:+.5f}] | {r["retention_gain"]:+.5f} | [{r["retention_ci"][0]:+.5f}, {r["retention_ci"][1]:+.5f}] |')
+    lines+=['','## 相同24小時長度：連續區段減隨機小時','',
+      '| 目標 | 模型 | 區段減隨機 ΔAP | 95%區間 |','| --- | --- | ---: | --- |']
+    for target,models in design_contrasts.items():
+        for model,r in models.items():
+            lines.append(f'| {target} | {NAMES[model]} | {r["block_minus_random_ap"]:+.5f} | [{r["ci"][0]:+.5f}, {r["ci"][1]:+.5f}] |')
     lines+=['','區間來自1,000次同住院配對重抽，每次先對各位置算AP再平均，不把重複病例疊成更大隊列。這裡評估的是五模型等權機率集成；前表則是五次指標平均，兩者不能混為一談。區間只反映固定模型的病例抽樣，未校正歷史多重比較。','',
       '連續缺失可能保留較長的完整片段，隨機缺失可能打散序列；實際哪個較難由結果判讀，不預設連續一定更差。人工缺失無法完整反映臨床決策、介面與跨院分布差異。','',
       '![缺失曲線](../figures/P61_missingness_curves.png)','',

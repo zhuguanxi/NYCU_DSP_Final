@@ -38,6 +38,7 @@ $env:CUDA_VISIBLE_DEVICES='-1'
 $env:PYTHONPATH=Join-Path (Get-Location) 'artifacts/p21_cpu_packages/site'
 & .venv/Scripts/python.exe related_work/publish_p60_p61.py
 & .venv/Scripts/python.exe related_work/verify_p60_p61.py
+& .venv/Scripts/python.exe related_work/integrate_p60_p61.py
 ```
 
 五種子CNN實際均在CPU完成，CNN推論也固定CPU。KEDGN可用閒置GPU，每批檢查（查詢最多快取3秒）；有其他運算程序或無自身運算時的顯著負載則改CPU。閒置桌面顯示程式不視為另一個模型訓練工作；未知GPU程序保守視為忙碌。絕不停止他人的程序。
