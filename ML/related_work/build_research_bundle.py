@@ -169,7 +169,7 @@ def story(p55,p57,p58,p59):
             '不把負向消融、未知外部效果或未完成的其他論文重跑藏起來。Warpformer、ViTST、WaveGNN 等可作方法背景，完整同隊列復現者只按實際完成狀態列出。','',
             '## 對照資料','',
             '[完成驗收](研究完成驗收.json) · [結果總表](研究結果總表.csv) · [P55](P55_kedgn_missingness_results.md) · [P56](P56_observation_mixture_results.md) · [P57](P57_demo_paired_results.md) · [P58](P58_joint_objectives_results.md) · [P59](P59_ma_alignment_results.md) · [文獻定位](文獻定位與可比性.md)','']
-    (REPORT/'研究結論與故事.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+    (REPORT/'研究結論與故事.md').write_text('\n'.join(lines).rstrip()+'\n',encoding='utf-8')
 
 
 def main():
@@ -190,7 +190,7 @@ def main():
                   additional_summary_sha256={str(p.relative_to(ML)):hashlib.sha256(p.read_bytes()).hexdigest() for p in
                       [OUT/'p45_augmentation_branch_ablation/summary.json',OUT/'p52_24h_catboost_blend/evaluation.json',
                        REPORT/'P54_kedgn_ab_transfer_summary.json']})
-    (REPORT/'研究實驗登錄.json').write_text(json.dumps(registry,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    (REPORT/'研究實驗登錄.json').write_text(json.dumps(registry,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
     print(f'Published {len(rows)} aggregate metric rows, scientific figures, registry and research story.',flush=True)
 
 

@@ -138,7 +138,7 @@ def main():
                              'Architecture/representation/capacity differences across literature controls'])
     privacy(result)
     path=REPORT/'研究完成驗收.json'
-    path.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    path.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
     print('Verified current experimental evidence and grouped OOF coverage. External AP gain remains unconfirmed.',flush=True)
 
 

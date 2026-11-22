@@ -14,7 +14,7 @@ def main():
     public=dict(value)
     public['source_sha256']={str(Path(k).relative_to(ML)):v for k,v in value['source_sha256'].items()}
     target=ML/'reports/P56_observation_mixture_summary.json'
-    target.write_text(json.dumps(public,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    target.write_text(json.dumps(public,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
     baseline=value['baseline']
     lines=['# P56：觀測狀態條件混合的 A/B 消融','',
            '依事先規格，重擬原固定 CNN 的三個 A/B 訓練折，逐項重現 P33 的原候選分數。32 個條件規則中，最佳仍是有／無 GCS 均以 P28 與 CNN 作 75%／25% 固定機率混合，與原 P33 完全相同。**加權目標增益為 0，未達預定 0.001 接受條件，因此保留 P33。**','',

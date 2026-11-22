@@ -15,7 +15,7 @@ VERSIONS={'original_1000':'原版 α=1000','original_10':'原版 α=10','augment
 def read(name): return json.loads((REPORT/name).read_text(encoding='utf-8'))
 def f(value): return f'{value:.5f}'
 def ci(value): return f'[{value[0]:+.5f}, {value[1]:+.5f}]'
-def write(name,lines): (REPORT/name).write_text('\n'.join(lines)+'\n',encoding='utf-8')
+def write(name,lines): (REPORT/name).write_text('\n'.join(lines).rstrip()+'\n',encoding='utf-8',newline='\n')
 
 
 def p55():
@@ -136,4 +136,7 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--phases',nargs='+',choices=('55','57','58','59'),default=['55','57','58','59'])
     for phase in parser.parse_args().phases: globals()[f'p{phase}']()
+    # These summaries are hashed by the completion audit and pinned to LF in Git.
+    for summary in REPORT.glob('P5[5-9]*_summary.json'):
+        summary.write_text(summary.read_text(encoding='utf-8'),encoding='utf-8',newline='\n')
     print('Published selected aggregate-only experimental reports.')
