@@ -66,18 +66,28 @@ def train(path,seed):
     print(f'P33 seed {seed}: 8 fixed epochs on {where}',flush=True)
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('mode',choices=['fit','infer']);p.add_argument('--model',type=Path,required=True)
+    p=argparse.ArgumentParser();p.add_argument('mode',choices=['fit','infer','infer-list']);p.add_argument('--model',type=Path,required=True)
     p.add_argument('--seed',type=int);p.add_argument('--packet',type=Path);p.add_argument('--output',type=Path)
     a=p.parse_args()
     torch.set_num_threads(3);torch.use_deterministic_algorithms(True)
     torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
     torch.backends.cudnn.benchmark=False
     if a.mode=='fit': train(a.model,a.seed)
-    else:
+    elif a.mode=='infer':
         where=device();model=torch.jit.load(str(a.model),map_location='cpu')
         with np.load(a.packet) as data:
             values=predict(model,data['cube'],data['static'],where)
         if not (np.isfinite(values)&(values>=0)&(values<=1)).all(): raise ValueError('Invalid CNN probabilities')
         np.save(a.output,values)
+    else:
+        model=torch.jit.load(str(a.model),map_location='cpu')
+        for job in json.loads(a.packet.read_text(encoding='utf-8')):
+            target=Path(job['output'])
+            if target.exists(): continue
+            where=device()
+            with np.load(job['input']) as data: values=predict(model,data['cube'],data['static'],where)
+            assert (np.isfinite(values)&(values>=0)&(values<=1)).all()
+            np.save(target,values)
+            print(f'CNN {a.model.parent.name}/{target.parent.name}: {where}',flush=True)
 
 if __name__=='__main__': main()
