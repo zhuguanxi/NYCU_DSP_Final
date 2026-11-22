@@ -1,0 +1,4859 @@
+{
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "kedgn_existing_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "new_component_fits": 35,
+  "new_selected_parameters": 0,
+  "selected_seed": null,
+  "training_data": "P12 A+B 8000/1122",
+  "cnn_training_devices": [
+    "cpu",
+    "cpu",
+    "cpu",
+    "cpu",
+    "cpu"
+  ],
+  "per_seed": [
+    {
+      "cohort": "clean",
+      "model": "frozen_full",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5798491272075557,
+      "auroc": 0.8748938193740536,
+      "brier": 0.08735567440909614,
+      "sensitivity": 0.3452991452991453
+    },
+    {
+      "cohort": "clean",
+      "model": "frozen_full",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5798491272075557,
+      "auroc": 0.8748938193740536,
+      "brier": 0.08735567440909614,
+      "sensitivity": 0.3452991452991453
+    },
+    {
+      "cohort": "clean",
+      "model": "frozen_full",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5798491272075557,
+      "auroc": 0.8748938193740536,
+      "brier": 0.08735567440909614,
+      "sensitivity": 0.3452991452991453
+    },
+    {
+      "cohort": "clean",
+      "model": "frozen_full",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5798491272075557,
+      "auroc": 0.8748938193740536,
+      "brier": 0.08735567440909614,
+      "sensitivity": 0.3452991452991453
+    },
+    {
+      "cohort": "clean",
+      "model": "frozen_full",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5798491272075557,
+      "auroc": 0.8748938193740536,
+      "brier": 0.08735567440909614,
+      "sensitivity": 0.3452991452991453
+    },
+    {
+      "cohort": "clean",
+      "model": "frozen_elastic",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5713421733297984,
+      "auroc": 0.8742881455619376,
+      "brier": 0.08808459323930612,
+      "sensitivity": 0.3145299145299145
+    },
+    {
+      "cohort": "clean",
+      "model": "frozen_elastic",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5713421733297984,
+      "auroc": 0.8742881455619376,
+      "brier": 0.08808459323930612,
+      "sensitivity": 0.3145299145299145
+    },
+    {
+      "cohort": "clean",
+      "model": "frozen_elastic",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5713421733297984,
+      "auroc": 0.8742881455619376,
+      "brier": 0.08808459323930612,
+      "sensitivity": 0.3145299145299145
+    },
+    {
+      "cohort": "clean",
+      "model": "frozen_elastic",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5713421733297984,
+      "auroc": 0.8742881455619376,
+      "brier": 0.08808459323930612,
+      "sensitivity": 0.3145299145299145
+    },
+    {
+      "cohort": "clean",
+      "model": "frozen_elastic",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5713421733297984,
+      "auroc": 0.8742881455619376,
+      "brier": 0.08808459323930612,
+      "sensitivity": 0.3145299145299145
+    },
+    {
+      "cohort": "clean",
+      "model": "gcs_only_full",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5774656296668539,
+      "auroc": 0.8737875886924203,
+      "brier": 0.0876106993923588,
+      "sensitivity": 0.3128205128205128
+    },
+    {
+      "cohort": "clean",
+      "model": "gcs_only_full",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5774656296668539,
+      "auroc": 0.8737875886924203,
+      "brier": 0.0876106993923588,
+      "sensitivity": 0.3128205128205128
+    },
+    {
+      "cohort": "clean",
+      "model": "gcs_only_full",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5774656296668539,
+      "auroc": 0.8737875886924203,
+      "brier": 0.0876106993923588,
+      "sensitivity": 0.3128205128205128
+    },
+    {
+      "cohort": "clean",
+      "model": "gcs_only_full",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5774656296668539,
+      "auroc": 0.8737875886924203,
+      "brier": 0.0876106993923588,
+      "sensitivity": 0.3128205128205128
+    },
+    {
+      "cohort": "clean",
+      "model": "gcs_only_full",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5774656296668539,
+      "auroc": 0.8737875886924203,
+      "brier": 0.0876106993923588,
+      "sensitivity": 0.3128205128205128
+    },
+    {
+      "cohort": "clean",
+      "model": "gcs_only_elastic",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5709744672646656,
+      "auroc": 0.8721662849920537,
+      "brier": 0.08836195158396229,
+      "sensitivity": 0.31794871794871793
+    },
+    {
+      "cohort": "clean",
+      "model": "gcs_only_elastic",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5709744672646656,
+      "auroc": 0.8721662849920537,
+      "brier": 0.08836195158396229,
+      "sensitivity": 0.31794871794871793
+    },
+    {
+      "cohort": "clean",
+      "model": "gcs_only_elastic",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5709744672646656,
+      "auroc": 0.8721662849920537,
+      "brier": 0.08836195158396229,
+      "sensitivity": 0.31794871794871793
+    },
+    {
+      "cohort": "clean",
+      "model": "gcs_only_elastic",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5709744672646656,
+      "auroc": 0.8721662849920537,
+      "brier": 0.08836195158396229,
+      "sensitivity": 0.31794871794871793
+    },
+    {
+      "cohort": "clean",
+      "model": "gcs_only_elastic",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5709744672646656,
+      "auroc": 0.8721662849920537,
+      "brier": 0.08836195158396229,
+      "sensitivity": 0.31794871794871793
+    },
+    {
+      "cohort": "clean",
+      "model": "p26",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5959231643788673,
+      "auroc": 0.879438875749271,
+      "brier": 0.08570574318156216,
+      "sensitivity": 0.3606837606837607
+    },
+    {
+      "cohort": "clean",
+      "model": "p26",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.594861961114791,
+      "auroc": 0.878339652863811,
+      "brier": 0.08575496833766147,
+      "sensitivity": 0.3606837606837607
+    },
+    {
+      "cohort": "clean",
+      "model": "p26",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5950722216623104,
+      "auroc": 0.877775525271865,
+      "brier": 0.08587398044961808,
+      "sensitivity": 0.37264957264957266
+    },
+    {
+      "cohort": "clean",
+      "model": "p26",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5952261737221861,
+      "auroc": 0.8784427675789316,
+      "brier": 0.08598758208009799,
+      "sensitivity": 0.3452991452991453
+    },
+    {
+      "cohort": "clean",
+      "model": "p26",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5955073967926532,
+      "auroc": 0.8782695749020786,
+      "brier": 0.08588801475343627,
+      "sensitivity": 0.35384615384615387
+    },
+    {
+      "cohort": "clean",
+      "model": "p28",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5921564360018979,
+      "auroc": 0.8796345934852522,
+      "brier": 0.08605007444395227,
+      "sensitivity": 0.3401709401709402
+    },
+    {
+      "cohort": "clean",
+      "model": "p28",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5921916879817295,
+      "auroc": 0.878944325562188,
+      "brier": 0.08610831994868257,
+      "sensitivity": 0.3367521367521368
+    },
+    {
+      "cohort": "clean",
+      "model": "p28",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5918319626433846,
+      "auroc": 0.8786274730637835,
+      "brier": 0.08617951100941514,
+      "sensitivity": 0.3384615384615385
+    },
+    {
+      "cohort": "clean",
+      "model": "p28",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5908948681176976,
+      "auroc": 0.8790159051945289,
+      "brier": 0.08626934334116973,
+      "sensitivity": 0.3230769230769231
+    },
+    {
+      "cohort": "clean",
+      "model": "p28",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5925485951520711,
+      "auroc": 0.8790073957277471,
+      "brier": 0.08617160819660281,
+      "sensitivity": 0.3367521367521368
+    },
+    {
+      "cohort": "clean",
+      "model": "p33",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.6025660232619859,
+      "auroc": 0.880856452803744,
+      "brier": 0.08603749176977672,
+      "sensitivity": 0.3076923076923077
+    },
+    {
+      "cohort": "clean",
+      "model": "p33",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.602161638079081,
+      "auroc": 0.8803689104128344,
+      "brier": 0.08534801553869113,
+      "sensitivity": 0.3299145299145299
+    },
+    {
+      "cohort": "clean",
+      "model": "p33",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5992018915011624,
+      "auroc": 0.8806627372952409,
+      "brier": 0.08597433110613988,
+      "sensitivity": 0.3076923076923077
+    },
+    {
+      "cohort": "clean",
+      "model": "p33",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5979084945730804,
+      "auroc": 0.8802703007095394,
+      "brier": 0.0857617365128755,
+      "sensitivity": 0.3384615384615385
+    },
+    {
+      "cohort": "clean",
+      "model": "p33",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.6023489004085244,
+      "auroc": 0.881054673324073,
+      "brier": 0.08520436225290443,
+      "sensitivity": 0.3487179487179487
+    },
+    {
+      "cohort": "clean",
+      "model": "kedgn_ab",
+      "seed": 0,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.556459301802029,
+      "auroc": 0.8717167849232271,
+      "brier": 0.14198218167337417,
+      "sensitivity": 0.7623931623931623
+    },
+    {
+      "cohort": "clean",
+      "model": "kedgn_ab",
+      "seed": 1,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5301165441513156,
+      "auroc": 0.8590877351053047,
+      "brier": 0.14359335840333293,
+      "sensitivity": 0.7658119658119659
+    },
+    {
+      "cohort": "clean",
+      "model": "kedgn_ab",
+      "seed": 2,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5385642131750571,
+      "auroc": 0.8649452515923965,
+      "brier": 0.12347820856587408,
+      "sensitivity": 0.694017094017094
+    },
+    {
+      "cohort": "clean",
+      "model": "kedgn_ab",
+      "seed": 3,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5586437854167501,
+      "auroc": 0.86943224337075,
+      "brier": 0.13750355626182453,
+      "sensitivity": 0.7589743589743589
+    },
+    {
+      "cohort": "clean",
+      "model": "kedgn_ab",
+      "seed": 4,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5446887498306924,
+      "auroc": 0.8657301247637997,
+      "brier": 0.16577173991554803,
+      "sensitivity": 0.8205128205128205
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "frozen_full",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4538337223848874,
+      "auroc": 0.805658294853024,
+      "brier": 0.10555907403869391,
+      "sensitivity": 0.10427350427350428
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "frozen_full",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4538337223848874,
+      "auroc": 0.805658294853024,
+      "brier": 0.10555907403869391,
+      "sensitivity": 0.10427350427350428
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "frozen_full",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4538337223848874,
+      "auroc": 0.805658294853024,
+      "brier": 0.10555907403869391,
+      "sensitivity": 0.10427350427350428
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "frozen_full",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4538337223848874,
+      "auroc": 0.805658294853024,
+      "brier": 0.10555907403869391,
+      "sensitivity": 0.10427350427350428
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "frozen_full",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4538337223848874,
+      "auroc": 0.805658294853024,
+      "brier": 0.10555907403869391,
+      "sensitivity": 0.10427350427350428
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "frozen_elastic",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.44680721208339247,
+      "auroc": 0.8024211935778554,
+      "brier": 0.10580901461900408,
+      "sensitivity": 0.11282051282051282
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "frozen_elastic",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.44680721208339247,
+      "auroc": 0.8024211935778554,
+      "brier": 0.10580901461900408,
+      "sensitivity": 0.11282051282051282
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "frozen_elastic",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.44680721208339247,
+      "auroc": 0.8024211935778554,
+      "brier": 0.10580901461900408,
+      "sensitivity": 0.11282051282051282
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "frozen_elastic",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.44680721208339247,
+      "auroc": 0.8024211935778554,
+      "brier": 0.10580901461900408,
+      "sensitivity": 0.11282051282051282
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "frozen_elastic",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.44680721208339247,
+      "auroc": 0.8024211935778554,
+      "brier": 0.10580901461900408,
+      "sensitivity": 0.11282051282051282
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "gcs_only_full",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5049208609967757,
+      "auroc": 0.845615747519115,
+      "brier": 0.0962173010162285,
+      "sensitivity": 0.20341880341880342
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "gcs_only_full",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5049208609967757,
+      "auroc": 0.845615747519115,
+      "brier": 0.0962173010162285,
+      "sensitivity": 0.20341880341880342
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "gcs_only_full",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5049208609967757,
+      "auroc": 0.845615747519115,
+      "brier": 0.0962173010162285,
+      "sensitivity": 0.20341880341880342
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "gcs_only_full",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5049208609967757,
+      "auroc": 0.845615747519115,
+      "brier": 0.0962173010162285,
+      "sensitivity": 0.20341880341880342
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "gcs_only_full",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5049208609967757,
+      "auroc": 0.845615747519115,
+      "brier": 0.0962173010162285,
+      "sensitivity": 0.20341880341880342
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "gcs_only_elastic",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.49962128881170353,
+      "auroc": 0.8433982805871533,
+      "brier": 0.09687646148336744,
+      "sensitivity": 0.2
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "gcs_only_elastic",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.49962128881170353,
+      "auroc": 0.8433982805871533,
+      "brier": 0.09687646148336744,
+      "sensitivity": 0.2
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "gcs_only_elastic",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.49962128881170353,
+      "auroc": 0.8433982805871533,
+      "brier": 0.09687646148336744,
+      "sensitivity": 0.2
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "gcs_only_elastic",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.49962128881170353,
+      "auroc": 0.8433982805871533,
+      "brier": 0.09687646148336744,
+      "sensitivity": 0.2
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "gcs_only_elastic",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.49962128881170353,
+      "auroc": 0.8433982805871533,
+      "brier": 0.09687646148336744,
+      "sensitivity": 0.2
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p26",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5373313036042846,
+      "auroc": 0.8553856164983545,
+      "brier": 0.09402866493552872,
+      "sensitivity": 0.2717948717948718
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p26",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5315715684057254,
+      "auroc": 0.856138954586978,
+      "brier": 0.09444134549810812,
+      "sensitivity": 0.27008547008547007
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p26",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5361225256041555,
+      "auroc": 0.8560018020047302,
+      "brier": 0.09415400795948088,
+      "sensitivity": 0.27350427350427353
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p26",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5333411599858993,
+      "auroc": 0.8571020260039294,
+      "brier": 0.09454318141605174,
+      "sensitivity": 0.27863247863247864
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p26",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5335545261964942,
+      "auroc": 0.8552244371863699,
+      "brier": 0.09429554881668495,
+      "sensitivity": 0.27350427350427353
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p28",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5315548368884836,
+      "auroc": 0.8569028043698614,
+      "brier": 0.09399589335451065,
+      "sensitivity": 0.22735042735042735
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p28",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5290362898444217,
+      "auroc": 0.8572607025315664,
+      "brier": 0.09423083893205197,
+      "sensitivity": 0.22905982905982905
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p28",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5325298187029588,
+      "auroc": 0.8572256635507002,
+      "brier": 0.09401169833074798,
+      "sensitivity": 0.22905982905982905
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p28",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5298706023935575,
+      "auroc": 0.8574939620327615,
+      "brier": 0.09418520853578251,
+      "sensitivity": 0.22564102564102564
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p28",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5304762189830381,
+      "auroc": 0.8565859518714569,
+      "brier": 0.09407031240359508,
+      "sensitivity": 0.2222222222222222
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p33",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5329952352242604,
+      "auroc": 0.8564703232345984,
+      "brier": 0.095092426467104,
+      "sensitivity": 0.1811965811965812
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p33",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5273642916808383,
+      "auroc": 0.8539870606049229,
+      "brier": 0.09487759304668575,
+      "sensitivity": 0.21025641025641026
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p33",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5305659958077357,
+      "auroc": 0.8559152056663037,
+      "brier": 0.0950766656221364,
+      "sensitivity": 0.19145299145299147
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p33",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5309180524801278,
+      "auroc": 0.8565964635657167,
+      "brier": 0.09456881628284394,
+      "sensitivity": 0.20341880341880342
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "p33",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5337195704561742,
+      "auroc": 0.8571721039656618,
+      "brier": 0.09427011703373131,
+      "sensitivity": 0.20854700854700856
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "kedgn_ab",
+      "seed": 0,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.42880680440032615,
+      "auroc": 0.8091877213399907,
+      "brier": 0.1861477616703703,
+      "sensitivity": 0.7350427350427351
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "kedgn_ab",
+      "seed": 1,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.40867803579055095,
+      "auroc": 0.7798470798763625,
+      "brier": 0.21357890007356423,
+      "sensitivity": 0.7504273504273504
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "kedgn_ab",
+      "seed": 2,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.39603694412688606,
+      "auroc": 0.7822963046389109,
+      "brier": 0.13303736108346745,
+      "sensitivity": 0.48547008547008547
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "kedgn_ab",
+      "seed": 3,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.41634357239729625,
+      "auroc": 0.8060402197444658,
+      "brier": 0.18178313153713394,
+      "sensitivity": 0.7282051282051282
+    },
+    {
+      "cohort": "gcs_full",
+      "model": "kedgn_ab",
+      "seed": 4,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.43375069859880827,
+      "auroc": 0.806453679718687,
+      "brier": 0.39180812225774175,
+      "sensitivity": 0.9675213675213675
+    },
+    {
+      "cohort": "six_full",
+      "model": "frozen_full",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4324621663384723,
+      "auroc": 0.7950494925604736,
+      "brier": 0.10484221691875262,
+      "sensitivity": 0.10256410256410256
+    },
+    {
+      "cohort": "six_full",
+      "model": "frozen_full",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4324621663384723,
+      "auroc": 0.7950494925604736,
+      "brier": 0.10484221691875262,
+      "sensitivity": 0.10256410256410256
+    },
+    {
+      "cohort": "six_full",
+      "model": "frozen_full",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4324621663384723,
+      "auroc": 0.7950494925604736,
+      "brier": 0.10484221691875262,
+      "sensitivity": 0.10256410256410256
+    },
+    {
+      "cohort": "six_full",
+      "model": "frozen_full",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4324621663384723,
+      "auroc": 0.7950494925604736,
+      "brier": 0.10484221691875262,
+      "sensitivity": 0.10256410256410256
+    },
+    {
+      "cohort": "six_full",
+      "model": "frozen_full",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4324621663384723,
+      "auroc": 0.7950494925604736,
+      "brier": 0.10484221691875262,
+      "sensitivity": 0.10256410256410256
+    },
+    {
+      "cohort": "six_full",
+      "model": "frozen_elastic",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.42810557585064507,
+      "auroc": 0.7948127291611917,
+      "brier": 0.1049356103474196,
+      "sensitivity": 0.10256410256410256
+    },
+    {
+      "cohort": "six_full",
+      "model": "frozen_elastic",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.42810557585064507,
+      "auroc": 0.7948127291611917,
+      "brier": 0.1049356103474196,
+      "sensitivity": 0.10256410256410256
+    },
+    {
+      "cohort": "six_full",
+      "model": "frozen_elastic",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.42810557585064507,
+      "auroc": 0.7948127291611917,
+      "brier": 0.1049356103474196,
+      "sensitivity": 0.10256410256410256
+    },
+    {
+      "cohort": "six_full",
+      "model": "frozen_elastic",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.42810557585064507,
+      "auroc": 0.7948127291611917,
+      "brier": 0.1049356103474196,
+      "sensitivity": 0.10256410256410256
+    },
+    {
+      "cohort": "six_full",
+      "model": "frozen_elastic",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.42810557585064507,
+      "auroc": 0.7948127291611917,
+      "brier": 0.1049356103474196,
+      "sensitivity": 0.10256410256410256
+    },
+    {
+      "cohort": "six_full",
+      "model": "gcs_only_full",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4605209328754593,
+      "auroc": 0.8214458585176009,
+      "brier": 0.1018660965023866,
+      "sensitivity": 0.09743589743589744
+    },
+    {
+      "cohort": "six_full",
+      "model": "gcs_only_full",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4605209328754593,
+      "auroc": 0.8214458585176009,
+      "brier": 0.1018660965023866,
+      "sensitivity": 0.09743589743589744
+    },
+    {
+      "cohort": "six_full",
+      "model": "gcs_only_full",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4605209328754593,
+      "auroc": 0.8214458585176009,
+      "brier": 0.1018660965023866,
+      "sensitivity": 0.09743589743589744
+    },
+    {
+      "cohort": "six_full",
+      "model": "gcs_only_full",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4605209328754593,
+      "auroc": 0.8214458585176009,
+      "brier": 0.1018660965023866,
+      "sensitivity": 0.09743589743589744
+    },
+    {
+      "cohort": "six_full",
+      "model": "gcs_only_full",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4605209328754593,
+      "auroc": 0.8214458585176009,
+      "brier": 0.1018660965023866,
+      "sensitivity": 0.09743589743589744
+    },
+    {
+      "cohort": "six_full",
+      "model": "gcs_only_elastic",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4475843698230003,
+      "auroc": 0.8200027530627824,
+      "brier": 0.10237324401517832,
+      "sensitivity": 0.09572649572649573
+    },
+    {
+      "cohort": "six_full",
+      "model": "gcs_only_elastic",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4475843698230003,
+      "auroc": 0.8200027530627824,
+      "brier": 0.10237324401517832,
+      "sensitivity": 0.09572649572649573
+    },
+    {
+      "cohort": "six_full",
+      "model": "gcs_only_elastic",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4475843698230003,
+      "auroc": 0.8200027530627824,
+      "brier": 0.10237324401517832,
+      "sensitivity": 0.09572649572649573
+    },
+    {
+      "cohort": "six_full",
+      "model": "gcs_only_elastic",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4475843698230003,
+      "auroc": 0.8200027530627824,
+      "brier": 0.10237324401517832,
+      "sensitivity": 0.09572649572649573
+    },
+    {
+      "cohort": "six_full",
+      "model": "gcs_only_elastic",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4475843698230003,
+      "auroc": 0.8200027530627824,
+      "brier": 0.10237324401517832,
+      "sensitivity": 0.09572649572649573
+    },
+    {
+      "cohort": "six_full",
+      "model": "p26",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4993690599065369,
+      "auroc": 0.8414821488906408,
+      "brier": 0.09733705253481965,
+      "sensitivity": 0.21367521367521367
+    },
+    {
+      "cohort": "six_full",
+      "model": "p26",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4989648685724087,
+      "auroc": 0.8448749233522292,
+      "brier": 0.09721780398974797,
+      "sensitivity": 0.22735042735042735
+    },
+    {
+      "cohort": "six_full",
+      "model": "p26",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5048940497525941,
+      "auroc": 0.8463981179061706,
+      "brier": 0.09671085259611521,
+      "sensitivity": 0.2205128205128205
+    },
+    {
+      "cohort": "six_full",
+      "model": "p26",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5010452276820567,
+      "auroc": 0.8444299282952284,
+      "brier": 0.09707018857463964,
+      "sensitivity": 0.2205128205128205
+    },
+    {
+      "cohort": "six_full",
+      "model": "p26",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.49890353052018677,
+      "auroc": 0.8431144648421369,
+      "brier": 0.09729487266440114,
+      "sensitivity": 0.2205128205128205
+    },
+    {
+      "cohort": "six_full",
+      "model": "p28",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4947748557923635,
+      "auroc": 0.84099560761347,
+      "brier": 0.0981019547089651,
+      "sensitivity": 0.15213675213675212
+    },
+    {
+      "cohort": "six_full",
+      "model": "p28",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4928979283170371,
+      "auroc": 0.8432476129694285,
+      "brier": 0.09797367425403126,
+      "sensitivity": 0.1623931623931624
+    },
+    {
+      "cohort": "six_full",
+      "model": "p28",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4967505250643014,
+      "auroc": 0.8444409405463578,
+      "brier": 0.097747956805951,
+      "sensitivity": 0.15384615384615385
+    },
+    {
+      "cohort": "six_full",
+      "model": "p28",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.49583349380035036,
+      "auroc": 0.8425308155322797,
+      "brier": 0.09793644501056505,
+      "sensitivity": 0.15384615384615385
+    },
+    {
+      "cohort": "six_full",
+      "model": "p28",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4953562649494637,
+      "auroc": 0.8421704145862272,
+      "brier": 0.09804795702815769,
+      "sensitivity": 0.15897435897435896
+    },
+    {
+      "cohort": "six_full",
+      "model": "p33",
+      "seed": 42,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.49440078187348324,
+      "auroc": 0.8376528888388333,
+      "brier": 0.09871819848580074,
+      "sensitivity": 0.14871794871794872
+    },
+    {
+      "cohort": "six_full",
+      "model": "p33",
+      "seed": 43,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.48533013635395555,
+      "auroc": 0.8330297455919711,
+      "brier": 0.0982427475393091,
+      "sensitivity": 0.1811965811965812
+    },
+    {
+      "cohort": "six_full",
+      "model": "p33",
+      "seed": 44,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4918480719748122,
+      "auroc": 0.8389062832401046,
+      "brier": 0.09868585573885313,
+      "sensitivity": 0.13675213675213677
+    },
+    {
+      "cohort": "six_full",
+      "model": "p33",
+      "seed": 45,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4875640571848579,
+      "auroc": 0.8366487717585815,
+      "brier": 0.09790959725204536,
+      "sensitivity": 0.17094017094017094
+    },
+    {
+      "cohort": "six_full",
+      "model": "p33",
+      "seed": 46,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.49078418743709007,
+      "auroc": 0.836837982255259,
+      "brier": 0.09818708187069587,
+      "sensitivity": 0.17264957264957265
+    },
+    {
+      "cohort": "six_full",
+      "model": "kedgn_ab",
+      "seed": 0,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4317560057951726,
+      "auroc": 0.8046446671922514,
+      "brier": 0.24863165203317755,
+      "sensitivity": 0.8700854700854701
+    },
+    {
+      "cohort": "six_full",
+      "model": "kedgn_ab",
+      "seed": 1,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.4058398656599171,
+      "auroc": 0.7712990702156148,
+      "brier": 0.285456726042318,
+      "sensitivity": 0.8393162393162393
+    },
+    {
+      "cohort": "six_full",
+      "model": "kedgn_ab",
+      "seed": 2,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.40381140952122063,
+      "auroc": 0.7829435246711967,
+      "brier": 0.19432774222499624,
+      "sensitivity": 0.705982905982906
+    },
+    {
+      "cohort": "six_full",
+      "model": "kedgn_ab",
+      "seed": 3,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.3696901415986831,
+      "auroc": 0.762916244321808,
+      "brier": 0.28186261071450786,
+      "sensitivity": 0.8461538461538461
+    },
+    {
+      "cohort": "six_full",
+      "model": "kedgn_ab",
+      "seed": 4,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.37771374236242505,
+      "auroc": 0.776320656730613,
+      "brier": 0.49835493452451507,
+      "sensitivity": 0.9777777777777777
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "frozen_full",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.47749706488906224,
+      "auroc": 0.8238100539113564,
+      "brier": 0.08020576428492533,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "frozen_full",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.47749706488906224,
+      "auroc": 0.8238100539113564,
+      "brier": 0.08020576428492533,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "frozen_full",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.47749706488906224,
+      "auroc": 0.8238100539113564,
+      "brier": 0.08020576428492533,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "frozen_full",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.47749706488906224,
+      "auroc": 0.8238100539113564,
+      "brier": 0.08020576428492533,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "frozen_full",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.47749706488906224,
+      "auroc": 0.8238100539113564,
+      "brier": 0.08020576428492533,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "frozen_elastic",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.48956686739207445,
+      "auroc": 0.8320478363893703,
+      "brier": 0.07931643012156188,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "frozen_elastic",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.48956686739207445,
+      "auroc": 0.8320478363893703,
+      "brier": 0.07931643012156188,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "frozen_elastic",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.48956686739207445,
+      "auroc": 0.8320478363893703,
+      "brier": 0.07931643012156188,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "frozen_elastic",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.48956686739207445,
+      "auroc": 0.8320478363893703,
+      "brier": 0.07931643012156188,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "frozen_elastic",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.48956686739207445,
+      "auroc": 0.8320478363893703,
+      "brier": 0.07931643012156188,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "gcs_only_full",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4767965476568672,
+      "auroc": 0.8205499276410999,
+      "brier": 0.0818596352826723,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "gcs_only_full",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4767965476568672,
+      "auroc": 0.8205499276410999,
+      "brier": 0.0818596352826723,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "gcs_only_full",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4767965476568672,
+      "auroc": 0.8205499276410999,
+      "brier": 0.0818596352826723,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "gcs_only_full",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4767965476568672,
+      "auroc": 0.8205499276410999,
+      "brier": 0.0818596352826723,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "gcs_only_full",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4767965476568672,
+      "auroc": 0.8205499276410999,
+      "brier": 0.0818596352826723,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "gcs_only_elastic",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4884189737717453,
+      "auroc": 0.8215041109397115,
+      "brier": 0.08114887942998672,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "gcs_only_elastic",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4884189737717453,
+      "auroc": 0.8215041109397115,
+      "brier": 0.08114887942998672,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "gcs_only_elastic",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4884189737717453,
+      "auroc": 0.8215041109397115,
+      "brier": 0.08114887942998672,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "gcs_only_elastic",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4884189737717453,
+      "auroc": 0.8215041109397115,
+      "brier": 0.08114887942998672,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "gcs_only_elastic",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4884189737717453,
+      "auroc": 0.8215041109397115,
+      "brier": 0.08114887942998672,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p26",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4838421745753146,
+      "auroc": 0.8236351203066109,
+      "brier": 0.08098214459878268,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p26",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4895028270688951,
+      "auroc": 0.8180849541196863,
+      "brier": 0.08125677390245778,
+      "sensitivity": 0.16483516483516483
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p26",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4801602017742354,
+      "auroc": 0.8220766209188785,
+      "brier": 0.08139691973036708,
+      "sensitivity": 0.14285714285714285
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p26",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4890005530841771,
+      "auroc": 0.8264658640924921,
+      "brier": 0.08050400499704892,
+      "sensitivity": 0.15384615384615385
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p26",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4955021443752823,
+      "auroc": 0.8272292107313817,
+      "brier": 0.07955359335839027,
+      "sensitivity": 0.16483516483516483
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p28",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.5014420016601255,
+      "auroc": 0.8294556384281421,
+      "brier": 0.08015440046836984,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p28",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.5037578209271754,
+      "auroc": 0.8252731349692276,
+      "brier": 0.08032204297748469,
+      "sensitivity": 0.14285714285714285
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p28",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.49825384946427054,
+      "auroc": 0.8288195162290675,
+      "brier": 0.0804661679783194,
+      "sensitivity": 0.12087912087912088
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p28",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.507815607253419,
+      "auroc": 0.8308233011561521,
+      "brier": 0.0798808721660924,
+      "sensitivity": 0.15384615384615385
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p28",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.5103041051250393,
+      "auroc": 0.83174567834481,
+      "brier": 0.07942077996789086,
+      "sensitivity": 0.15384615384615385
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p33",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4845471172443226,
+      "auroc": 0.825813838838441,
+      "brier": 0.08132477706160444,
+      "sensitivity": 0.12087912087912088
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p33",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4872617114902457,
+      "auroc": 0.8199774176619328,
+      "brier": 0.08076055608387166,
+      "sensitivity": 0.14285714285714285
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p33",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.48453268347792283,
+      "auroc": 0.8199615146069559,
+      "brier": 0.08124080648318212,
+      "sensitivity": 0.10989010989010989
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p33",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4981053025162327,
+      "auroc": 0.8266248946422607,
+      "brier": 0.07982902107826984,
+      "sensitivity": 0.12087912087912088
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "p33",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4905078093104699,
+      "auroc": 0.8275313687759418,
+      "brier": 0.07994965211631117,
+      "sensitivity": 0.12087912087912088
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "kedgn_ab",
+      "seed": 0,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4303819778379209,
+      "auroc": 0.7992080278621524,
+      "brier": 0.1161874259837091,
+      "sensitivity": 0.5274725274725275
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "kedgn_ab",
+      "seed": 1,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.3804775835266436,
+      "auroc": 0.7769596539495237,
+      "brier": 0.19696437299626143,
+      "sensitivity": 0.7252747252747253
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "kedgn_ab",
+      "seed": 2,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.3892184013792531,
+      "auroc": 0.8106105182805616,
+      "brier": 0.14152585626054265,
+      "sensitivity": 0.6483516483516484
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "kedgn_ab",
+      "seed": 3,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.42633758042900083,
+      "auroc": 0.8004007569854169,
+      "brier": 0.1197518857938741,
+      "sensitivity": 0.5604395604395604
+    },
+    {
+      "cohort": "eicu_hourly",
+      "model": "kedgn_ab",
+      "seed": 4,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.41702427214938476,
+      "auroc": 0.7837343553696664,
+      "brier": 0.23313496826433486,
+      "sensitivity": 0.8021978021978022
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "frozen_full",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4792425222248837,
+      "auroc": 0.8201364482117015,
+      "brier": 0.08013115352789152,
+      "sensitivity": 0.1978021978021978
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "frozen_full",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4792425222248837,
+      "auroc": 0.8201364482117015,
+      "brier": 0.08013115352789152,
+      "sensitivity": 0.1978021978021978
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "frozen_full",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4792425222248837,
+      "auroc": 0.8201364482117015,
+      "brier": 0.08013115352789152,
+      "sensitivity": 0.1978021978021978
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "frozen_full",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4792425222248837,
+      "auroc": 0.8201364482117015,
+      "brier": 0.08013115352789152,
+      "sensitivity": 0.1978021978021978
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "frozen_full",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4792425222248837,
+      "auroc": 0.8201364482117015,
+      "brier": 0.08013115352789152,
+      "sensitivity": 0.1978021978021978
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "frozen_elastic",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4772435804354537,
+      "auroc": 0.8273882412811502,
+      "brier": 0.08006481344661233,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "frozen_elastic",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4772435804354537,
+      "auroc": 0.8273882412811502,
+      "brier": 0.08006481344661233,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "frozen_elastic",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4772435804354537,
+      "auroc": 0.8273882412811502,
+      "brier": 0.08006481344661233,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "frozen_elastic",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4772435804354537,
+      "auroc": 0.8273882412811502,
+      "brier": 0.08006481344661233,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "frozen_elastic",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4772435804354537,
+      "auroc": 0.8273882412811502,
+      "brier": 0.08006481344661233,
+      "sensitivity": 0.17582417582417584
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "gcs_only_full",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4725129807662305,
+      "auroc": 0.8161924905774399,
+      "brier": 0.08159087982194481,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "gcs_only_full",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4725129807662305,
+      "auroc": 0.8161924905774399,
+      "brier": 0.08159087982194481,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "gcs_only_full",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4725129807662305,
+      "auroc": 0.8161924905774399,
+      "brier": 0.08159087982194481,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "gcs_only_full",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4725129807662305,
+      "auroc": 0.8161924905774399,
+      "brier": 0.08159087982194481,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "gcs_only_full",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4725129807662305,
+      "auroc": 0.8161924905774399,
+      "brier": 0.08159087982194481,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "gcs_only_elastic",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4854756193724664,
+      "auroc": 0.8179736327348485,
+      "brier": 0.08092616147762577,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "gcs_only_elastic",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4854756193724664,
+      "auroc": 0.8179736327348485,
+      "brier": 0.08092616147762577,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "gcs_only_elastic",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4854756193724664,
+      "auroc": 0.8179736327348485,
+      "brier": 0.08092616147762577,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "gcs_only_elastic",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4854756193724664,
+      "auroc": 0.8179736327348485,
+      "brier": 0.08092616147762577,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "gcs_only_elastic",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4854756193724664,
+      "auroc": 0.8179736327348485,
+      "brier": 0.08092616147762577,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p26",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4786154091626989,
+      "auroc": 0.8250822983095052,
+      "brier": 0.08067887062698556,
+      "sensitivity": 0.13186813186813187
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p26",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.48422953569031973,
+      "auroc": 0.8187687854836915,
+      "brier": 0.08118442688233227,
+      "sensitivity": 0.18681318681318682
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p26",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4830474351260225,
+      "auroc": 0.8219334934240868,
+      "brier": 0.08121593208458315,
+      "sensitivity": 0.15384615384615385
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p26",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.48747732940926924,
+      "auroc": 0.8274359504460808,
+      "brier": 0.08009184073497622,
+      "sensitivity": 0.15384615384615385
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p26",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.49448706355770905,
+      "auroc": 0.8290739651086974,
+      "brier": 0.079287772630718,
+      "sensitivity": 0.16483516483516483
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p28",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.49916374839349015,
+      "auroc": 0.829344317043304,
+      "brier": 0.07970619556676445,
+      "sensitivity": 0.14285714285714285
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p28",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.5001247527057848,
+      "auroc": 0.8248755585948061,
+      "brier": 0.07999012165020974,
+      "sensitivity": 0.15384615384615385
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p28",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4947925302744608,
+      "auroc": 0.8267680221370526,
+      "brier": 0.08005216246658269,
+      "sensitivity": 0.14285714285714285
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p28",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.5068261503651968,
+      "auroc": 0.8305529492215454,
+      "brier": 0.07939977592827989,
+      "sensitivity": 0.16483516483516483
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p28",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.5097442528524815,
+      "auroc": 0.8316502600149488,
+      "brier": 0.07899010174072002,
+      "sensitivity": 0.15384615384615385
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p33",
+      "seed": 42,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.48022399144810496,
+      "auroc": 0.8253208441341582,
+      "brier": 0.08094652994524863,
+      "sensitivity": 0.12087912087912088
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p33",
+      "seed": 43,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.47964120092317725,
+      "auroc": 0.8196593565623955,
+      "brier": 0.08068290193257065,
+      "sensitivity": 0.14285714285714285
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p33",
+      "seed": 44,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.482616280662276,
+      "auroc": 0.8192776832429509,
+      "brier": 0.08098937777857906,
+      "sensitivity": 0.12087912087912088
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p33",
+      "seed": 45,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.49489467626545214,
+      "auroc": 0.8280402665352015,
+      "brier": 0.07955059439384823,
+      "sensitivity": 0.15384615384615385
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "p33",
+      "seed": 46,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.48818341191710285,
+      "auroc": 0.8282470062499006,
+      "brier": 0.0797260157307108,
+      "sensitivity": 0.12087912087912088
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "kedgn_ab",
+      "seed": 0,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4174212221542447,
+      "auroc": 0.7990967064773143,
+      "brier": 0.11564057781005888,
+      "sensitivity": 0.5054945054945055
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "kedgn_ab",
+      "seed": 1,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.36539271704915527,
+      "auroc": 0.7740493948887582,
+      "brier": 0.20589435728744387,
+      "sensitivity": 0.7472527472527473
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "kedgn_ab",
+      "seed": 2,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.37827876640156277,
+      "auroc": 0.8080978355942177,
+      "brier": 0.14414820912863205,
+      "sensitivity": 0.6483516483516484
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "kedgn_ab",
+      "seed": 3,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.41395010402351284,
+      "auroc": 0.7961228351966413,
+      "brier": 0.12001815520619043,
+      "sensitivity": 0.5384615384615384
+    },
+    {
+      "cohort": "eicu_native",
+      "model": "kedgn_ab",
+      "seed": 4,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4108640565093364,
+      "auroc": 0.784370477568741,
+      "brier": 0.24431841470666016,
+      "sensitivity": 0.8131868131868132
+    }
+  ],
+  "summary": {
+    "clean": {
+      "frozen_full": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5798491272075557,
+            "sd": 0.0,
+            "minimum": 0.5798491272075557,
+            "maximum": 0.5798491272075557
+          },
+          "auroc": {
+            "mean": 0.8748938193740535,
+            "sd": 1.2412670766236366e-16,
+            "minimum": 0.8748938193740536,
+            "maximum": 0.8748938193740536
+          },
+          "brier": {
+            "mean": 0.08735567440909614,
+            "sd": 0.0,
+            "minimum": 0.08735567440909614,
+            "maximum": 0.08735567440909614
+          },
+          "sensitivity": {
+            "mean": 0.3452991452991453,
+            "sd": 0.0,
+            "minimum": 0.3452991452991453,
+            "maximum": 0.3452991452991453
+          }
+        },
+        "ensemble": {
+          "ap": 0.5798491272075557,
+          "auroc": 0.8748938193740536,
+          "brier": 0.08735567440909614,
+          "sensitivity": 0.3452991452991453
+        }
+      },
+      "frozen_elastic": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5713421733297984,
+            "sd": 0.0,
+            "minimum": 0.5713421733297984,
+            "maximum": 0.5713421733297984
+          },
+          "auroc": {
+            "mean": 0.8742881455619376,
+            "sd": 0.0,
+            "minimum": 0.8742881455619376,
+            "maximum": 0.8742881455619376
+          },
+          "brier": {
+            "mean": 0.08808459323930612,
+            "sd": 0.0,
+            "minimum": 0.08808459323930612,
+            "maximum": 0.08808459323930612
+          },
+          "sensitivity": {
+            "mean": 0.3145299145299145,
+            "sd": 0.0,
+            "minimum": 0.3145299145299145,
+            "maximum": 0.3145299145299145
+          }
+        },
+        "ensemble": {
+          "ap": 0.5713421733297984,
+          "auroc": 0.8742881455619376,
+          "brier": 0.08808459323930612,
+          "sensitivity": 0.3145299145299145
+        }
+      },
+      "gcs_only_full": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5774656296668539,
+            "sd": 0.0,
+            "minimum": 0.5774656296668539,
+            "maximum": 0.5774656296668539
+          },
+          "auroc": {
+            "mean": 0.8737875886924205,
+            "sd": 1.2412670766236366e-16,
+            "minimum": 0.8737875886924203,
+            "maximum": 0.8737875886924203
+          },
+          "brier": {
+            "mean": 0.0876106993923588,
+            "sd": 0.0,
+            "minimum": 0.0876106993923588,
+            "maximum": 0.0876106993923588
+          },
+          "sensitivity": {
+            "mean": 0.3128205128205128,
+            "sd": 0.0,
+            "minimum": 0.3128205128205128,
+            "maximum": 0.3128205128205128
+          }
+        },
+        "ensemble": {
+          "ap": 0.5774656296668539,
+          "auroc": 0.8737875886924203,
+          "brier": 0.0876106993923588,
+          "sensitivity": 0.3128205128205128
+        }
+      },
+      "gcs_only_elastic": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5709744672646656,
+            "sd": 0.0,
+            "minimum": 0.5709744672646656,
+            "maximum": 0.5709744672646656
+          },
+          "auroc": {
+            "mean": 0.8721662849920537,
+            "sd": 0.0,
+            "minimum": 0.8721662849920537,
+            "maximum": 0.8721662849920537
+          },
+          "brier": {
+            "mean": 0.08836195158396229,
+            "sd": 0.0,
+            "minimum": 0.08836195158396229,
+            "maximum": 0.08836195158396229
+          },
+          "sensitivity": {
+            "mean": 0.31794871794871793,
+            "sd": 0.0,
+            "minimum": 0.31794871794871793,
+            "maximum": 0.31794871794871793
+          }
+        },
+        "ensemble": {
+          "ap": 0.5709744672646656,
+          "auroc": 0.8721662849920537,
+          "brier": 0.08836195158396229,
+          "sensitivity": 0.31794871794871793
+        }
+      },
+      "p26": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5953181835341615,
+            "sd": 0.0004119785866675894,
+            "minimum": 0.594861961114791,
+            "maximum": 0.5959231643788673
+          },
+          "auroc": {
+            "mean": 0.8784532792731914,
+            "sd": 0.0006077663310363289,
+            "minimum": 0.877775525271865,
+            "maximum": 0.879438875749271
+          },
+          "brier": {
+            "mean": 0.0858420577604752,
+            "sd": 0.00011233283455437527,
+            "minimum": 0.08570574318156216,
+            "maximum": 0.08598758208009799
+          },
+          "sensitivity": {
+            "mean": 0.3586324786324787,
+            "sd": 0.010069522376084201,
+            "minimum": 0.3452991452991453,
+            "maximum": 0.37264957264957266
+          }
+        },
+        "ensemble": {
+          "ap": 0.597737679912327,
+          "auroc": 0.8794934364480484,
+          "brier": 0.08549671627912471,
+          "sensitivity": 0.3641025641025641
+        }
+      },
+      "p28": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5919247099793561,
+            "sd": 0.0006291627850489085,
+            "minimum": 0.5908948681176976,
+            "maximum": 0.5925485951520711
+          },
+          "auroc": {
+            "mean": 0.8790459386066999,
+            "sd": 0.00036549307340607743,
+            "minimum": 0.8786274730637835,
+            "maximum": 0.8796345934852522
+          },
+          "brier": {
+            "mean": 0.0861557713879645,
+            "sd": 8.236571761474695e-05,
+            "minimum": 0.08605007444395227,
+            "maximum": 0.08626934334116973
+          },
+          "sensitivity": {
+            "mean": 0.335042735042735,
+            "sd": 0.006837606837606838,
+            "minimum": 0.3230769230769231,
+            "maximum": 0.3401709401709402
+          }
+        },
+        "ensemble": {
+          "ap": 0.592745486669172,
+          "auroc": 0.8793597877638872,
+          "brier": 0.08606662296122085,
+          "sensitivity": 0.3384615384615385
+        }
+      },
+      "p33": {
+        "metrics": {
+          "ap": {
+            "mean": 0.6008373895647667,
+            "sd": 0.0021377414136186505,
+            "minimum": 0.5979084945730804,
+            "maximum": 0.6025660232619859
+          },
+          "auroc": {
+            "mean": 0.8806426149090862,
+            "sd": 0.00032766435091046044,
+            "minimum": 0.8802703007095394,
+            "maximum": 0.881054673324073
+          },
+          "brier": {
+            "mean": 0.08566518743607754,
+            "sd": 0.0003729812032125642,
+            "minimum": 0.08520436225290443,
+            "maximum": 0.08603749176977672
+          },
+          "sensitivity": {
+            "mean": 0.3264957264957265,
+            "sd": 0.018410819853451284,
+            "minimum": 0.3076923076923077,
+            "maximum": 0.3487179487179487
+          }
+        },
+        "ensemble": {
+          "ap": 0.6029016764431763,
+          "auroc": 0.881371025265608,
+          "brier": 0.08547146077369205,
+          "sensitivity": 0.3247863247863248
+        }
+      },
+      "kedgn_ab": {
+        "metrics": {
+          "ap": {
+            "mean": 0.545694518875169,
+            "sd": 0.01202175301975775,
+            "minimum": 0.5301165441513156,
+            "maximum": 0.5586437854167501
+          },
+          "auroc": {
+            "mean": 0.8661824279510956,
+            "sd": 0.004828567526934956,
+            "minimum": 0.8590877351053047,
+            "maximum": 0.8717167849232271
+          },
+          "brier": {
+            "mean": 0.14246580896399075,
+            "sd": 0.015246512727275226,
+            "minimum": 0.12347820856587408,
+            "maximum": 0.16577173991554803
+          },
+          "sensitivity": {
+            "mean": 0.7603418803418803,
+            "sd": 0.044876271652951535,
+            "minimum": 0.694017094017094,
+            "maximum": 0.8205128205128205
+          }
+        },
+        "ensemble": {
+          "ap": 0.575020356157686,
+          "auroc": 0.8779036678304614,
+          "brier": 0.13455514698869656,
+          "sensitivity": 0.7829059829059829
+        }
+      }
+    },
+    "gcs_full": {
+      "frozen_full": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4538337223848874,
+            "sd": 0.0,
+            "minimum": 0.4538337223848874,
+            "maximum": 0.4538337223848874
+          },
+          "auroc": {
+            "mean": 0.805658294853024,
+            "sd": 0.0,
+            "minimum": 0.805658294853024,
+            "maximum": 0.805658294853024
+          },
+          "brier": {
+            "mean": 0.10555907403869391,
+            "sd": 0.0,
+            "minimum": 0.10555907403869391,
+            "maximum": 0.10555907403869391
+          },
+          "sensitivity": {
+            "mean": 0.10427350427350428,
+            "sd": 0.0,
+            "minimum": 0.10427350427350428,
+            "maximum": 0.10427350427350428
+          }
+        },
+        "ensemble": {
+          "ap": 0.4538337223848874,
+          "auroc": 0.805658294853024,
+          "brier": 0.10555907403869391,
+          "sensitivity": 0.10427350427350428
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.12601540482266826,
+          "sd": 0.0,
+          "minimum": -0.12601540482266826,
+          "maximum": -0.12601540482266826,
+          "values": [
+            -0.12601540482266826,
+            -0.12601540482266826,
+            -0.12601540482266826,
+            -0.12601540482266826,
+            -0.12601540482266826
+          ]
+        }
+      },
+      "frozen_elastic": {
+        "metrics": {
+          "ap": {
+            "mean": 0.44680721208339247,
+            "sd": 0.0,
+            "minimum": 0.44680721208339247,
+            "maximum": 0.44680721208339247
+          },
+          "auroc": {
+            "mean": 0.8024211935778552,
+            "sd": 1.2412670766236366e-16,
+            "minimum": 0.8024211935778554,
+            "maximum": 0.8024211935778554
+          },
+          "brier": {
+            "mean": 0.10580901461900408,
+            "sd": 0.0,
+            "minimum": 0.10580901461900408,
+            "maximum": 0.10580901461900408
+          },
+          "sensitivity": {
+            "mean": 0.11282051282051282,
+            "sd": 0.0,
+            "minimum": 0.11282051282051282,
+            "maximum": 0.11282051282051282
+          }
+        },
+        "ensemble": {
+          "ap": 0.44680721208339247,
+          "auroc": 0.8024211935778554,
+          "brier": 0.10580901461900408,
+          "sensitivity": 0.11282051282051282
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.12453496124640595,
+          "sd": 0.0,
+          "minimum": -0.12453496124640595,
+          "maximum": -0.12453496124640595,
+          "values": [
+            -0.12453496124640595,
+            -0.12453496124640595,
+            -0.12453496124640595,
+            -0.12453496124640595,
+            -0.12453496124640595
+          ]
+        }
+      },
+      "gcs_only_full": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5049208609967757,
+            "sd": 0.0,
+            "minimum": 0.5049208609967757,
+            "maximum": 0.5049208609967757
+          },
+          "auroc": {
+            "mean": 0.845615747519115,
+            "sd": 0.0,
+            "minimum": 0.845615747519115,
+            "maximum": 0.845615747519115
+          },
+          "brier": {
+            "mean": 0.0962173010162285,
+            "sd": 0.0,
+            "minimum": 0.0962173010162285,
+            "maximum": 0.0962173010162285
+          },
+          "sensitivity": {
+            "mean": 0.20341880341880342,
+            "sd": 0.0,
+            "minimum": 0.20341880341880342,
+            "maximum": 0.20341880341880342
+          }
+        },
+        "ensemble": {
+          "ap": 0.5049208609967757,
+          "auroc": 0.845615747519115,
+          "brier": 0.0962173010162285,
+          "sensitivity": 0.20341880341880342
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.0725447686700782,
+          "sd": 0.0,
+          "minimum": -0.0725447686700782,
+          "maximum": -0.0725447686700782,
+          "values": [
+            -0.0725447686700782,
+            -0.0725447686700782,
+            -0.0725447686700782,
+            -0.0725447686700782,
+            -0.0725447686700782
+          ]
+        }
+      },
+      "gcs_only_elastic": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4996212888117036,
+            "sd": 6.206335383118183e-17,
+            "minimum": 0.49962128881170353,
+            "maximum": 0.49962128881170353
+          },
+          "auroc": {
+            "mean": 0.8433982805871534,
+            "sd": 1.2412670766236366e-16,
+            "minimum": 0.8433982805871533,
+            "maximum": 0.8433982805871533
+          },
+          "brier": {
+            "mean": 0.09687646148336744,
+            "sd": 0.0,
+            "minimum": 0.09687646148336744,
+            "maximum": 0.09687646148336744
+          },
+          "sensitivity": {
+            "mean": 0.2,
+            "sd": 0.0,
+            "minimum": 0.2,
+            "maximum": 0.2
+          }
+        },
+        "ensemble": {
+          "ap": 0.49962128881170353,
+          "auroc": 0.8433982805871533,
+          "brier": 0.09687646148336744,
+          "sensitivity": 0.2
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.07135317845296207,
+          "sd": 0.0,
+          "minimum": -0.07135317845296207,
+          "maximum": -0.07135317845296207,
+          "values": [
+            -0.07135317845296207,
+            -0.07135317845296207,
+            -0.07135317845296207,
+            -0.07135317845296207,
+            -0.07135317845296207
+          ]
+        }
+      },
+      "p26": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5343842167593118,
+            "sd": 0.0023127031335320744,
+            "minimum": 0.5315715684057254,
+            "maximum": 0.5373313036042846
+          },
+          "auroc": {
+            "mean": 0.8559705672560725,
+            "sd": 0.0007430353744446313,
+            "minimum": 0.8552244371863699,
+            "maximum": 0.8571020260039294
+          },
+          "brier": {
+            "mean": 0.09429254972517088,
+            "sd": 0.00020844329211603768,
+            "minimum": 0.09402866493552872,
+            "maximum": 0.09454318141605174
+          },
+          "sensitivity": {
+            "mean": 0.27350427350427353,
+            "sd": 0.003197997766473465,
+            "minimum": 0.27008547008547007,
+            "maximum": 0.27863247863247864
+          }
+        },
+        "ensemble": {
+          "ap": 0.5389739464084015,
+          "auroc": 0.8579324498504586,
+          "brier": 0.09367735450681446,
+          "sensitivity": 0.28034188034188035
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.06093396677484979,
+          "sd": 0.0020565863279353083,
+          "minimum": -0.06329039270906556,
+          "maximum": -0.05859186077458267,
+          "values": [
+            -0.05859186077458267,
+            -0.06329039270906556,
+            -0.05894969605815492,
+            -0.061885013736286854,
+            -0.06195287059615895
+          ]
+        }
+      },
+      "p28": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5306935533624919,
+            "sd": 0.0013770153059092605,
+            "minimum": 0.5290362898444217,
+            "maximum": 0.5325298187029588
+          },
+          "auroc": {
+            "mean": 0.8570938168712694,
+            "sd": 0.000353469643139228,
+            "minimum": 0.8565859518714569,
+            "maximum": 0.8574939620327615
+          },
+          "brier": {
+            "mean": 0.09409879031133764,
+            "sd": 0.00010474819304580015,
+            "minimum": 0.09399589335451065,
+            "maximum": 0.09423083893205197
+          },
+          "sensitivity": {
+            "mean": 0.22666666666666666,
+            "sd": 0.0028603761590908572,
+            "minimum": 0.2222222222222222,
+            "maximum": 0.22905982905982905
+          }
+        },
+        "ensemble": {
+          "ap": 0.5323739295778368,
+          "auroc": 0.8578748858104641,
+          "brier": 0.09393249924517773,
+          "sensitivity": 0.22564102564102564
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.0612311566168642,
+          "sd": 0.0014637786855816377,
+          "minimum": -0.06315539813730775,
+          "maximum": -0.05930214394042577,
+          "values": [
+            -0.06060159911341434,
+            -0.06315539813730775,
+            -0.05930214394042577,
+            -0.0610242657241401,
+            -0.06207237616903305
+          ]
+        }
+      },
+      "p33": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5311126291298273,
+            "sd": 0.0024863150684665183,
+            "minimum": 0.5273642916808383,
+            "maximum": 0.5337195704561742
+          },
+          "auroc": {
+            "mean": 0.8560282314074407,
+            "sd": 0.0012253499971437327,
+            "minimum": 0.8539870606049229,
+            "maximum": 0.8571721039656618
+          },
+          "brier": {
+            "mean": 0.09477712369050029,
+            "sd": 0.00035344130607754045,
+            "minimum": 0.09427011703373131,
+            "maximum": 0.095092426467104
+          },
+          "sensitivity": {
+            "mean": 0.198974358974359,
+            "sd": 0.01236217759436892,
+            "minimum": 0.1811965811965812,
+            "maximum": 0.21025641025641026
+          }
+        },
+        "ensemble": {
+          "ap": 0.5324645432651629,
+          "auroc": 0.8570104240968077,
+          "brier": 0.09459466246583861,
+          "sensitivity": 0.19316239316239317
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.06972476043493954,
+          "sd": 0.002983995937372636,
+          "minimum": -0.07479734639824265,
+          "maximum": -0.06699044209295257,
+          "values": [
+            -0.06957078803772554,
+            -0.07479734639824265,
+            -0.06863589569342676,
+            -0.06699044209295257,
+            -0.06862932995235016
+          ]
+        }
+      },
+      "kedgn_ab": {
+        "metrics": {
+          "ap": {
+            "mean": 0.41672321106277355,
+            "sd": 0.015237611116551888,
+            "minimum": 0.39603694412688606,
+            "maximum": 0.43375069859880827
+          },
+          "auroc": {
+            "mean": 0.7967650010636833,
+            "sd": 0.014402980492351765,
+            "minimum": 0.7798470798763625,
+            "maximum": 0.8091877213399907
+          },
+          "brier": {
+            "mean": 0.22127105532445554,
+            "sd": 0.09964962008478576,
+            "minimum": 0.13303736108346745,
+            "maximum": 0.39180812225774175
+          },
+          "sensitivity": {
+            "mean": 0.7333333333333334,
+            "sd": 0.17073491951020545,
+            "minimum": 0.48547008547008547,
+            "maximum": 0.9675213675213675
+          }
+        },
+        "ensemble": {
+          "ap": 0.4448552593597945,
+          "auroc": 0.817928945952372,
+          "brier": 0.19248511786324377,
+          "sensitivity": 0.7589743589743589
+        }
+      }
+    },
+    "six_full": {
+      "frozen_full": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4324621663384723,
+            "sd": 0.0,
+            "minimum": 0.4324621663384723,
+            "maximum": 0.4324621663384723
+          },
+          "auroc": {
+            "mean": 0.7950494925604736,
+            "sd": 0.0,
+            "minimum": 0.7950494925604736,
+            "maximum": 0.7950494925604736
+          },
+          "brier": {
+            "mean": 0.10484221691875262,
+            "sd": 0.0,
+            "minimum": 0.10484221691875262,
+            "maximum": 0.10484221691875262
+          },
+          "sensitivity": {
+            "mean": 0.10256410256410256,
+            "sd": 0.0,
+            "minimum": 0.10256410256410256,
+            "maximum": 0.10256410256410256
+          }
+        },
+        "ensemble": {
+          "ap": 0.4324621663384723,
+          "auroc": 0.7950494925604736,
+          "brier": 0.10484221691875262,
+          "sensitivity": 0.10256410256410256
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.14738696086908337,
+          "sd": 0.0,
+          "minimum": -0.14738696086908337,
+          "maximum": -0.14738696086908337,
+          "values": [
+            -0.14738696086908337,
+            -0.14738696086908337,
+            -0.14738696086908337,
+            -0.14738696086908337,
+            -0.14738696086908337
+          ]
+        }
+      },
+      "frozen_elastic": {
+        "metrics": {
+          "ap": {
+            "mean": 0.42810557585064507,
+            "sd": 0.0,
+            "minimum": 0.42810557585064507,
+            "maximum": 0.42810557585064507
+          },
+          "auroc": {
+            "mean": 0.7948127291611917,
+            "sd": 0.0,
+            "minimum": 0.7948127291611917,
+            "maximum": 0.7948127291611917
+          },
+          "brier": {
+            "mean": 0.1049356103474196,
+            "sd": 0.0,
+            "minimum": 0.1049356103474196,
+            "maximum": 0.1049356103474196
+          },
+          "sensitivity": {
+            "mean": 0.10256410256410256,
+            "sd": 0.0,
+            "minimum": 0.10256410256410256,
+            "maximum": 0.10256410256410256
+          }
+        },
+        "ensemble": {
+          "ap": 0.42810557585064507,
+          "auroc": 0.7948127291611917,
+          "brier": 0.1049356103474196,
+          "sensitivity": 0.10256410256410256
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.14323659747915335,
+          "sd": 0.0,
+          "minimum": -0.14323659747915335,
+          "maximum": -0.14323659747915335,
+          "values": [
+            -0.14323659747915335,
+            -0.14323659747915335,
+            -0.14323659747915335,
+            -0.14323659747915335,
+            -0.14323659747915335
+          ]
+        }
+      },
+      "gcs_only_full": {
+        "metrics": {
+          "ap": {
+            "mean": 0.46052093287545925,
+            "sd": 6.206335383118183e-17,
+            "minimum": 0.4605209328754593,
+            "maximum": 0.4605209328754593
+          },
+          "auroc": {
+            "mean": 0.821445858517601,
+            "sd": 1.2412670766236366e-16,
+            "minimum": 0.8214458585176009,
+            "maximum": 0.8214458585176009
+          },
+          "brier": {
+            "mean": 0.10186609650238658,
+            "sd": 1.5515838457795457e-17,
+            "minimum": 0.1018660965023866,
+            "maximum": 0.1018660965023866
+          },
+          "sensitivity": {
+            "mean": 0.09743589743589744,
+            "sd": 0.0,
+            "minimum": 0.09743589743589744,
+            "maximum": 0.09743589743589744
+          }
+        },
+        "ensemble": {
+          "ap": 0.4605209328754593,
+          "auroc": 0.8214458585176009,
+          "brier": 0.1018660965023866,
+          "sensitivity": 0.09743589743589744
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.11694469679139456,
+          "sd": 1.5515838457795457e-17,
+          "minimum": -0.11694469679139458,
+          "maximum": -0.11694469679139458,
+          "values": [
+            -0.11694469679139458,
+            -0.11694469679139458,
+            -0.11694469679139458,
+            -0.11694469679139458,
+            -0.11694469679139458
+          ]
+        }
+      },
+      "gcs_only_elastic": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4475843698230003,
+            "sd": 0.0,
+            "minimum": 0.4475843698230003,
+            "maximum": 0.4475843698230003
+          },
+          "auroc": {
+            "mean": 0.8200027530627823,
+            "sd": 1.2412670766236366e-16,
+            "minimum": 0.8200027530627824,
+            "maximum": 0.8200027530627824
+          },
+          "brier": {
+            "mean": 0.1023732440151783,
+            "sd": 1.5515838457795457e-17,
+            "minimum": 0.10237324401517832,
+            "maximum": 0.10237324401517832
+          },
+          "sensitivity": {
+            "mean": 0.09572649572649573,
+            "sd": 0.0,
+            "minimum": 0.09572649572649573,
+            "maximum": 0.09572649572649573
+          }
+        },
+        "ensemble": {
+          "ap": 0.4475843698230003,
+          "auroc": 0.8200027530627824,
+          "brier": 0.10237324401517832,
+          "sensitivity": 0.09572649572649573
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.12339009744166529,
+          "sd": 0.0,
+          "minimum": -0.12339009744166529,
+          "maximum": -0.12339009744166529,
+          "values": [
+            -0.12339009744166529,
+            -0.12339009744166529,
+            -0.12339009744166529,
+            -0.12339009744166529,
+            -0.12339009744166529
+          ]
+        }
+      },
+      "p26": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5006353472867566,
+            "sd": 0.0025346459717457285,
+            "minimum": 0.49890353052018677,
+            "maximum": 0.5048940497525941
+          },
+          "auroc": {
+            "mean": 0.8440599166572811,
+            "sd": 0.0018578950050274936,
+            "minimum": 0.8414821488906408,
+            "maximum": 0.8463981179061706
+          },
+          "brier": {
+            "mean": 0.09712615407194472,
+            "sd": 0.0002534518125954113,
+            "minimum": 0.09671085259611521,
+            "maximum": 0.09733705253481965
+          },
+          "sensitivity": {
+            "mean": 0.22051282051282053,
+            "sd": 0.0048349181619593016,
+            "minimum": 0.21367521367521367,
+            "maximum": 0.22735042735042735
+          }
+        },
+        "ensemble": {
+          "ap": 0.5053149257795744,
+          "auroc": 0.8462709764613132,
+          "brier": 0.09650656833382047,
+          "sensitivity": 0.2222222222222222
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.09468283624740495,
+          "sd": 0.0027023283503350404,
+          "minimum": -0.09660386627246642,
+          "maximum": -0.09017817190971633,
+          "values": [
+            -0.09655410447233037,
+            -0.09589709254238227,
+            -0.09017817190971633,
+            -0.09418094604012939,
+            -0.09660386627246642
+          ]
+        }
+      },
+      "p28": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4951226135847032,
+            "sd": 0.001438766785216086,
+            "minimum": 0.4928979283170371,
+            "maximum": 0.4967505250643014
+          },
+          "auroc": {
+            "mean": 0.8426770782495525,
+            "sd": 0.0012788827564402608,
+            "minimum": 0.84099560761347,
+            "maximum": 0.8444409405463578
+          },
+          "brier": {
+            "mean": 0.09796159756153403,
+            "sd": 0.00013562720604520993,
+            "minimum": 0.097747956805951,
+            "maximum": 0.0981019547089651
+          },
+          "sensitivity": {
+            "mean": 0.15623931623931625,
+            "sd": 0.004290564238636286,
+            "minimum": 0.15213675213675212,
+            "maximum": 0.1623931623931624
+          }
+        },
+        "ensemble": {
+          "ap": 0.49712969789633227,
+          "auroc": 0.8436355445433044,
+          "brier": 0.09779984796745705,
+          "sensitivity": 0.15213675213675212
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.09680209639465294,
+          "sd": 0.0017809583008777349,
+          "minimum": -0.0992937596646924,
+          "maximum": -0.09506137431734729,
+          "values": [
+            -0.09738158020953441,
+            -0.0992937596646924,
+            -0.09508143757908316,
+            -0.09506137431734729,
+            -0.09719233020260742
+          ]
+        }
+      },
+      "p33": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4899854469648398,
+            "sd": 0.003575527442758718,
+            "minimum": 0.48533013635395555,
+            "maximum": 0.49440078187348324
+          },
+          "auroc": {
+            "mean": 0.8366151343369499,
+            "sd": 0.002192721073578209,
+            "minimum": 0.8330297455919711,
+            "maximum": 0.8389062832401046
+          },
+          "brier": {
+            "mean": 0.09834869617734084,
+            "sd": 0.0003465402898961097,
+            "minimum": 0.09790959725204536,
+            "maximum": 0.09871819848580074
+          },
+          "sensitivity": {
+            "mean": 0.16205128205128205,
+            "sd": 0.01854523604118361,
+            "minimum": 0.13675213675213677,
+            "maximum": 0.1811965811965812
+          }
+        },
+        "ensemble": {
+          "ap": 0.49296727826357917,
+          "auroc": 0.8381609540613932,
+          "brier": 0.09806351622594411,
+          "sensitivity": 0.15555555555555556
+        },
+        "ap_loss_from_clean": {
+          "mean": -0.11085194259992703,
+          "sd": 0.003740854144159737,
+          "minimum": -0.11683150172512541,
+          "maximum": -0.10735381952635026,
+          "values": [
+            -0.1081652413885027,
+            -0.11683150172512541,
+            -0.10735381952635026,
+            -0.11034443738822247,
+            -0.11156471297143433
+          ]
+        }
+      },
+      "kedgn_ab": {
+        "metrics": {
+          "ap": {
+            "mean": 0.3977622329874837,
+            "sd": 0.024735609792928513,
+            "minimum": 0.3696901415986831,
+            "maximum": 0.4317560057951726
+          },
+          "auroc": {
+            "mean": 0.7796248326262967,
+            "sd": 0.015783049925428363,
+            "minimum": 0.762916244321808,
+            "maximum": 0.8046446671922514
+          },
+          "brier": {
+            "mean": 0.30172673310790293,
+            "sd": 0.11583995096436299,
+            "minimum": 0.19432774222499624,
+            "maximum": 0.49835493452451507
+          },
+          "sensitivity": {
+            "mean": 0.8478632478632478,
+            "sd": 0.09692473505869971,
+            "minimum": 0.705982905982906,
+            "maximum": 0.9777777777777777
+          }
+        },
+        "ensemble": {
+          "ap": 0.4371277225033879,
+          "auroc": 0.8042186932962921,
+          "brier": 0.2759072225853432,
+          "sensitivity": 0.8974358974358975
+        }
+      }
+    },
+    "eicu_hourly": {
+      "frozen_full": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4774970648890623,
+            "sd": 6.206335383118183e-17,
+            "minimum": 0.47749706488906224,
+            "maximum": 0.47749706488906224
+          },
+          "auroc": {
+            "mean": 0.8238100539113564,
+            "sd": 0.0,
+            "minimum": 0.8238100539113564,
+            "maximum": 0.8238100539113564
+          },
+          "brier": {
+            "mean": 0.08020576428492533,
+            "sd": 0.0,
+            "minimum": 0.08020576428492533,
+            "maximum": 0.08020576428492533
+          },
+          "sensitivity": {
+            "mean": 0.17582417582417584,
+            "sd": 0.0,
+            "minimum": 0.17582417582417584,
+            "maximum": 0.17582417582417584
+          }
+        },
+        "ensemble": {
+          "ap": 0.47749706488906224,
+          "auroc": 0.8238100539113564,
+          "brier": 0.08020576428492533,
+          "sensitivity": 0.17582417582417584
+        }
+      },
+      "frozen_elastic": {
+        "metrics": {
+          "ap": {
+            "mean": 0.48956686739207445,
+            "sd": 0.0,
+            "minimum": 0.48956686739207445,
+            "maximum": 0.48956686739207445
+          },
+          "auroc": {
+            "mean": 0.8320478363893702,
+            "sd": 1.2412670766236366e-16,
+            "minimum": 0.8320478363893703,
+            "maximum": 0.8320478363893703
+          },
+          "brier": {
+            "mean": 0.07931643012156188,
+            "sd": 0.0,
+            "minimum": 0.07931643012156188,
+            "maximum": 0.07931643012156188
+          },
+          "sensitivity": {
+            "mean": 0.18681318681318682,
+            "sd": 0.0,
+            "minimum": 0.18681318681318682,
+            "maximum": 0.18681318681318682
+          }
+        },
+        "ensemble": {
+          "ap": 0.48956686739207445,
+          "auroc": 0.8320478363893703,
+          "brier": 0.07931643012156188,
+          "sensitivity": 0.18681318681318682
+        }
+      },
+      "gcs_only_full": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4767965476568672,
+            "sd": 0.0,
+            "minimum": 0.4767965476568672,
+            "maximum": 0.4767965476568672
+          },
+          "auroc": {
+            "mean": 0.8205499276410999,
+            "sd": 0.0,
+            "minimum": 0.8205499276410999,
+            "maximum": 0.8205499276410999
+          },
+          "brier": {
+            "mean": 0.0818596352826723,
+            "sd": 0.0,
+            "minimum": 0.0818596352826723,
+            "maximum": 0.0818596352826723
+          },
+          "sensitivity": {
+            "mean": 0.17582417582417584,
+            "sd": 0.0,
+            "minimum": 0.17582417582417584,
+            "maximum": 0.17582417582417584
+          }
+        },
+        "ensemble": {
+          "ap": 0.4767965476568672,
+          "auroc": 0.8205499276410999,
+          "brier": 0.0818596352826723,
+          "sensitivity": 0.17582417582417584
+        }
+      },
+      "gcs_only_elastic": {
+        "metrics": {
+          "ap": {
+            "mean": 0.48841897377174537,
+            "sd": 6.206335383118183e-17,
+            "minimum": 0.4884189737717453,
+            "maximum": 0.4884189737717453
+          },
+          "auroc": {
+            "mean": 0.8215041109397114,
+            "sd": 1.2412670766236366e-16,
+            "minimum": 0.8215041109397115,
+            "maximum": 0.8215041109397115
+          },
+          "brier": {
+            "mean": 0.08114887942998672,
+            "sd": 0.0,
+            "minimum": 0.08114887942998672,
+            "maximum": 0.08114887942998672
+          },
+          "sensitivity": {
+            "mean": 0.13186813186813187,
+            "sd": 0.0,
+            "minimum": 0.13186813186813187,
+            "maximum": 0.13186813186813187
+          }
+        },
+        "ensemble": {
+          "ap": 0.4884189737717453,
+          "auroc": 0.8215041109397115,
+          "brier": 0.08114887942998672,
+          "sensitivity": 0.13186813186813187
+        }
+      },
+      "p26": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4876015801755809,
+            "sd": 0.005862977541344736,
+            "minimum": 0.4801602017742354,
+            "maximum": 0.4955021443752823
+          },
+          "auroc": {
+            "mean": 0.8234983540338099,
+            "sd": 0.003676626726358631,
+            "minimum": 0.8180849541196863,
+            "maximum": 0.8272292107313817
+          },
+          "brier": {
+            "mean": 0.08073868731740934,
+            "sd": 0.0007450635124139211,
+            "minimum": 0.07955359335839027,
+            "maximum": 0.08139691973036708
+          },
+          "sensitivity": {
+            "mean": 0.15164835164835164,
+            "sd": 0.014327917374071755,
+            "minimum": 0.13186813186813187,
+            "maximum": 0.16483516483516483
+          }
+        },
+        "ensemble": {
+          "ap": 0.4921240440061951,
+          "auroc": 0.8261478029929549,
+          "brier": 0.08034144616321874,
+          "sensitivity": 0.14285714285714285
+        }
+      },
+      "p28": {
+        "metrics": {
+          "ap": {
+            "mean": 0.504314676886006,
+            "sd": 0.0048328496928918005,
+            "minimum": 0.49825384946427054,
+            "maximum": 0.5103041051250393
+          },
+          "auroc": {
+            "mean": 0.8292234538254799,
+            "sd": 0.0024871279794644635,
+            "minimum": 0.8252731349692276,
+            "maximum": 0.83174567834481
+          },
+          "brier": {
+            "mean": 0.08004885271163145,
+            "sd": 0.00041310353339984145,
+            "minimum": 0.07942077996789086,
+            "maximum": 0.0804661679783194
+          },
+          "sensitivity": {
+            "mean": 0.14065934065934066,
+            "sd": 0.014327917374071759,
+            "minimum": 0.12087912087912088,
+            "maximum": 0.15384615384615385
+          }
+        },
+        "ensemble": {
+          "ap": 0.5065115017551202,
+          "auroc": 0.8299645361874015,
+          "brier": 0.07994436881156254,
+          "sensitivity": 0.14285714285714285
+        }
+      },
+      "p33": {
+        "metrics": {
+          "ap": {
+            "mean": 0.48899092480783873,
+            "sd": 0.005656552389058772,
+            "minimum": 0.48453268347792283,
+            "maximum": 0.4981053025162327
+          },
+          "auroc": {
+            "mean": 0.8239818069051065,
+            "sd": 0.0037127997063992955,
+            "minimum": 0.8199615146069559,
+            "maximum": 0.8275313687759418
+          },
+          "brier": {
+            "mean": 0.08062096256464785,
+            "sd": 0.0007030072396448148,
+            "minimum": 0.07982902107826984,
+            "maximum": 0.08132477706160444
+          },
+          "sensitivity": {
+            "mean": 0.12307692307692308,
+            "sd": 0.012037858406706944,
+            "minimum": 0.10989010989010989,
+            "maximum": 0.14285714285714285
+          }
+        },
+        "ensemble": {
+          "ap": 0.4964041891196025,
+          "auroc": 0.8261955121578854,
+          "brier": 0.0803804707568331,
+          "sensitivity": 0.12087912087912088
+        }
+      },
+      "kedgn_ab": {
+        "metrics": {
+          "ap": {
+            "mean": 0.40868796306444066,
+            "sd": 0.022508457661215737,
+            "minimum": 0.3804775835266436,
+            "maximum": 0.4303819778379209
+          },
+          "auroc": {
+            "mean": 0.7941826624894641,
+            "sd": 0.013597725793484592,
+            "minimum": 0.7769596539495237,
+            "maximum": 0.8106105182805616
+          },
+          "brier": {
+            "mean": 0.16151290185974443,
+            "sd": 0.051440233329161644,
+            "minimum": 0.1161874259837091,
+            "maximum": 0.23313496826433486
+          },
+          "sensitivity": {
+            "mean": 0.6527472527472528,
+            "sd": 0.11383045417651481,
+            "minimum": 0.5274725274725275,
+            "maximum": 0.8021978021978022
+          }
+        },
+        "ensemble": {
+          "ap": 0.46375391968812685,
+          "auroc": 0.8148407309044067,
+          "brier": 0.142039751250815,
+          "sensitivity": 0.6593406593406593
+        }
+      }
+    },
+    "eicu_native": {
+      "frozen_full": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4792425222248838,
+            "sd": 6.206335383118183e-17,
+            "minimum": 0.4792425222248837,
+            "maximum": 0.4792425222248837
+          },
+          "auroc": {
+            "mean": 0.8201364482117015,
+            "sd": 0.0,
+            "minimum": 0.8201364482117015,
+            "maximum": 0.8201364482117015
+          },
+          "brier": {
+            "mean": 0.08013115352789152,
+            "sd": 0.0,
+            "minimum": 0.08013115352789152,
+            "maximum": 0.08013115352789152
+          },
+          "sensitivity": {
+            "mean": 0.1978021978021978,
+            "sd": 0.0,
+            "minimum": 0.1978021978021978,
+            "maximum": 0.1978021978021978
+          }
+        },
+        "ensemble": {
+          "ap": 0.4792425222248837,
+          "auroc": 0.8201364482117015,
+          "brier": 0.08013115352789152,
+          "sensitivity": 0.1978021978021978
+        }
+      },
+      "frozen_elastic": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4772435804354537,
+            "sd": 0.0,
+            "minimum": 0.4772435804354537,
+            "maximum": 0.4772435804354537
+          },
+          "auroc": {
+            "mean": 0.8273882412811503,
+            "sd": 1.2412670766236366e-16,
+            "minimum": 0.8273882412811502,
+            "maximum": 0.8273882412811502
+          },
+          "brier": {
+            "mean": 0.08006481344661233,
+            "sd": 0.0,
+            "minimum": 0.08006481344661233,
+            "maximum": 0.08006481344661233
+          },
+          "sensitivity": {
+            "mean": 0.17582417582417584,
+            "sd": 0.0,
+            "minimum": 0.17582417582417584,
+            "maximum": 0.17582417582417584
+          }
+        },
+        "ensemble": {
+          "ap": 0.4772435804354537,
+          "auroc": 0.8273882412811502,
+          "brier": 0.08006481344661233,
+          "sensitivity": 0.17582417582417584
+        }
+      },
+      "gcs_only_full": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4725129807662305,
+            "sd": 0.0,
+            "minimum": 0.4725129807662305,
+            "maximum": 0.4725129807662305
+          },
+          "auroc": {
+            "mean": 0.8161924905774398,
+            "sd": 1.2412670766236366e-16,
+            "minimum": 0.8161924905774399,
+            "maximum": 0.8161924905774399
+          },
+          "brier": {
+            "mean": 0.08159087982194481,
+            "sd": 0.0,
+            "minimum": 0.08159087982194481,
+            "maximum": 0.08159087982194481
+          },
+          "sensitivity": {
+            "mean": 0.18681318681318682,
+            "sd": 0.0,
+            "minimum": 0.18681318681318682,
+            "maximum": 0.18681318681318682
+          }
+        },
+        "ensemble": {
+          "ap": 0.4725129807662305,
+          "auroc": 0.8161924905774399,
+          "brier": 0.08159087982194481,
+          "sensitivity": 0.18681318681318682
+        }
+      },
+      "gcs_only_elastic": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4854756193724664,
+            "sd": 0.0,
+            "minimum": 0.4854756193724664,
+            "maximum": 0.4854756193724664
+          },
+          "auroc": {
+            "mean": 0.8179736327348485,
+            "sd": 0.0,
+            "minimum": 0.8179736327348485,
+            "maximum": 0.8179736327348485
+          },
+          "brier": {
+            "mean": 0.08092616147762577,
+            "sd": 0.0,
+            "minimum": 0.08092616147762577,
+            "maximum": 0.08092616147762577
+          },
+          "sensitivity": {
+            "mean": 0.13186813186813187,
+            "sd": 0.0,
+            "minimum": 0.13186813186813187,
+            "maximum": 0.13186813186813187
+          }
+        },
+        "ensemble": {
+          "ap": 0.4854756193724664,
+          "auroc": 0.8179736327348485,
+          "brier": 0.08092616147762577,
+          "sensitivity": 0.13186813186813187
+        }
+      },
+      "p26": {
+        "metrics": {
+          "ap": {
+            "mean": 0.48557135458920386,
+            "sd": 0.0059092814837412916,
+            "minimum": 0.4786154091626989,
+            "maximum": 0.49448706355770905
+          },
+          "auroc": {
+            "mean": 0.8244588985544123,
+            "sd": 0.0041624921126255385,
+            "minimum": 0.8187687854836915,
+            "maximum": 0.8290739651086974
+          },
+          "brier": {
+            "mean": 0.08049176859191905,
+            "sd": 0.0008137481195460595,
+            "minimum": 0.079287772630718,
+            "maximum": 0.08121593208458315
+          },
+          "sensitivity": {
+            "mean": 0.15824175824175823,
+            "sd": 0.019962529807236208,
+            "minimum": 0.13186813186813187,
+            "maximum": 0.18681318681318682
+          }
+        },
+        "ensemble": {
+          "ap": 0.4911593830490284,
+          "auroc": 0.8270383740716591,
+          "brier": 0.08006811292358706,
+          "sensitivity": 0.15384615384615385
+        }
+      },
+      "p28": {
+        "metrics": {
+          "ap": {
+            "mean": 0.5021302869182829,
+            "sd": 0.006055757624354989,
+            "minimum": 0.4947925302744608,
+            "maximum": 0.5097442528524815
+          },
+          "auroc": {
+            "mean": 0.8286382214023312,
+            "sd": 0.002779046912826157,
+            "minimum": 0.8248755585948061,
+            "maximum": 0.8316502600149488
+          },
+          "brier": {
+            "mean": 0.07962767147051136,
+            "sd": 0.0004404998044030666,
+            "minimum": 0.07899010174072002,
+            "maximum": 0.08005216246658269
+          },
+          "sensitivity": {
+            "mean": 0.15164835164835164,
+            "sd": 0.009194066225649186,
+            "minimum": 0.14285714285714285,
+            "maximum": 0.16483516483516483
+          }
+        },
+        "ensemble": {
+          "ap": 0.5023190181138505,
+          "auroc": 0.8291534803835816,
+          "brier": 0.07951284862908732,
+          "sensitivity": 0.14285714285714285
+        }
+      },
+      "p33": {
+        "metrics": {
+          "ap": {
+            "mean": 0.4851119122432227,
+            "sd": 0.006426219946354717,
+            "minimum": 0.47964120092317725,
+            "maximum": 0.49489467626545214
+          },
+          "auroc": {
+            "mean": 0.8241090313449213,
+            "sd": 0.004392819903670986,
+            "minimum": 0.8192776832429509,
+            "maximum": 0.8282470062499006
+          },
+          "brier": {
+            "mean": 0.08037908395619148,
+            "sd": 0.0006891393046686614,
+            "minimum": 0.07955059439384823,
+            "maximum": 0.08098937777857906
+          },
+          "sensitivity": {
+            "mean": 0.1318681318681319,
+            "sd": 0.01554080837772632,
+            "minimum": 0.12087912087912088,
+            "maximum": 0.15384615384615385
+          }
+        },
+        "ensemble": {
+          "ap": 0.48963357429474136,
+          "auroc": 0.8263068335427235,
+          "brier": 0.08013177767970008,
+          "sensitivity": 0.13186813186813187
+        }
+      },
+      "kedgn_ab": {
+        "metrics": {
+          "ap": {
+            "mean": 0.3971813732275624,
+            "sd": 0.023695383755695045,
+            "minimum": 0.36539271704915527,
+            "maximum": 0.4174212221542447
+          },
+          "auroc": {
+            "mean": 0.7923474499451345,
+            "sd": 0.01328844942769127,
+            "minimum": 0.7740493948887582,
+            "maximum": 0.8080978355942177
+          },
+          "brier": {
+            "mean": 0.16600394282779707,
+            "sd": 0.05668605641170917,
+            "minimum": 0.11564057781005888,
+            "maximum": 0.24431841470666016
+          },
+          "sensitivity": {
+            "mean": 0.6505494505494506,
+            "sd": 0.13173069761310777,
+            "minimum": 0.5054945054945055,
+            "maximum": 0.8131868131868132
+          }
+        },
+        "ensemble": {
+          "ap": 0.44640193316694576,
+          "auroc": 0.8130754918019751,
+          "brier": 0.14497386473020077,
+          "sensitivity": 0.6703296703296703
+        }
+      }
+    }
+  },
+  "paired_training_seed_ap": {
+    "clean": {
+      "frozen_full": {
+        "frozen_full": {
+          "mean": 0.0,
+          "sd": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive_seeds": 0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "p28": {
+          "mean": -0.012075582771800496,
+          "sd": 0.0006291627850489085,
+          "minimum": -0.012699467944515486,
+          "maximum": -0.011045740910141988,
+          "positive_seeds": 0,
+          "values": [
+            -0.012307308794342275,
+            -0.012342560774173839,
+            -0.011982835435828898,
+            -0.011045740910141988,
+            -0.012699467944515486
+          ]
+        }
+      },
+      "frozen_elastic": {
+        "frozen_full": {
+          "mean": -0.00850695387775724,
+          "sd": 0.0,
+          "minimum": -0.00850695387775724,
+          "maximum": -0.00850695387775724,
+          "positive_seeds": 0,
+          "values": [
+            -0.00850695387775724,
+            -0.00850695387775724,
+            -0.00850695387775724,
+            -0.00850695387775724,
+            -0.00850695387775724
+          ]
+        },
+        "p28": {
+          "mean": -0.020582536649557736,
+          "sd": 0.0006291627850489085,
+          "minimum": -0.021206421822272725,
+          "maximum": -0.019552694787899227,
+          "positive_seeds": 0,
+          "values": [
+            -0.020814262672099515,
+            -0.020849514651931078,
+            -0.020489789313586138,
+            -0.019552694787899227,
+            -0.021206421822272725
+          ]
+        }
+      },
+      "gcs_only_full": {
+        "frozen_full": {
+          "mean": -0.0023834975407017733,
+          "sd": 0.0,
+          "minimum": -0.0023834975407017733,
+          "maximum": -0.0023834975407017733,
+          "positive_seeds": 0,
+          "values": [
+            -0.0023834975407017733,
+            -0.0023834975407017733,
+            -0.0023834975407017733,
+            -0.0023834975407017733,
+            -0.0023834975407017733
+          ]
+        },
+        "p28": {
+          "mean": -0.01445908031250227,
+          "sd": 0.0006291627850489085,
+          "minimum": -0.015082965485217259,
+          "maximum": -0.013429238450843761,
+          "positive_seeds": 0,
+          "values": [
+            -0.014690806335044049,
+            -0.014726058314875612,
+            -0.014366332976530671,
+            -0.013429238450843761,
+            -0.015082965485217259
+          ]
+        }
+      },
+      "gcs_only_elastic": {
+        "frozen_full": {
+          "mean": -0.00887465994289005,
+          "sd": 0.0,
+          "minimum": -0.00887465994289005,
+          "maximum": -0.00887465994289005,
+          "positive_seeds": 0,
+          "values": [
+            -0.00887465994289005,
+            -0.00887465994289005,
+            -0.00887465994289005,
+            -0.00887465994289005,
+            -0.00887465994289005
+          ]
+        },
+        "p28": {
+          "mean": -0.020950242714690547,
+          "sd": 0.0006291627850489085,
+          "minimum": -0.021574127887405536,
+          "maximum": -0.01992040085303204,
+          "positive_seeds": 0,
+          "values": [
+            -0.021181968737232326,
+            -0.02121722071706389,
+            -0.02085749537871895,
+            -0.01992040085303204,
+            -0.021574127887405536
+          ]
+        }
+      },
+      "p26": {
+        "frozen_full": {
+          "mean": 0.015469056326605935,
+          "sd": 0.0004119785866675894,
+          "minimum": 0.01501283390723529,
+          "maximum": 0.016074037171311617,
+          "positive_seeds": 5,
+          "values": [
+            0.016074037171311617,
+            0.01501283390723529,
+            0.015223094454754782,
+            0.015377046514630455,
+            0.01565826958509753
+          ]
+        },
+        "p28": {
+          "mean": 0.0033934735548054374,
+          "sd": 0.0006622464293432196,
+          "minimum": 0.0026702731330614515,
+          "maximum": 0.004331305604488467,
+          "positive_seeds": 5,
+          "values": [
+            0.0037667283769693416,
+            0.0026702731330614515,
+            0.003240259018925884,
+            0.004331305604488467,
+            0.0029588016405820428
+          ]
+        }
+      },
+      "p28": {
+        "frozen_full": {
+          "mean": 0.012075582771800496,
+          "sd": 0.0006291627850489085,
+          "minimum": 0.011045740910141988,
+          "maximum": 0.012699467944515486,
+          "positive_seeds": 5,
+          "values": [
+            0.012307308794342275,
+            0.012342560774173839,
+            0.011982835435828898,
+            0.011045740910141988,
+            0.012699467944515486
+          ]
+        },
+        "p28": {
+          "mean": 0.0,
+          "sd": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive_seeds": 0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "p33": {
+        "frozen_full": {
+          "mean": 0.020988262357211164,
+          "sd": 0.0021377414136186505,
+          "minimum": 0.018059367365524714,
+          "maximum": 0.02271689605443028,
+          "positive_seeds": 5,
+          "values": [
+            0.02271689605443028,
+            0.022312510871525304,
+            0.019352764293606772,
+            0.018059367365524714,
+            0.022499773200968742
+          ]
+        },
+        "p28": {
+          "mean": 0.008912679585410666,
+          "sd": 0.0015916120328225178,
+          "minimum": 0.0070136264553827266,
+          "maximum": 0.010409587260088005,
+          "positive_seeds": 5,
+          "values": [
+            0.010409587260088005,
+            0.009969950097351465,
+            0.007369928857777874,
+            0.0070136264553827266,
+            0.009800305256453257
+          ]
+        }
+      }
+    },
+    "gcs_full": {
+      "frozen_full": {
+        "frozen_full": {
+          "mean": 0.0,
+          "sd": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive_seeds": 0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "p28": {
+          "mean": -0.07685983097760456,
+          "sd": 0.0013770153059092605,
+          "minimum": -0.0786960963180714,
+          "maximum": -0.07520256745953435,
+          "positive_seeds": 0,
+          "values": [
+            -0.0777211145035962,
+            -0.07520256745953435,
+            -0.0786960963180714,
+            -0.07603688000867015,
+            -0.0766424965981507
+          ]
+        }
+      },
+      "frozen_elastic": {
+        "frozen_full": {
+          "mean": -0.007026510301494926,
+          "sd": 0.0,
+          "minimum": -0.007026510301494926,
+          "maximum": -0.007026510301494926,
+          "positive_seeds": 0,
+          "values": [
+            -0.007026510301494926,
+            -0.007026510301494926,
+            -0.007026510301494926,
+            -0.007026510301494926,
+            -0.007026510301494926
+          ]
+        },
+        "p28": {
+          "mean": -0.08388634127909948,
+          "sd": 0.0013770153059092605,
+          "minimum": -0.08572260661956632,
+          "maximum": -0.08222907776102928,
+          "positive_seeds": 0,
+          "values": [
+            -0.08474762480509113,
+            -0.08222907776102928,
+            -0.08572260661956632,
+            -0.08306339031016508,
+            -0.08366900689964563
+          ]
+        }
+      },
+      "gcs_only_full": {
+        "frozen_full": {
+          "mean": 0.051087138611888294,
+          "sd": 0.0,
+          "minimum": 0.051087138611888294,
+          "maximum": 0.051087138611888294,
+          "positive_seeds": 5,
+          "values": [
+            0.051087138611888294,
+            0.051087138611888294,
+            0.051087138611888294,
+            0.051087138611888294,
+            0.051087138611888294
+          ]
+        },
+        "p28": {
+          "mean": -0.025772692365716266,
+          "sd": 0.0013770153059092605,
+          "minimum": -0.0276089577061831,
+          "maximum": -0.02411542884764606,
+          "positive_seeds": 0,
+          "values": [
+            -0.026633975891707906,
+            -0.02411542884764606,
+            -0.0276089577061831,
+            -0.024949741396781855,
+            -0.025555357986262406
+          ]
+        }
+      },
+      "gcs_only_elastic": {
+        "frozen_full": {
+          "mean": 0.04578756642681614,
+          "sd": 0.0,
+          "minimum": 0.04578756642681614,
+          "maximum": 0.04578756642681614,
+          "positive_seeds": 5,
+          "values": [
+            0.04578756642681614,
+            0.04578756642681614,
+            0.04578756642681614,
+            0.04578756642681614,
+            0.04578756642681614
+          ]
+        },
+        "p28": {
+          "mean": -0.03107226455078842,
+          "sd": 0.0013770153059092605,
+          "minimum": -0.032908529891255256,
+          "maximum": -0.029415001032718213,
+          "positive_seeds": 0,
+          "values": [
+            -0.03193354807678006,
+            -0.029415001032718213,
+            -0.032908529891255256,
+            -0.03024931358185401,
+            -0.03085493017133456
+          ]
+        }
+      },
+      "p26": {
+        "frozen_full": {
+          "mean": 0.08055049437442441,
+          "sd": 0.0023127031335320744,
+          "minimum": 0.077737846020838,
+          "maximum": 0.08349758121939721,
+          "positive_seeds": 5,
+          "values": [
+            0.08349758121939721,
+            0.077737846020838,
+            0.08228880321926813,
+            0.07950743760101187,
+            0.07972080381160684
+          ]
+        },
+        "p28": {
+          "mean": 0.003690663396819849,
+          "sd": 0.0012367812800892811,
+          "minimum": 0.0025352785613036444,
+          "maximum": 0.00577646671580101,
+          "positive_seeds": 5,
+          "values": [
+            0.00577646671580101,
+            0.0025352785613036444,
+            0.0035927069011967294,
+            0.0034705575923417165,
+            0.003078307213456144
+          ]
+        }
+      },
+      "p28": {
+        "frozen_full": {
+          "mean": 0.07685983097760456,
+          "sd": 0.0013770153059092605,
+          "minimum": 0.07520256745953435,
+          "maximum": 0.0786960963180714,
+          "positive_seeds": 5,
+          "values": [
+            0.0777211145035962,
+            0.07520256745953435,
+            0.0786960963180714,
+            0.07603688000867015,
+            0.0766424965981507
+          ]
+        },
+        "p28": {
+          "mean": 0.0,
+          "sd": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive_seeds": 0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "p33": {
+        "frozen_full": {
+          "mean": 0.0772789067449399,
+          "sd": 0.0024863150684665183,
+          "minimum": 0.07353056929595092,
+          "maximum": 0.07988584807128685,
+          "positive_seeds": 5,
+          "values": [
+            0.079161512839373,
+            0.07353056929595092,
+            0.07673227342284827,
+            0.0770843300952404,
+            0.07988584807128685
+          ]
+        },
+        "p28": {
+          "mean": 0.0004190757673353307,
+          "sd": 0.002205973909458669,
+          "minimum": -0.001963822895223122,
+          "maximum": 0.003243351473136147,
+          "positive_seeds": 3,
+          "values": [
+            0.0014403983357768047,
+            -0.0016719981635834325,
+            -0.001963822895223122,
+            0.0010474500865702563,
+            0.003243351473136147
+          ]
+        }
+      }
+    },
+    "six_full": {
+      "frozen_full": {
+        "frozen_full": {
+          "mean": 0.0,
+          "sd": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive_seeds": 0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "p28": {
+          "mean": -0.06266044724623093,
+          "sd": 0.001438766785216086,
+          "minimum": -0.06428835872582911,
+          "maximum": -0.06043576197856482,
+          "positive_seeds": 0,
+          "values": [
+            -0.062312689453891235,
+            -0.06043576197856482,
+            -0.06428835872582911,
+            -0.06337132746187807,
+            -0.06289409861099143
+          ]
+        }
+      },
+      "frozen_elastic": {
+        "frozen_full": {
+          "mean": -0.004356590487827217,
+          "sd": 0.0,
+          "minimum": -0.004356590487827217,
+          "maximum": -0.004356590487827217,
+          "positive_seeds": 0,
+          "values": [
+            -0.004356590487827217,
+            -0.004356590487827217,
+            -0.004356590487827217,
+            -0.004356590487827217,
+            -0.004356590487827217
+          ]
+        },
+        "p28": {
+          "mean": -0.06701703773405815,
+          "sd": 0.001438766785216086,
+          "minimum": -0.06864494921365633,
+          "maximum": -0.06479235246639203,
+          "positive_seeds": 0,
+          "values": [
+            -0.06666927994171845,
+            -0.06479235246639203,
+            -0.06864494921365633,
+            -0.06772791794970529,
+            -0.06725068909881865
+          ]
+        }
+      },
+      "gcs_only_full": {
+        "frozen_full": {
+          "mean": 0.028058766536987023,
+          "sd": 0.0,
+          "minimum": 0.028058766536987023,
+          "maximum": 0.028058766536987023,
+          "positive_seeds": 5,
+          "values": [
+            0.028058766536987023,
+            0.028058766536987023,
+            0.028058766536987023,
+            0.028058766536987023,
+            0.028058766536987023
+          ]
+        },
+        "p28": {
+          "mean": -0.03460168070924391,
+          "sd": 0.001438766785216086,
+          "minimum": -0.036229592188842086,
+          "maximum": -0.032376995441577794,
+          "positive_seeds": 0,
+          "values": [
+            -0.03425392291690421,
+            -0.032376995441577794,
+            -0.036229592188842086,
+            -0.035312560924891045,
+            -0.03483533207400441
+          ]
+        }
+      },
+      "gcs_only_elastic": {
+        "frozen_full": {
+          "mean": 0.01512220348452803,
+          "sd": 0.0,
+          "minimum": 0.01512220348452803,
+          "maximum": 0.01512220348452803,
+          "positive_seeds": 5,
+          "values": [
+            0.01512220348452803,
+            0.01512220348452803,
+            0.01512220348452803,
+            0.01512220348452803,
+            0.01512220348452803
+          ]
+        },
+        "p28": {
+          "mean": -0.0475382437617029,
+          "sd": 0.001438766785216086,
+          "minimum": -0.04916615524130108,
+          "maximum": -0.04531355849403679,
+          "positive_seeds": 0,
+          "values": [
+            -0.047190485969363205,
+            -0.04531355849403679,
+            -0.04916615524130108,
+            -0.04824912397735004,
+            -0.047771895126463404
+          ]
+        }
+      },
+      "p26": {
+        "frozen_full": {
+          "mean": 0.06817318094828435,
+          "sd": 0.002534645971745729,
+          "minimum": 0.06644136418171448,
+          "maximum": 0.07243188341412182,
+          "positive_seeds": 5,
+          "values": [
+            0.06690689356806462,
+            0.0665027022339364,
+            0.07243188341412182,
+            0.06858306134358444,
+            0.06644136418171448
+          ]
+        },
+        "p28": {
+          "mean": 0.005512733702053419,
+          "sd": 0.0017338950795790704,
+          "minimum": 0.003547265570723046,
+          "maximum": 0.008143524688292714,
+          "positive_seeds": 5,
+          "values": [
+            0.004594204114173384,
+            0.006066940255371578,
+            0.008143524688292714,
+            0.005211733881706371,
+            0.003547265570723046
+          ]
+        }
+      },
+      "p28": {
+        "frozen_full": {
+          "mean": 0.06266044724623093,
+          "sd": 0.001438766785216086,
+          "minimum": 0.06043576197856482,
+          "maximum": 0.06428835872582911,
+          "positive_seeds": 5,
+          "values": [
+            0.062312689453891235,
+            0.06043576197856482,
+            0.06428835872582911,
+            0.06337132746187807,
+            0.06289409861099143
+          ]
+        },
+        "p28": {
+          "mean": 0.0,
+          "sd": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive_seeds": 0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "p33": {
+        "frozen_full": {
+          "mean": 0.0575232806263675,
+          "sd": 0.0035755274427587175,
+          "minimum": 0.05286797001548327,
+          "maximum": 0.061938615535010955,
+          "positive_seeds": 5,
+          "values": [
+            0.061938615535010955,
+            0.05286797001548327,
+            0.059385905636339886,
+            0.055101890846385615,
+            0.05832202109861778
+          ]
+        },
+        "p28": {
+          "mean": -0.005137166619863432,
+          "sd": 0.003113700495532419,
+          "minimum": -0.008269436615492454,
+          "maximum": -0.00037407391888027997,
+          "positive_seeds": 0,
+          "values": [
+            -0.00037407391888027997,
+            -0.007567791963081549,
+            -0.004902453089489223,
+            -0.008269436615492454,
+            -0.004572077512373651
+          ]
+        }
+      }
+    },
+    "eicu_hourly": {
+      "frozen_full": {
+        "frozen_full": {
+          "mean": 0.0,
+          "sd": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive_seeds": 0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "p28": {
+          "mean": -0.026817611996943713,
+          "sd": 0.0048328496928918005,
+          "minimum": -0.03280704023597708,
+          "maximum": -0.020756784575208298,
+          "positive_seeds": 0,
+          "values": [
+            -0.023944936771063297,
+            -0.02626075603811312,
+            -0.020756784575208298,
+            -0.03031854236435677,
+            -0.03280704023597708
+          ]
+        }
+      },
+      "frozen_elastic": {
+        "frozen_full": {
+          "mean": 0.012069802503012206,
+          "sd": 0.0,
+          "minimum": 0.012069802503012206,
+          "maximum": 0.012069802503012206,
+          "positive_seeds": 5,
+          "values": [
+            0.012069802503012206,
+            0.012069802503012206,
+            0.012069802503012206,
+            0.012069802503012206,
+            0.012069802503012206
+          ]
+        },
+        "p28": {
+          "mean": -0.014747809493931507,
+          "sd": 0.0048328496928918005,
+          "minimum": -0.020737237732964875,
+          "maximum": -0.008686982072196092,
+          "positive_seeds": 0,
+          "values": [
+            -0.01187513426805109,
+            -0.014190953535100914,
+            -0.008686982072196092,
+            -0.018248739861344565,
+            -0.020737237732964875
+          ]
+        }
+      },
+      "gcs_only_full": {
+        "frozen_full": {
+          "mean": -0.0007005172321950526,
+          "sd": 0.0,
+          "minimum": -0.0007005172321950526,
+          "maximum": -0.0007005172321950526,
+          "positive_seeds": 0,
+          "values": [
+            -0.0007005172321950526,
+            -0.0007005172321950526,
+            -0.0007005172321950526,
+            -0.0007005172321950526,
+            -0.0007005172321950526
+          ]
+        },
+        "p28": {
+          "mean": -0.027518129229138766,
+          "sd": 0.0048328496928918005,
+          "minimum": -0.03350755746817213,
+          "maximum": -0.02145730180740335,
+          "positive_seeds": 0,
+          "values": [
+            -0.02464545400325835,
+            -0.026961273270308173,
+            -0.02145730180740335,
+            -0.031019059596551823,
+            -0.03350755746817213
+          ]
+        }
+      },
+      "gcs_only_elastic": {
+        "frozen_full": {
+          "mean": 0.010921908882683073,
+          "sd": 0.0,
+          "minimum": 0.010921908882683073,
+          "maximum": 0.010921908882683073,
+          "positive_seeds": 5,
+          "values": [
+            0.010921908882683073,
+            0.010921908882683073,
+            0.010921908882683073,
+            0.010921908882683073,
+            0.010921908882683073
+          ]
+        },
+        "p28": {
+          "mean": -0.01589570311426064,
+          "sd": 0.0048328496928918005,
+          "minimum": -0.021885131353294007,
+          "maximum": -0.009834875692525225,
+          "positive_seeds": 0,
+          "values": [
+            -0.013023027888380223,
+            -0.015338847155430047,
+            -0.009834875692525225,
+            -0.019396633481673697,
+            -0.021885131353294007
+          ]
+        }
+      },
+      "p26": {
+        "frozen_full": {
+          "mean": 0.010104515286518656,
+          "sd": 0.005862977541344736,
+          "minimum": 0.0026631368851731674,
+          "maximum": 0.018005079486220044,
+          "positive_seeds": 5,
+          "values": [
+            0.006345109686252348,
+            0.012005762179832846,
+            0.0026631368851731674,
+            0.011503488195114875,
+            0.018005079486220044
+          ]
+        },
+        "p28": {
+          "mean": -0.016713096710425056,
+          "sd": 0.002049704077099754,
+          "minimum": -0.018815054169241896,
+          "maximum": -0.014254993858280274,
+          "positive_seeds": 0,
+          "values": [
+            -0.01759982708481095,
+            -0.014254993858280274,
+            -0.01809364769003513,
+            -0.018815054169241896,
+            -0.014801960749757037
+          ]
+        }
+      },
+      "p28": {
+        "frozen_full": {
+          "mean": 0.026817611996943713,
+          "sd": 0.0048328496928918005,
+          "minimum": 0.020756784575208298,
+          "maximum": 0.03280704023597708,
+          "positive_seeds": 5,
+          "values": [
+            0.023944936771063297,
+            0.02626075603811312,
+            0.020756784575208298,
+            0.03031854236435677,
+            0.03280704023597708
+          ]
+        },
+        "p28": {
+          "mean": 0.0,
+          "sd": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive_seeds": 0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "p33": {
+        "frozen_full": {
+          "mean": 0.011493859918776505,
+          "sd": 0.005656552389058772,
+          "minimum": 0.007035618588860593,
+          "maximum": 0.020608237627170456,
+          "positive_seeds": 5,
+          "values": [
+            0.00705005235526035,
+            0.00976464660118348,
+            0.007035618588860593,
+            0.020608237627170456,
+            0.01301074442140765
+          ]
+        },
+        "p28": {
+          "mean": -0.015323752078167208,
+          "sd": 0.0038054434467187487,
+          "minimum": -0.01979629581456943,
+          "maximum": -0.009710304737186315,
+          "positive_seeds": 0,
+          "values": [
+            -0.016894884415802947,
+            -0.01649610943692964,
+            -0.013721165986347705,
+            -0.009710304737186315,
+            -0.01979629581456943
+          ]
+        }
+      }
+    },
+    "eicu_native": {
+      "frozen_full": {
+        "frozen_full": {
+          "mean": 0.0,
+          "sd": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive_seeds": 0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "p28": {
+          "mean": -0.022887764693399093,
+          "sd": 0.006055757624354989,
+          "minimum": -0.030501730627597756,
+          "maximum": -0.015550008049577069,
+          "positive_seeds": 0,
+          "values": [
+            -0.01992122616860642,
+            -0.0208822304809011,
+            -0.015550008049577069,
+            -0.02758362814031312,
+            -0.030501730627597756
+          ]
+        }
+      },
+      "frozen_elastic": {
+        "frozen_full": {
+          "mean": -0.001998941789430053,
+          "sd": 0.0,
+          "minimum": -0.001998941789430053,
+          "maximum": -0.001998941789430053,
+          "positive_seeds": 0,
+          "values": [
+            -0.001998941789430053,
+            -0.001998941789430053,
+            -0.001998941789430053,
+            -0.001998941789430053,
+            -0.001998941789430053
+          ]
+        },
+        "p28": {
+          "mean": -0.024886706482829146,
+          "sd": 0.006055757624354989,
+          "minimum": -0.03250067241702781,
+          "maximum": -0.017548949839007122,
+          "positive_seeds": 0,
+          "values": [
+            -0.021920167958036474,
+            -0.02288117227033115,
+            -0.017548949839007122,
+            -0.029582569929743174,
+            -0.03250067241702781
+          ]
+        }
+      },
+      "gcs_only_full": {
+        "frozen_full": {
+          "mean": -0.006729541458653232,
+          "sd": 0.0,
+          "minimum": -0.006729541458653232,
+          "maximum": -0.006729541458653232,
+          "positive_seeds": 0,
+          "values": [
+            -0.006729541458653232,
+            -0.006729541458653232,
+            -0.006729541458653232,
+            -0.006729541458653232,
+            -0.006729541458653232
+          ]
+        },
+        "p28": {
+          "mean": -0.029617306152052325,
+          "sd": 0.006055757624354989,
+          "minimum": -0.03723127208625099,
+          "maximum": -0.0222795495082303,
+          "positive_seeds": 0,
+          "values": [
+            -0.026650767627259653,
+            -0.02761177193955433,
+            -0.0222795495082303,
+            -0.03431316959896635,
+            -0.03723127208625099
+          ]
+        }
+      },
+      "gcs_only_elastic": {
+        "frozen_full": {
+          "mean": 0.006233097147582689,
+          "sd": 0.0,
+          "minimum": 0.006233097147582689,
+          "maximum": 0.006233097147582689,
+          "positive_seeds": 5,
+          "values": [
+            0.006233097147582689,
+            0.006233097147582689,
+            0.006233097147582689,
+            0.006233097147582689,
+            0.006233097147582689
+          ]
+        },
+        "p28": {
+          "mean": -0.016654667545816404,
+          "sd": 0.006055757624354989,
+          "minimum": -0.024268633480015067,
+          "maximum": -0.00931691090199438,
+          "positive_seeds": 0,
+          "values": [
+            -0.013688129021023732,
+            -0.01464913333331841,
+            -0.00931691090199438,
+            -0.021350530992730432,
+            -0.024268633480015067
+          ]
+        }
+      },
+      "p26": {
+        "frozen_full": {
+          "mean": 0.006328832364320159,
+          "sd": 0.0059092814837412916,
+          "minimum": -0.0006271130621848253,
+          "maximum": 0.015244541332825323,
+          "positive_seeds": 4,
+          "values": [
+            -0.0006271130621848253,
+            0.004987013465436008,
+            0.0038049129011387683,
+            0.008234807184385518,
+            0.015244541332825323
+          ]
+        },
+        "p28": {
+          "mean": -0.016558932329078936,
+          "sd": 0.0035002473956942874,
+          "minimum": -0.020548339230791246,
+          "maximum": -0.0117450951484383,
+          "positive_seeds": 0,
+          "values": [
+            -0.020548339230791246,
+            -0.01589521701546509,
+            -0.0117450951484383,
+            -0.019348820955927604,
+            -0.015257189294772433
+          ]
+        }
+      },
+      "p28": {
+        "frozen_full": {
+          "mean": 0.022887764693399093,
+          "sd": 0.006055757624354989,
+          "minimum": 0.015550008049577069,
+          "maximum": 0.030501730627597756,
+          "positive_seeds": 5,
+          "values": [
+            0.01992122616860642,
+            0.0208822304809011,
+            0.015550008049577069,
+            0.02758362814031312,
+            0.030501730627597756
+          ]
+        },
+        "p28": {
+          "mean": 0.0,
+          "sd": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive_seeds": 0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "p33": {
+        "frozen_full": {
+          "mean": 0.005869390018338916,
+          "sd": 0.006426219946354717,
+          "minimum": 0.00039867869829351976,
+          "maximum": 0.01565215404056841,
+          "positive_seeds": 5,
+          "values": [
+            0.0009814692232212319,
+            0.00039867869829351976,
+            0.0033737584373922935,
+            0.01565215404056841,
+            0.008940889692219123
+          ]
+        },
+        "p28": {
+          "mean": -0.017018374675060177,
+          "sd": 0.004627523488033107,
+          "minimum": -0.021560840935378633,
+          "maximum": -0.01193147409974471,
+          "positive_seeds": 0,
+          "values": [
+            -0.01893975694538519,
+            -0.02048355178260758,
+            -0.012176249612184775,
+            -0.01193147409974471,
+            -0.021560840935378633
+          ]
+        }
+      }
+    }
+  },
+  "source_sha256": {
+    "artifacts\\p60_five_seed_stability\\frozen.json": "73c7bcd10de33fc90643d00f4798c30dff84d76961069fbc4d1a405c9b0be9af",
+    "artifacts\\p60_five_seed_stability\\evaluation.json": "3fe9db4781a26d152c445c9f94e35ae42b9db20fdd43538cdc0f316778c1741e",
+    "artifacts\\p61_progressive_block_missingness\\inputs.json": "cd022fe1173a9185ecad6502c7ccdb688da281ba9a1d0f78af9de5e6f80f3f20",
+    "artifacts\\related_work\\KEDGN\\ab_dense_gpu_20261121\\frozen.json": "21eb6204113bdb0364a7ec4e804d3967f7e8a98c4d319bd02b3dc2ae379ecfbb",
+    "artifacts\\p55_kedgn_missingness\\kedgn_manifest.json": "139c777632535ed4261b56fbb1e9b33b023ba530dcb156be3142ea15ed4b86ce"
+  },
+  "limitations": [
+    "Five runs describe initialization/sampling variability, not independent test samples",
+    "Augmentation locations and feature selection fixed",
+    "Repeatedly viewed Set C and Demo",
+    "KEDGN seed labels are not paired to our seed labels",
+    "Mean of five metrics differs from score of mean probabilities"
+  ]
+}
