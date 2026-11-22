@@ -2,6 +2,7 @@
 
 import csv
 import json
+import hashlib
 from pathlib import Path
 
 import matplotlib
@@ -48,6 +49,15 @@ def tables(p55,p54,p57,p59):
     for r in p59['eicu']:
         for key,alignment in [('before','original_mapping'),('after','urine_mapped')]:
             add('eICU Demo',48,r['mode'],f'ma_{r["variant"]}_{r["model"]}','P12-only frozen',782,91,r[key],'P59',alignment=alignment)
+    p45=read(OUT/'p45_augmentation_branch_ablation/summary.json')
+    for mode in ('hourly','native'):
+        data=p45['eicu'][f'urine_mapped:{mode}']['metrics']
+        np.testing.assert_allclose(data['p28']['ap'],p54['results'][f'eicu_{mode}']['controls']['p28']['ap'],atol=1e-14,rtol=0)
+        for tag,model in [('p44','p44'),('primary_only','p45'),('fallback_only','p45_fallback_only')]:
+            add('eICU Demo',48,mode,model,'P12 + Demo grouped OOF',782,91,data[tag],'P45')
+    for case in ('clean','full_GCS','full_all_six'):
+        for tag,model in [('p44','p44'),('primary_only','p45'),('fallback_only','p45_fallback_only')]:
+            add('P12 Set C',48,case,model,'P12 + Demo frozen',4000,585,p45['set_c'][case][tag],'P45',alignment='P12')
     target=REPORT/'研究結果總表.csv'
     with target.open('w',encoding='utf-8-sig',newline='') as stream:
         writer=csv.DictWriter(stream,fieldnames=list(rows[0]))
@@ -176,7 +186,10 @@ def main():
     registry=dict(scope=verified['scope'],experiments=verified['evidence'],result_rows=len(rows),
                   primary_model='P33',robustness_specialist='P26',
                   external_ap_improvement_confirmed=False,
-                  evidence='研究完成驗收.json',results='研究結果總表.csv',story='研究結論與故事.md')
+                  evidence='研究完成驗收.json',results='研究結果總表.csv',story='研究結論與故事.md',
+                  additional_summary_sha256={str(p.relative_to(ML)):hashlib.sha256(p.read_bytes()).hexdigest() for p in
+                      [OUT/'p45_augmentation_branch_ablation/summary.json',OUT/'p52_24h_catboost_blend/evaluation.json',
+                       REPORT/'P54_kedgn_ab_transfer_summary.json']})
     (REPORT/'研究實驗登錄.json').write_text(json.dumps(registry,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(f'Published {len(rows)} aggregate metric rows, scientific figures, registry and research story.',flush=True)
 
