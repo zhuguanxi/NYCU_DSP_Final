@@ -33,6 +33,10 @@ def main():
     for file,digest in full['protocol']['source_sha256'].items(): assert sha(ML/file)==digest
     for file,digest in mask['source_sha256'].items(): assert sha(ML/file)==digest
     for file,digest in kg['model_sources_sha256'].items(): assert sha(ML/file)==digest
+    abroot=OUT/'related_work/KEDGN/ab_dense_gpu_20261121'
+    for seed,receipt in read(abroot/'frozen.json')['seeds'].items():
+        for file,key in [('weights.pt','weights_sha256'),('statistics.npz','statistics_sha256')]:
+            assert sha(abroot/f'final_seed_{seed}'/file)==receipt[key]
     clean=pd.read_parquet(STRESS/'clean/features.parquet')
     timing=pd.read_parquet(STRESS/'clean/temporal.parquet')
     with np.load(STRESS/'clean/input.npz') as p: clean_cube=p['cube'].copy();ids=p['ids'];y=p['y']
@@ -57,6 +61,8 @@ def main():
     public60=read(ML/'reports/P60_five_seed_stability_summary.json')
     public61=read(ML/'reports/P61_progressive_block_summary.json')
     privacy(public60);privacy(public61)
+    for public in (public60,public61):
+        for file,digest in public['source_sha256'].items(): assert sha(ML/file)==digest
     assert len(public60['per_seed'])==200 and public60['selected_seed'] is None
     recomputed=[]
     for case in ev['cases']:
