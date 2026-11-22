@@ -1,0 +1,87 @@
+{
+  "release": "eICU Demo 2.0.1",
+  "checksum_source": "https://physionet.org/files/eicu-crd-demo/2.0.1/SHA256SUMS.txt",
+  "source_verified_on": "2026-11-22",
+  "verified_files": [
+    {
+      "file": "patient.csv.gz",
+      "expected_sha256": "15e1eb52169828e3cfff3b67132a087298de4d0365bbb31bb294f6043bffd474",
+      "actual_sha256": "15e1eb52169828e3cfff3b67132a087298de4d0365bbb31bb294f6043bffd474",
+      "verified": true
+    },
+    {
+      "file": "hospital.csv.gz",
+      "expected_sha256": "4ed356f9c4e7c8ce80e89241697e94b77f21c2f325cd6ad126794b1e92805ef4",
+      "actual_sha256": "4ed356f9c4e7c8ce80e89241697e94b77f21c2f325cd6ad126794b1e92805ef4",
+      "verified": true
+    },
+    {
+      "file": "lab.csv.gz",
+      "expected_sha256": "e06852850abeb65211bc22ac43f17121ba41b14656fac862396449af84d8273a",
+      "actual_sha256": "e06852850abeb65211bc22ac43f17121ba41b14656fac862396449af84d8273a",
+      "verified": true
+    },
+    {
+      "file": "vitalPeriodic.csv.gz",
+      "expected_sha256": "04dc093a2e77cd4c52ac7f2a47a8356fbb7456c7f15deb20d5abb1ca4303231d",
+      "actual_sha256": "04dc093a2e77cd4c52ac7f2a47a8356fbb7456c7f15deb20d5abb1ca4303231d",
+      "verified": true
+    },
+    {
+      "file": "vitalAperiodic.csv.gz",
+      "expected_sha256": "c294f46647990cb648b3ebfa589e83f330bdc0c2c922b5e8f23aa0ef99954635",
+      "actual_sha256": "c294f46647990cb648b3ebfa589e83f330bdc0c2c922b5e8f23aa0ef99954635",
+      "verified": true
+    },
+    {
+      "file": "nurseCharting.csv.gz",
+      "expected_sha256": "475000d63d4ef883b2e891d7197997201300bedc13fcf23e67add1abee11dafe",
+      "actual_sha256": "475000d63d4ef883b2e891d7197997201300bedc13fcf23e67add1abee11dafe",
+      "verified": true
+    },
+    {
+      "file": "respiratoryCharting.csv.gz",
+      "expected_sha256": "21bfe647fea0a229d09ff04c775ec4270d20ae084131a987943da836df534235",
+      "actual_sha256": "21bfe647fea0a229d09ff04c775ec4270d20ae084131a987943da836df534235",
+      "verified": true
+    },
+    {
+      "file": "intakeOutput.csv.gz",
+      "expected_sha256": "45db8ee0e64a4e3745284bde5828f740175770c45d00ea0c27daff789d18106e",
+      "actual_sha256": "45db8ee0e64a4e3745284bde5828f740175770c45d00ea0c27daff789d18106e",
+      "verified": true
+    },
+    {
+      "file": "apachePatientResult.csv.gz",
+      "expected_sha256": "ce799692737f7a712c59aa8fbb9a302cee7c719887f0638caed3ae144b166821",
+      "actual_sha256": "ce799692737f7a712c59aa8fbb9a302cee7c719887f0638caed3ae144b166821",
+      "verified": true
+    },
+    {
+      "file": "apacheApsVar.csv.gz",
+      "expected_sha256": "2dc6d63f9807c7e663ffa253998691605d527b702ac1db8cc5dda92308061e78",
+      "actual_sha256": "2dc6d63f9807c7e663ffa253998691605d527b702ac1db8cc5dda92308061e78",
+      "verified": true
+    },
+    {
+      "file": "apachePredVar.csv.gz",
+      "expected_sha256": "99d5a4ab2c5cd07b6ee0a540c86a576e5975ed3b93df8525e3d287d5babf3eae",
+      "actual_sha256": "99d5a4ab2c5cd07b6ee0a540c86a576e5975ed3b93df8525e3d287d5babf3eae",
+      "verified": true
+    },
+    {
+      "file": "respiratoryCare.csv.gz",
+      "expected_sha256": "9e260512866498995b49d0f0676795b62115fc1045de3f7daf2e356769259de7",
+      "actual_sha256": "9e260512866498995b49d0f0676795b62115fc1045de3f7daf2e356769259de7",
+      "verified": true
+    }
+  ],
+  "raw_counts": {
+    "stays": 2520,
+    "patients": 1841,
+    "hospital_keys": 186
+  },
+  "hospital_note": "Publisher description says 20 hospitals, while matching published files contain different hospital-key counts. Physical hospital count is not inferred from keys.",
+  "raw_data_published": false,
+  "patient_ids_published": false
+}

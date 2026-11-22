@@ -1,0 +1,88 @@
+{
+  "scope": "Experiments and research narrative only; Demo-only data confirmed by user on 2026-11-22",
+  "experiments": {
+    "unmasked_accuracy": {
+      "experiments_complete": true,
+      "effect": "supported on fixed Set C",
+      "evidence": [
+        "P33",
+        "P54",
+        "P58"
+      ]
+    },
+    "missingness_robustness": {
+      "experiments_complete": true,
+      "effect": "supported for prespecified Set C channel masks",
+      "evidence": [
+        "P9-P20",
+        "P55",
+        "P58"
+      ]
+    },
+    "cross_dataset_transfer": {
+      "experiments_complete": true,
+      "effect": "AP improvement remains uncertain on Demo",
+      "evidence": [
+        "P45",
+        "P52",
+        "P54",
+        "P57",
+        "P58",
+        "P59"
+      ]
+    },
+    "same_primary_model": {
+      "experiments_complete": true,
+      "model": "P33",
+      "selection": "P56 retained original mixture on A/B",
+      "evidence": [
+        "P56",
+        "P58"
+      ]
+    },
+    "external_augmentation": {
+      "experiments_complete": true,
+      "setting": "patient/site-key-block OOF, separate from P12-only transfer",
+      "evidence": [
+        "P44-P45",
+        "P50",
+        "P57"
+      ]
+    },
+    "literature_controls": {
+      "experiments_complete": true,
+      "reproduced": [
+        "MA-GBT",
+        "KEDGN"
+      ],
+      "other_papers": "literature context; cancelled schedules not relabelled completed"
+    },
+    "24h_extension": {
+      "experiments_complete": true,
+      "setting": "separate risk-set proxy and APACHE shared cohort",
+      "evidence": [
+        "P49-P52",
+        "P57"
+      ]
+    },
+    "data_provenance": {
+      "experiments_complete": true,
+      "eicu_tables_verified": 12,
+      "evidence": [
+        "資料來源核對.json"
+      ]
+    }
+  },
+  "result_rows": 167,
+  "primary_model": "P33",
+  "robustness_specialist": "P26",
+  "external_ap_improvement_confirmed": false,
+  "evidence": "研究完成驗收.json",
+  "results": "研究結果總表.csv",
+  "story": "研究結論與故事.md",
+  "additional_summary_sha256": {
+    "artifacts\\p45_augmentation_branch_ablation\\summary.json": "d2147ae40a2438b3d0c9fd0cd599c86430e27ea91e4b45cdab2a38ac2c87ed99",
+    "artifacts\\p52_24h_catboost_blend\\evaluation.json": "ffc05947a8892fcab96ef8e5fe7b850e0aaa90aec311049ddcca572546c4656a",
+    "reports\\P54_kedgn_ab_transfer_summary.json": "a41774b6d21d7dc4d72f44a118038f0e5c55612cdff5e4b525879a88c5b5e282"
+  }
+}

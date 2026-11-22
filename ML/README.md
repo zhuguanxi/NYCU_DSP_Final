@@ -1,6 +1,6 @@
 # ICU 機器學習探索：階段報告索引與總結
 
-[2026 年 11 月 21 日完整研究進度](reports/研究進度總覽.md) 涵蓋 P0–P54 和論文重現。原期末 PDF 整理截至 P51，P52 及後續文獻日誌核對另見最新進度。
+[2026 年 11 月 22 日完整研究進度](reports/研究進度總覽.md) 涵蓋 P0–P59。現有資料下的實驗已完成；[研究結論與故事](reports/研究結論與故事.md)、[結果總表](reports/研究結果總表.csv)、[完成驗收](reports/研究完成驗收.json) 和 [重跑入口](reports/研究重跑與驗收.md) 是最新入口。原期末 PDF 截至 P51，保留為歷史版本，本輪不製作簡報。
 
 [P54：A+B 重訓 KEDGN 的 Set C／eICU Demo 結果](reports/P54_kedgn_ab_transfer_results.md) 使用原 A/B 三折選共同輪次，全 A+B 訓練五個種子，再與 [P53 Set A 凍結版](reports/P53_kedgn_frozen_transfer_results.md) 及原模型做同病例比較。訓練使用 GPU，資料與權重不提交 Git。R1 已取消，其他論文背景重跑已停止。
 
@@ -9,12 +9,20 @@
 | 已評估情境 | 模型與 AP | 相對對照的配對 AP 差（95% 區間） |
 | --- | --- | --- |
 | Set C 未遮蔽 | P33，0.60447 | 對凍結 Full +0.02462 [+0.01109, +0.03775] |
-| Set C GCS 全遮 | P26，0.53733 | 對 GCS-only Full +0.03241 [+0.01363, +0.05132] |
+| Set C GCS 全遮 | P33，0.53213 | 對凍結 Full +0.07830 [+0.05838, +0.09808] |
+| Set C 六項全遮 | P33，0.48911 | 對凍結 Full +0.05665 [+0.03491, +0.07753] |
 | eICU Demo 尿量對齊整點，患者／院鍵區塊五折 | P45，0.51115 | 對凍結 P28 +0.00971 [−0.01335, +0.03271] |
 
 P33、P26 評估沿用完全未用於擬合的 Set C。Set C 曾多次用於比較。P45 使用真實外部病例增強，Demo 的同折訓練與測試患者互斥。外部 AP 改善仍不確定。取得有授權的完整版 eICU v2.0 後，可採 P46 固定入口排除所有 Demo 患者並比較。 [Set C 時間敏感度](reports/P41_p12_outcome_timing_results.md) · [真實外部病例增強](reports/P44_real_eicu_augmentation_results.md) · [外部增強分支](reports/P45_augmentation_branch_ablation_results.md) · [完整版確認入口](reports/P46_eicu_adaptation_confirmation_protocol.md)
 
 ## 目前研究進度
+
+- [P55 KEDGN 共同缺失比較](reports/P55_kedgn_missingness_results.md)：兩版 KEDGN 與七組原模型，八個固定情境。
+- [P56 條件混合](reports/P56_observation_mixture_results.md)：32 規則僅用 A/B 比較，保留原 P33。
+- [P57 24h 外部配對](reports/P57_demo_paired_results.md)：P52/P50/P49、APACHE 共隊列及患者／院鍵區塊區間。
+- [P58 同一主模型](reports/P58_joint_objectives_results.md)：P33 同時改善未遮蔽與固定缺失情境，AP 退化較小；外部 AP 增益不確定。
+- [P59 MA-GBT 映射核對](reports/P59_ma_alignment_results.md)：補值依賴下降與 AP 改善分開判讀。
+- [文獻定位](reports/文獻定位與可比性.md) 與 [資料來源核對](reports/資料來源核對.json) 保存來源、重現範圍與限制。
 
 - [組員研究報告第 10 節](實驗報告_組員分享版.md#10-缺失韌性與跨資料集評估) 整理原版 MA-GBT、缺失增強、時間窗分流與混合模型的共同設定。
 - [Set C 固定全遮蔽的配對比較](reports/P30_full_mask_paired_results.md) 報告相對凍結對照的 AP 與 AUROC 差及區間。

@@ -1,6 +1,6 @@
 # ICU 住院死亡文獻復現
 
-截至 2026 年 11 月 20 日，五個作者版本的小樣本 CPU 流程皆通過。KEDGN 已完成完整切分的五種子、每種子 10 輪排程。MA-GBT 沿用本專題已完成的對照。其餘完整排程缺口見下表。
+截至 2026 年 11 月 22 日，五個作者版本的小樣本 CPU 流程皆通過。KEDGN 已完成完整切分的五種子、每種子 10 輪排程。MA-GBT 沿用本專題已完成的對照。其餘完整排程缺口見下表。
 
 | 分類 | 方法 | 本機進度 |
 | --- | --- | --- |
@@ -23,3 +23,9 @@
 ## 2026 年 11 月 21 日後續完整重跑
 
 使用者已縮小範圍：R1 取消，其餘論文背景重跑停止，保留既有紀錄。P53 已完成作者 Set A 3,198 筆訓練之 KEDGN 凍結轉移。P54 接著用原 A/B 三折選輪次、全 A+B 訓練五個種子，再評估同一 Set C／eICU Demo；訓練可用 GPU。 [P54 結果](../reports/P54_kedgn_ab_transfer_results.md) · [A+B 重訓規格](KEDGN/AB_RETRAIN_PROTOCOL.md) · [P53 規格](KEDGN/FROZEN_TRANSFER_PROTOCOL.md) · [原完整排程規格（歷史）](COMPLETE_REPRODUCTION_PROTOCOL.md)
+
+## 最終共同隊列補充
+
+P55 已完成兩版 KEDGN 與七組原模型的八種 Set C 遮蔽；P59 已補 MA-GBT 的尿量映射一致性。這些為固定模型敏感度比較，不把不同容量或不同作者切分視為架構因果結論。
+
+[P55 結果](../reports/P55_kedgn_missingness_results.md) · [P59 結果](../reports/P59_ma_alignment_results.md) · [文獻定位與來源](../reports/文獻定位與可比性.md) · [研究主線](../reports/研究結論與故事.md)

@@ -1,0 +1,100 @@
+{
+  "scope": "Experiments and research narrative only; Demo-only data confirmed by user on 2026-11-22",
+  "source_commit": "4d21f5802694438b5fec476dc99655259149f0b3",
+  "experiments_complete": true,
+  "independent_full_eicu_available": false,
+  "external_ap_improvement_confirmed": false,
+  "evidence": {
+    "unmasked_accuracy": {
+      "experiments_complete": true,
+      "effect": "supported on fixed Set C",
+      "evidence": [
+        "P33",
+        "P54",
+        "P58"
+      ]
+    },
+    "missingness_robustness": {
+      "experiments_complete": true,
+      "effect": "supported for prespecified Set C channel masks",
+      "evidence": [
+        "P9-P20",
+        "P55",
+        "P58"
+      ]
+    },
+    "cross_dataset_transfer": {
+      "experiments_complete": true,
+      "effect": "AP improvement remains uncertain on Demo",
+      "evidence": [
+        "P45",
+        "P52",
+        "P54",
+        "P57",
+        "P58",
+        "P59"
+      ]
+    },
+    "same_primary_model": {
+      "experiments_complete": true,
+      "model": "P33",
+      "selection": "P56 retained original mixture on A/B",
+      "evidence": [
+        "P56",
+        "P58"
+      ]
+    },
+    "external_augmentation": {
+      "experiments_complete": true,
+      "setting": "patient/site-key-block OOF, separate from P12-only transfer",
+      "evidence": [
+        "P44-P45",
+        "P50",
+        "P57"
+      ]
+    },
+    "literature_controls": {
+      "experiments_complete": true,
+      "reproduced": [
+        "MA-GBT",
+        "KEDGN"
+      ],
+      "other_papers": "literature context; cancelled schedules not relabelled completed"
+    },
+    "24h_extension": {
+      "experiments_complete": true,
+      "setting": "separate risk-set proxy and APACHE shared cohort",
+      "evidence": [
+        "P49-P52",
+        "P57"
+      ]
+    },
+    "data_provenance": {
+      "experiments_complete": true,
+      "eicu_tables_verified": 12,
+      "evidence": [
+        "資料來源核對.json"
+      ]
+    }
+  },
+  "verified_summary_sha256": {
+    "P55_kedgn_missingness_summary.json": "145382375486b9773c00cf0f0c0aad50fdb390828a034d8206d2b5829771f1f4",
+    "P56_observation_mixture_summary.json": "50d7033b6511d544ee7d82cbfff8bb07724fc1b8a26d0a239983134e8f6bc799",
+    "P57_demo_paired_summary.json": "d60d26e9efb4a6b47e2e1d969033beb7cafe150ccec655cfef9772b0090b2e4d",
+    "P58_joint_objectives_summary.json": "507c6dfe557d812aefe9af1eb4b2741458a158032087a116a7b88efe4d9e5fd5",
+    "P59_ma_alignment_summary.json": "a3160fe864c7cbd46ff0527d6bcadc91815d800565850cd6c174a4632f78a29d"
+  },
+  "source_checks": "Frozen weights/statistics, OOF reconstruction, held-out grouping, original metrics and publisher checksums",
+  "new_replay_fits": {
+    "p56_cnn": 3,
+    "p57_external_fold": 5
+  },
+  "no_patient_data_in_public_summaries": true,
+  "limitations": [
+    "Repeatedly viewed Set C and Demo",
+    "Fixed-model bootstrap excludes refitting uncertainty",
+    "Unknown physical interpretation of released hospital keys",
+    "P12 24h outcome-time proxy",
+    "Architecture/representation/capacity differences across literature controls"
+  ]
+}
