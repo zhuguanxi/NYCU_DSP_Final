@@ -64,7 +64,9 @@ def load(seed_only=False):
         outcomes[case]=y
     paths=[ROOT/'frozen.json',ROOT/'evaluation.json',STRESS/'inputs.json',
            OUT/'related_work/KEDGN/ab_dense_gpu_20261121/frozen.json',OUT/'p55_kedgn_missingness/kedgn_manifest.json']
-    if not seed_only: paths.append(STRESS/'kedgn_evaluation.json')
+    if not seed_only:
+        paths.append(STRESS/'kedgn_evaluation.json')
+        if (STRESS/'inference_batch_validation.json').exists(): paths.append(STRESS/'inference_batch_validation.json')
     sources={str(p.relative_to(ML)):sha(p) for p in paths}
     return data,outcomes,specs,sources,frozen,kedgn
 
@@ -94,7 +96,7 @@ def seed_report(data,outcomes,sources,frozen):
     report=dict(seeds=list(SEEDS),kedgn_existing_seeds=list(range(5)),new_component_fits=35,
        new_selected_parameters=0,selected_seed=None,training_data='P12 A+B 8000/1122',cnn_training_devices=devices,
        per_seed=rows,summary=summary,paired_training_seed_ap=paired,
-       source_sha256={k:v for k,v in sources.items() if not k.endswith('kedgn_evaluation.json')},
+       source_sha256={k:v for k,v in sources.items() if not k.endswith(('kedgn_evaluation.json','inference_batch_validation.json'))},
        limitations=['Five runs describe initialization/sampling variability, not independent test samples',
           'Augmentation locations and feature selection fixed','Repeatedly viewed Set C and Demo',
           'KEDGN seed labels are not paired to our seed labels','Mean of five metrics differs from score of mean probabilities'])
@@ -184,6 +186,8 @@ def stress_report(data,outcomes,specs,sources,kedgn):
        primary_50_percent_ensemble_contrasts=contrasts,block_vs_random_24h=design_contrasts,
        bootstrap=dict(replicates=1000,seed=2026112262,unit='stay',mask_handling='Mean of three APs within each paired stay draw',model_handling='Equal probability mean of all five frozen seeds'),
        source_sha256=sources,kedgn_devices={k:v['devices'] for k,v in kedgn['cases'].items()},
+       inference_batch_validation=read(STRESS/'inference_batch_validation.json') if (STRESS/'inference_batch_validation.json').exists() else None,
+       kedgn_inference_batches={k:v.get('inference_batch','cached endpoint' if 'reused_endpoint_sha256' in v else 256) for k,v in kedgn['cases'].items()},
        limitations=['Clock-hour proportion differs from actual removed measurement fraction',
           'Three mask positions and five seeds are crossed, not fifteen independent test cohorts',
           'Fixed-model bootstrap excludes retraining/model-search uncertainty','Artificial missingness, not clinical causal effects',

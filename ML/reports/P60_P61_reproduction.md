@@ -42,6 +42,8 @@ $env:PYTHONPATH=Join-Path (Get-Location) 'artifacts/p21_cpu_packages/site'
 
 五種子CNN實際均在CPU完成，CNN推論也固定CPU。KEDGN可用閒置GPU，每批檢查（查詢最多快取3秒）；有其他運算程序或無自身運算時的顯著負載則改CPU。閒置桌面顯示程式不視為另一個模型訓練工作；未知GPU程序保守視為忙碌。絕不停止他人的程序。
 
+KEDGN前段案例使用256推論批次；之後以`related_work/validate_kedgn_inference_batch.py`在A/B固定1024筆核對256／512／1024批次，最大預測差約1.49×10⁻⁷，依等價預測下的執行速度改用1024。這僅為推論記憶體／效率設定，沒有更改訓練batch、權重或依測試AP選參。驗證JSON與各案例實際批次都保存於本機及彙總。
+
 ## 結果與判讀
 
 - [P60結果](P60_five_seed_stability_results.md)：200列種子×隊列整體指標，逐種子數值、平均／SD／範圍與各種子差值。

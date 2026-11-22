@@ -59,6 +59,11 @@ def main():
     privacy(public60);privacy(public61)
     assert len(public60['per_seed'])==200 and public60['selected_seed'] is None
     recomputed=[]
+    for case in ev['cases']:
+        path=STRESS/case/'kedgn_predictions.npz' if not case.startswith('eicu_') else OUT/f'related_work/KEDGN/ab_dense_gpu_20261121/{case}_predictions.npz'
+        with np.load(path) as p:
+            for s in range(5):
+                recomputed.append((case,'kedgn_ab',s,average_precision_score(p['y'],p['probabilities'][s])))
     for case,record in ev['cases'].items():
         with np.load(ML/record['file']) as p:
             probs=p['predictions'];outcomes=p['y']
@@ -71,9 +76,13 @@ def main():
         assert len(rows)==expected
         assert not set(rows[0])&{'ids','y','probabilities','patientunitstayid','uniquepid','RecordID'}
         lookup={(r.get('case',r.get('cohort')),r['model'],int(r['seed'])):float(r['ap']) for r in rows}
+        assert len(lookup)==len(rows)
         for case,model,seed,value in recomputed:
             if (case,model,seed) in lookup:
                 np.testing.assert_allclose(lookup[case,model,seed],value,rtol=0,atol=1e-14)
+    batch=read(STRESS/'inference_batch_validation.json')
+    assert batch['new_model_fits']==0 and batch['dataset'].startswith('P12 A/B')
+    assert all(r['max_abs_error']<2e-6 for r in batch['results'] if r['valid'])
     assert not subprocess.check_output(['git','ls-files','ML/artifacts/','ML/dataset/','data/'],text=True).strip()
     result=dict(complete=True,component_fits=35,pipelines=7,seeds=list(SEEDS),kedgn_existing_seeds=list(range(5)),
       cases=39,clean_demo_modes=2,p60_metric_rows=200,p61_metric_rows=1560,
