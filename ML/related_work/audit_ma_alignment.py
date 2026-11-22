@@ -18,18 +18,26 @@ from threadpoolctl import threadpool_limits
 from run_ma_gbt_p12 import validate_upstream
 from ma_gbt_p12_inputs import SCHEMA_FILE
 from evaluate_ma_gbt_p12 import Predictor
-from evaluate_gcs_routed_temporal import checked_metrics
 from evaluate_eicu_urine_mapping import urine_values
 from evaluate_missingness_augmentation import paired_intervals
 from stress_missingness_c import load_cohort,mask_plan,apply_masks,CHANNELS,score_metrics
 from prepare import OUT,sha
-from train_predictive_boosting import from_json
 
 ROOT=OUT/'p59_ma_gbt_alignment'
 COMMON=OUT/'related_work/common_sequence_inputs'
 VARIANTS=(('original_1000','ma_gbt_p12/fitted','ma_gbt_p12/evaluation/summary.json','ma'),
           ('original_10','ma_gbt_alpha10','ma_gbt_alpha10/evaluation/summary.json','ma10'),
           ('augmented_10','ma_gbt_alpha10_bilirubin','ma_gbt_alpha10_bilirubin/evaluation/summary.json','bilirubin10'))
+
+
+def from_json(path):
+    return json.loads(path.read_text(encoding='utf-8'))
+
+
+def checked_metrics(y,probabilities,expected):
+    measured=score_metrics(y,probabilities)
+    for key in ('ap','auroc','brier','sensitivity'):
+        np.testing.assert_allclose(measured[key],expected[key],rtol=0,atol=1e-12)
 
 
 def saved_metrics(row,version):
