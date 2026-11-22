@@ -116,6 +116,9 @@ def seed_report(data,outcomes,sources,frozen):
             s=paired[case]['p33'][ref]
             lines.append(f'| {case} | {NAMES[ref]} | {s["mean"]:+.5f} | {s["sd"]:.5f} | {s["minimum"]:+.5f}／{s["maximum"]:+.5f} | {s["positive_seeds"]}/5 |')
     lines+=['','原Full沒有隨機行／欄抽樣，若跨種子分數相同屬其固定演算法的結果；不藉此複製成五份獨立測試。P26/P28/P33共享同種子的元件，差值亦有相依性。五次指標平均是穩定性描述，五種子機率平均的集成另存在JSON，不用較高者替換主結果。','',
+      '## 穩定性與取捨','',
+      'P33 對 Full 在 Set C 未遮蔽、GCS 全遮、六欄全遮均為5/5正向。對P28則是未遮蔽5/5正向、GCS全遮3/5、六欄全遮0/5；兩種Demo取樣對P28亦均0/5。CNN的主要穩定收益在域內未遮蔽排序，不能說它對所有缺失／跨庫情境都帶來額外收益。','',
+      'Demo對Full的五次點估計都較高，但五種子不是五個新外部資料集，不能替代患者抽樣區間或獨立資料確認。原P33的0.60447是先前單一凍結模型分數；本輪0.60084是事先固定五種子的指標平均，兩者分開保存。','',
       '每個種子的AP、AUROC、Brier、@0.5敏感度與所有範圍見CSV／JSON；本表SD不是患者bootstrap的95%區間，也未涵蓋重新選欄、重新調參及全部研究搜尋。','',
       '[固定規格](P60_five_seed_stability_protocol.md) · [全部200列種子結果](P60_all_seed_results.csv) · [完整JSON](P60_five_seed_stability_summary.json) · [連續與漸進缺失](P61_progressive_block_results.md)']
     md(REPORT/'P60_five_seed_stability_results.md',lines)
@@ -222,7 +225,7 @@ def plots(p60,p61):
             ax.plot(x,values,'o-',label=NAMES[model],color=color,lw=1.7,ms=4)
             ax.fill_between(x,values-sd,values+sd,color=color,alpha=.12)
         ax.set_title(f'{target.upper()} / {design} hours');ax.set_xlabel('Removed clock hours (%)')
-        ax.set_xticks([0,25,50,75,100]);ax.set_ylim(.39,.64);ax.spines[['top','right']].set_visible(False)
+        ax.set_xticks([0,25,50,75,100]);ax.set_ylim(.32,.64);ax.spines[['top','right']].set_visible(False)
         ax.set_ylabel('Average precision')
     handles,labels=axes[0,0].get_legend_handles_labels();fig.legend(handles,labels,loc='upper center',ncol=4,frameon=False)
     fig.text(.07,.015,'5 frozen training seeds; 3 fixed mask positions per interior point. Band: SD of seed means, not 95% CI.',fontsize=9)

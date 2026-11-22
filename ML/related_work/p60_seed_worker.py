@@ -14,7 +14,17 @@ import numpy as np
 import torch
 from train_hourly_sequence import HourlyCNN,moments,digest
 
+_last_gpu_scan=-1e9
+_last_gpu_busy=True
 def busy():
+    global _last_gpu_scan,_last_gpu_busy
+    now=time.monotonic()
+    if now-_last_gpu_scan<3: return _last_gpu_busy
+    result=_scan_gpu()
+    _last_gpu_scan=now;_last_gpu_busy=result
+    return result
+
+def _scan_gpu():
     try:
         value=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid,process_name','--format=csv,noheader,nounits'],text=True,timeout=8)
         desktop={'explorer.exe','crossdeviceresume.exe','msedgewebview2.exe','predatorsense.exe','vgtray.exe',
