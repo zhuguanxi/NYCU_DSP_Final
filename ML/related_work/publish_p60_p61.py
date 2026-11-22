@@ -30,7 +30,7 @@ def interval(values): return np.quantile(values,[.025,.975]).tolist()
 def load(seed_only=False):
     evaluation=read(ROOT/'evaluation.json');masks=read(STRESS/'inputs.json')
     if seed_only:
-        kedgn=dict(cases={case:read(STRESS/case/'kedgn_receipt.json') for case in ('clean','gcs_full','six_full')})
+        kedgn=read(OUT/'p55_kedgn_missingness/kedgn_manifest.json')
     else: kedgn=read(STRESS/'kedgn_evaluation.json')
     frozen=read(ROOT/'frozen.json')
     assert sha(ROOT/'frozen.json')==evaluation['frozen_sha256']
@@ -49,6 +49,10 @@ def load(seed_only=False):
             assert values.shape==(5,7,len(y))
         if case.startswith('eicu_'):
             kgpath=OUT/f'related_work/KEDGN/ab_dense_gpu_20261121/{case}_predictions.npz'
+        elif seed_only:
+            tag={'clean':'clean','gcs_full':'full_GCS','six_full':'full_all_six'}[case]
+            kgpath=OUT/f'p55_kedgn_missingness/ab_{tag}.npz'
+            assert sha(kgpath)==kedgn['predictions'][kgpath.name]
         else:
             kgpath=STRESS/case/'kedgn_predictions.npz'
             assert sha(kgpath)==kedgn['cases'][case]['sha256']
