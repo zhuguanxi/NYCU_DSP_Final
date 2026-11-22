@@ -1,0 +1,35 @@
+{
+  "complete": true,
+  "component_fits": 35,
+  "pipelines": 7,
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "kedgn_existing_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "cases": 39,
+  "clean_demo_modes": 2,
+  "p60_metric_rows": 200,
+  "p61_metric_rows": 1560,
+  "selected_seed": null,
+  "selected_test_configuration": null,
+  "new_parameters_selected": 0,
+  "sources_verified": true,
+  "all_representations_masked": true,
+  "all_seeds_published": true,
+  "patient_data_in_git": false,
+  "source_commit": "253556ab20277b2213739f860312e1dcaedadc38",
+  "published_summary_sha256": {
+    "P60_five_seed_stability_summary.json": "6ca9387838b212ea4705943e0589c9985598cc842c3e0cc39532706432845d55",
+    "P61_progressive_block_summary.json": "2d8b838b9bd7812e3d129351d4047f4ca03c123ea9fdeec7291360b026cd9a9b"
+  }
+}

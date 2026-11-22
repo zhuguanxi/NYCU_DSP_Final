@@ -1,5 +1,13 @@
 # ICU 機器學習探索：階段報告索引與總結
 
+<!-- P60_P61_START -->
+**最新補強已完成：P60／P61。** 固定五種子P33的Set C未遮蔽／GCS全遮／六欄全遮AP為 0.60084 ± 0.00214／0.53111 ± 0.00249／0.48999 ± 0.00358。35次元件擬合、39個缺失案例，全部種子與位置保留；P33相對P28在六欄全遮與Demo有穩定取捨。
+
+下方0.60447等為原單一凍結模型結果；本輪五種子平均另列，兩者分開判讀。
+
+[五種子結果](reports/P60_five_seed_stability_results.md) · [漸進／區段缺失](reports/P61_progressive_block_results.md) · [研究故事](reports/研究結論與故事.md) · [重跑與驗收](reports/P60_P61_reproduction.md)
+<!-- P60_P61_END -->
+
 [2026 年 11 月 22 日完整研究進度](reports/研究進度總覽.md) 涵蓋 P0–P59。現有資料下的實驗已完成；[研究結論與故事](reports/研究結論與故事.md)、[結果總表](reports/研究結果總表.csv)、[完成驗收](reports/研究完成驗收.json) 和 [重跑入口](reports/研究重跑與驗收.md) 是最新入口。原期末 PDF 截至 P51，保留為歷史版本，本輪不製作簡報。
 
 [P54：A+B 重訓 KEDGN 的 Set C／eICU Demo 結果](reports/P54_kedgn_ab_transfer_results.md) 使用原 A/B 三折選共同輪次，全 A+B 訓練五個種子，再與 [P53 Set A 凍結版](reports/P53_kedgn_frozen_transfer_results.md) 及原模型做同病例比較。訓練使用 GPU，資料與權重不提交 Git。R1 已取消，其他論文背景重跑已停止。

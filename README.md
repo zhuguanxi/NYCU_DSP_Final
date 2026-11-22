@@ -1,5 +1,13 @@
 # ICU 住院死亡風險預測
 
+<!-- P60_P61_START -->
+**最新補強已完成：P60／P61。** 固定五種子P33的Set C未遮蔽／GCS全遮／六欄全遮AP為 0.60084 ± 0.00214／0.53111 ± 0.00249／0.48999 ± 0.00358。35次元件擬合、39個缺失案例，全部種子與位置保留；P33相對P28在六欄全遮與Demo有穩定取捨。
+
+下方0.60447等為原單一凍結模型結果；本輪五種子平均另列，兩者分開判讀。
+
+[五種子結果](ML/reports/P60_five_seed_stability_results.md) · [漸進／區段缺失](ML/reports/P61_progressive_block_results.md) · [研究故事](ML/reports/研究結論與故事.md) · [重跑與驗收](ML/reports/P60_P61_reproduction.md)
+<!-- P60_P61_END -->
+
 資料科學專題（DSP）｜Fall 2026｜PhysioNet 2012 與 eICU Demo
 
 **現有 P12 與 eICU Demo 的研究實驗已完成，更新至 2026 年 11 月 22 日（P0–P59）。** [研究結論與故事](ML/reports/研究結論與故事.md) 提供主線與可主張範圍；[完整進度](ML/reports/研究進度總覽.md)、[結果總表](ML/reports/研究結果總表.csv)、[完成驗收](ML/reports/研究完成驗收.json) 與 [重跑入口](ML/reports/研究重跑與驗收.md) 保留完整證據。這不代表所有改善假設都成立：Set C 的完整資料排序與缺失韌性有支持，Demo 的外部 AP 增益仍不確定。

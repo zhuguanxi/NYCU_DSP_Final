@@ -84,5 +84,16 @@
     "artifacts\\p45_augmentation_branch_ablation\\summary.json": "d2147ae40a2438b3d0c9fd0cd599c86430e27ea91e4b45cdab2a38ac2c87ed99",
     "artifacts\\p52_24h_catboost_blend\\evaluation.json": "ffc05947a8892fcab96ef8e5fe7b850e0aaa90aec311049ddcca572546c4656a",
     "reports\\P54_kedgn_ab_transfer_summary.json": "a41774b6d21d7dc4d72f44a118038f0e5c55612cdff5e4b525879a88c5b5e282"
+  },
+  "followup_seed_missingness": {
+    "complete": true,
+    "component_fits": 35,
+    "case_count": 39,
+    "selected_seed": null,
+    "verification": "P60_P61_verification.json",
+    "reports": [
+      "P60_five_seed_stability_results.md",
+      "P61_progressive_block_results.md"
+    ]
   }
 }
