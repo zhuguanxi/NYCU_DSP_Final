@@ -241,15 +241,36 @@ def plots(p60,p61):
         ax.set_xticks([0,25,50,75,100]);ax.set_ylim(.32,.64);ax.spines[['top','right']].set_visible(False)
         ax.set_ylabel('Average precision')
     handles,labels=axes[0,0].get_legend_handles_labels();fig.legend(handles,labels,loc='upper center',ncol=4,frameon=False)
-    fig.text(.07,.015,'5 frozen training seeds; 3 fixed mask positions per interior point. Band: SD of seed means, not 95% CI.',fontsize=9)
-    fig.tight_layout(rect=(0,.04,1,.94));fig.savefig(ML/'figures/P61_missingness_curves.png',dpi=180);plt.close(fig)
+    fig.text(.07,.035,'Points: mean of five individual-seed APs (three positions per interior point), not ensemble AP.',fontsize=8.5)
+    fig.text(.07,.015,'Band: SD of the five seed means; this is not a 95% confidence interval.',fontsize=8.5)
+    fig.tight_layout(rect=(0,.06,1,.94));fig.savefig(ML/'figures/P61_missingness_curves.png',dpi=180);plt.close(fig)
+
+def interpretation(p60,p61):
+    target=REPORT/'P61_progressive_block_results.md'
+    text=target.read_text(encoding='utf-8')
+    if '<!-- INTERPRETATION -->' in text: text=text.split('<!-- INTERPRETATION -->')[0].rstrip()+'\n'
+    contrasts=p61['primary_50_percent_ensemble_contrasts']
+    better=sum(v['frozen_full']['ap_ci'][0]>0 for v in contrasts.values())
+    retained=sum(v['frozen_full']['retention_ci'][0]>0 for v in contrasts.values())
+    worse=sum(v['frozen_full']['retention_ci'][1]<0 for v in contrasts.values())
+    lines=['<!-- INTERPRETATION -->','## 綜合判讀與原結論的修正','',
+      f'四個事先固定50%情境，P33五種子集成對Full的AP差有{better}/4個區間高於零；但少退化的AP僅{retained}/4有正向支持，{worse}/4反而有較大退化的區間支持。**遮蔽後分數較高，不等於相對自身未遮蔽掉分更少。** 整欄全遮的韌性證據不能直接延伸至所有部分時間缺失。','',
+      'P33對P28的50% AP差區間均跨零；相對clean的優勢縮小，四種情境的退化差均不利於P33。這與P60的六欄全遮及Demo取捨一致，支持把CNN的主要收益定位在域內完整資料排序，而非宣稱普遍增加缺失韌性。','',
+      '連續24小時對隨機24小時的八組AP差區間均跨零；目前不能確認哪種設計普遍較難。兩種設計都完整保留，不依結果選更好的一種。','',
+      '曲線是個別種子AP平均；配對表是五種子機率平均的集成。KEDGN受益於種子集成，不能拿曲線中的個別種子平均直接當作其集成表現：其clean平均AP為'+
+      f'{p60["summary"]["clean"][KG]["metrics"]["ap"]["mean"]:.5f}，集成為{p60["summary"]["clean"][KG]["ensemble"]["ap"]:.5f}。P33對KEDGN集成在四個50%情境的AP差區間亦均跨零，不能宣稱在這些情境確定勝過KEDGN。']
+    target.write_text(text+'\n'+'\n'.join(lines)+'\n',encoding='utf-8',newline='\n')
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--phase',choices=['60','all'],default='all');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--phase',choices=['60','all','render'],default='all');args=parser.parse_args()
+    if args.phase=='render':
+        p60=read(REPORT/'P60_five_seed_stability_summary.json');p61=read(REPORT/'P61_progressive_block_summary.json')
+        interpretation(p60,p61);plots(p60,p61);return
     data,y,specs,sources,frozen,kedgn=load(seed_only=args.phase=='60')
     p60=seed_report(data,y,sources,frozen)
     if args.phase=='60': return
     p61=stress_report(data,y,specs,sources,kedgn)
+    interpretation(p60,p61)
     plots(p60,p61)
     print('Published all seeds, all masks, descriptive variation and prespecified comparisons.',flush=True)
 
