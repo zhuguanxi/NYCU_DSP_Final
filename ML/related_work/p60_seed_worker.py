@@ -16,8 +16,20 @@ from train_hourly_sequence import HourlyCNN,moments,digest
 
 def busy():
     try:
-        value=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader,nounits'],text=True,timeout=8)
-        return any(s.strip().isdigit() and int(s)!=os.getpid() for s in value.splitlines())
+        value=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid,process_name','--format=csv,noheader,nounits'],text=True,timeout=8)
+        desktop={'explorer.exe','crossdeviceresume.exe','msedgewebview2.exe','predatorsense.exe','vgtray.exe',
+                 'brave.exe','chatgpt.exe','dwm.exe','shellexperiencehost.exe','startmenuexperiencehost.exe'}
+        own=False
+        for line in value.splitlines():
+            parts=line.split(',',1)
+            if len(parts)!=2 or not parts[0].strip().isdigit(): continue
+            if int(parts[0])==os.getpid(): own=True;continue
+            if Path(parts[1].strip()).name.lower() not in desktop: return True
+        if not own:
+            load=subprocess.check_output(['nvidia-smi','--query-gpu=utilization.gpu,memory.used','--format=csv,noheader,nounits'],text=True,timeout=8)
+            utilization,memory=[float(v.strip()) for v in load.splitlines()[0].split(',')]
+            if utilization>=15 or memory>=1024: return True
+        return False
     except (OSError,subprocess.SubprocessError): return True
 
 def device():
@@ -84,7 +96,9 @@ def main():
         for job in json.loads(a.packet.read_text(encoding='utf-8')):
             target=Path(job['output'])
             if target.exists(): continue
-            where=device()
+            # Keep CNN inference consistent with the five completed CPU fits;
+            # the slower KEDGN comparator may use the verified idle GPU.
+            where=torch.device('cpu')
             with np.load(job['input']) as data: values=predict(model,data['cube'],data['static'],where)
             assert (np.isfinite(values)&(values>=0)&(values<=1)).all()
             np.save(target,values)

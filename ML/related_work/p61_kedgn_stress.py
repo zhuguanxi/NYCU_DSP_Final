@@ -72,7 +72,12 @@ def main():
                 if where.type=='cuda' and busy():
                     del model;torch.cuda.empty_cache();where=torch.device('cpu');model=runtime.model_for(where,seed)
                     model.load_state_dict(torch.load(AB/f'final_seed_{seed}/weights.pt',map_location=where))
-                with torch.no_grad(): values[seed,idx]=runtime.predict(model,tensors,embeddings.to(where),where,batch=256)
+                for start in range(0,len(idx),256):
+                    if where.type=='cuda' and busy():
+                        del model;torch.cuda.empty_cache();where=torch.device('cpu');model=runtime.model_for(where,seed)
+                        model.load_state_dict(torch.load(AB/f'final_seed_{seed}/weights.pt',map_location=where))
+                    chunk=tuple(t[start:start+256] for t in tensors)
+                    with torch.no_grad(): values[seed,idx[start:start+256]]=runtime.predict(model,chunk,embeddings.to(where),where,batch=256)
                 devices.append(str(where));del model
             note=dict(devices=devices,changed_stays=len(idx),tensorization_shared=True)
         assert (np.isfinite(values)&(values>=0)&(values<=1)).all()
