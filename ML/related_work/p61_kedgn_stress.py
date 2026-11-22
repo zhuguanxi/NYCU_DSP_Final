@@ -12,6 +12,9 @@ ROOT=runtime.ML/'artifacts/p61_progressive_block_missingness'
 AB=runtime.ML/'artifacts/related_work/KEDGN/ab_dense_gpu_20261121'
 
 def main():
+    validation=ROOT/'inference_batch_validation.json'
+    batch=json.loads(validation.read_text())['selected_batch'] if validation.exists() else 256
+    assert batch in (256,512,1024)
     manifest=json.loads((ROOT/'inputs.json').read_text())
     frozen=json.loads((AB/'frozen.json').read_text())
     inputs=json.loads((runtime.P53/'inputs.json').read_text())
@@ -72,14 +75,14 @@ def main():
                 if where.type=='cuda' and busy():
                     del model;torch.cuda.empty_cache();where=torch.device('cpu');model=runtime.model_for(where,seed)
                     model.load_state_dict(torch.load(AB/f'final_seed_{seed}/weights.pt',map_location=where))
-                for start in range(0,len(idx),256):
+                for start in range(0,len(idx),batch):
                     if where.type=='cuda' and busy():
                         del model;torch.cuda.empty_cache();where=torch.device('cpu');model=runtime.model_for(where,seed)
                         model.load_state_dict(torch.load(AB/f'final_seed_{seed}/weights.pt',map_location=where))
-                    chunk=tuple(t[start:start+256] for t in tensors)
-                    with torch.no_grad(): values[seed,idx[start:start+256]]=runtime.predict(model,chunk,embeddings.to(where),where,batch=256)
+                    chunk=tuple(t[start:start+batch] for t in tensors)
+                    with torch.no_grad(): values[seed,idx[start:start+batch]]=runtime.predict(model,chunk,embeddings.to(where),where,batch=batch)
                 devices.append(str(where));del model
-            note=dict(devices=devices,changed_stays=len(idx),tensorization_shared=True)
+            note=dict(devices=devices,changed_stays=len(idx),tensorization_shared=True,inference_batch=batch)
         assert (np.isfinite(values)&(values>=0)&(values<=1)).all()
         np.savez_compressed(target,ids=ids,y=y,probabilities=values)
         meta=dict(sha256=runtime.sha(target),input_sha256=case['files']['input.npz'],
