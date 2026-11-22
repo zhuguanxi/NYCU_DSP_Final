@@ -1,0 +1,6 @@
+# Preserve byte hashes of the published completion evidence across Windows checkouts.
+ML/related_work/select_observation_mixture.py text eol=lf
+ML/reports/P5[5-9]*_summary.json text eol=lf
+ML/reports/研究完成驗收.json text eol=lf
+ML/reports/研究實驗登錄.json text eol=lf
+ML/reports/資料來源核對.json text eol=lf
