@@ -70,8 +70,9 @@ def main():
         fit=from_json(base/'manifest.json')
         old=from_json(OUT/previous)
         for model in ('Full','Elastic'):
-            path=base/f'{model}.joblib'
-            if sha(path)!=fit['model_sha256'][model]: raise ValueError('Frozen MA model changed')
+            path=base/('ma10' if version=='original_10' else '')/f'{model}.joblib'
+            expected_hash=fit['model_sha256'][f'ma10/{model}.joblib'] if version=='original_10' else fit['model_sha256'][model]
+            if sha(path)!=expected_hash: raise ValueError('Frozen MA model changed')
             pipe=Predictor(joblib.load(path),schemas[model]['final'])
             for scenario,altered in views.items():
                 probabilities,rho=pipe.predict_and_rho(altered)
