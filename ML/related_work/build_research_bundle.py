@@ -31,6 +31,7 @@ def tables(p55,p54,p57,p59):
     for mode in ('hourly','native'):
         r=p54['results'][f'eicu_{mode}']
         for model,m in [('kedgn_ab',r['ensemble']),*r['controls'].items()]:
+            if model=='set_a_kedgn': model='kedgn_set_a'
             add('eICU Demo',48,mode,model,'P12-only frozen',r['stays'],r['deaths'],m,'P54')
         r=p57['results'][mode]
         for model,m in r['metrics'].items():
@@ -59,7 +60,7 @@ def plots(p55,p58,p57):
     font=Path('C:/Windows/Fonts/msjh.ttc')
     if font.exists():
         font_manager.fontManager.addfont(str(font))
-        plt.rcParams['font.family']=font_manager.FontProperties(fname=str(font)).get_name()
+        plt.rcParams['font.family']=[font_manager.FontProperties(fname=str(font)).get_name(),'DejaVu Sans']
     plt.rcParams['axes.unicode_minus']=False
     cases=['clean','full_GCS','full_all_six']
     models=['frozen_full','gcs_only_full','p26','p33','kedgn_ab']
@@ -120,7 +121,7 @@ def story(p55,p57,p58,p59):
            '## 主角與研究問題','',
            '主模型以 **P33** 為主：435 欄表格及 140 個時間摘要 → 有／無 GCS 的分流模型 P26 → 與 GCS-only Elastic 作 log odds 混合 P28 → 與 20 通道逐小時 CNN 作 75%／25% 機率混合。原 Full 是基準，GCS-only 是缺失增強對照，P26 是專家消融，MA-GBT 是補值依賴方法對照，KEDGN 是實際重現並在共同資料上重訓的競爭基準。','',
            '這樣主線保持一個明確可執行模型；P26 的某些遮蔽點估計更高，留作取捨分析，不按測試情境事後替換主模型。P56 額外檢查了條件混合，A/B 沒有勝過原 P33，所以保留既有規則。','',
-           '### 問題一：時間資訊能否改善完整資料排序？','',
+            '### 問題一：時間與缺失表示的組合能否改善完整資料排序？','',
            '原 A/B 8,000 次住院／1,122 次死亡使用固定三折開發，縮放、補值和參數只由訓練部分估計；Set C 4,000／585 用凍結模型計分。P33 未遮蔽 AP 0.60447，高於 Full 0.57985，ΔAP +0.02462，95% 區間 [+0.01109, +0.03775]。KEDGN 的原作者五種子測試已核對，再用 A+B 三折選 9 輪，全 A+B 五種子重訓，Set C AP 0.57502。','',
            '這支持「在本研究共同留出設定中，這套時間與缺失表示有效」。KEDGN 與本組仍有表示、前處理、平衡採樣和模型容量差異，不能將結果包裝成打敗所有 SOTA。','',
            '### 問題二：完整資料較高，缺失時是否也較穩？','',
@@ -131,6 +132,7 @@ def story(p55,p57,p58,p59):
     lines+=['',
             '同一 P33 的三種情境都有正向配對區間。更重要的是，扣除各自未遮蔽分數後，GCS 全遮的 AP 損失較 Full 少 0.05368［+0.03663, +0.07163］，六項全遮少 0.03203［+0.01214, +0.05118］。因此韌性結論同時有遮蔽後分數及較小退化的支持。','',
             f'KEDGN A+B 的 GCS 全遮 AP 為 {metrics["full_GCS","kedgn_ab"]["ap"]:.5f}、六項全遮為 {metrics["full_all_six","kedgn_ab"]["ap"]:.5f}；完整八種情境與兩版 KEDGN 見 P55。這些是共同病例上的敏感度結果，不能解讀成 GCS 或其他變數的臨床因果效果。','',
+            '在這兩種遮蔽中，P33 對 A+B KEDGN 的 ΔAP 分別為 +0.08728［+0.06193, +0.11394］及 +0.05199［+0.02505, +0.07889］。KEDGN 使用更多 A/B 病例後未遮蔽 AP 提高，但整欄缺失的 AP 退化沒有隨之消失；不規則序列建模能力與缺失韌性仍需要分別測試。','',
             '### 問題三：缺失韌性可以直接變成跨資料庫增益嗎？','',
             'eICU Demo 48 小時沿同一 782 次住院／91 次死亡，核對欄位、單位與住院死亡標籤。P33 對 Full 的整點 ΔAP +0.00498［−0.06114, +0.05663］，原始間隔 −0.00466［−0.06581, +0.04827］；兩者均未確認改善。P45 的真實 Demo 增強使用患者／院鍵區塊折外預測，對 P28 亦是點估計上升但區間跨零。','',
             '24 小時是另一個觀察窗與風險集，主要模型為 P52。P57 補齊它對 P50 外部增強的比較：P52 的 AP 點估計較高，患者與院鍵區塊區間都跨零。P52 對 P49 的 Brier 誤差下降則在兩種取樣及兩種重抽下都有支持。應說「本 Demo 的機率誤差改善」，不能替換成「外部 AP 已證實提升」。','',
