@@ -4,3 +4,5 @@ ML/reports/P5[5-9]*_summary.json text eol=lf
 ML/reports/研究完成驗收.json text eol=lf
 ML/reports/研究實驗登錄.json text eol=lf
 ML/reports/資料來源核對.json text eol=lf
+ML/reports/P6[01]*.json text eol=lf
+ML/reports/P6[01]*_protocol.md text eol=lf
