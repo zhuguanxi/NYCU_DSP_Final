@@ -46,7 +46,7 @@ def main():
     short=(f'**最新補強已完成：P60／P61。** 固定五種子P33的Set C未遮蔽／GCS全遮／六欄全遮AP為 {ap}。'
        '35次元件擬合、39個缺失案例，全部種子與位置保留；P33相對P28在六欄全遮與Demo有穩定取捨。')
     for path,prefix in [(ROOT/'README.md','ML/'),(ML/'README.md','')]:
-        marked(path,short+'\n\n'+f'[五種子結果]({prefix}reports/P60_five_seed_stability_results.md) · [漸進／區段缺失]({prefix}reports/P61_progressive_block_results.md) · [研究故事]({prefix}reports/研究結論與故事.md) · [重跑與驗收]({prefix}reports/P60_P61_reproduction.md)')
+        marked(path,short+'\n\n下方0.60447等為原單一凍結模型結果；本輪五種子平均另列，兩者分開判讀。\n\n'+f'[五種子結果]({prefix}reports/P60_five_seed_stability_results.md) · [漸進／區段缺失]({prefix}reports/P61_progressive_block_results.md) · [研究故事]({prefix}reports/研究結論與故事.md) · [重跑與驗收]({prefix}reports/P60_P61_reproduction.md)')
     marked(REPORT/'研究進度總覽.md',short+'\n\n'+
        '| 階段 | 已完成補強 | 證據 |\n| --- | --- | --- |\n'+
        '| P60 | 五種子重訓，全部200列整體指標，不選最佳種子 | [結果](P60_five_seed_stability_results.md) |\n'+
