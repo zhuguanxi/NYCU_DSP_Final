@@ -191,6 +191,8 @@ def render(font,bold):
       'h3':ParagraphStyle('H3',parent=body,fontName='CJK-Bold',fontSize=12,leading=18,spaceBefore=8,spaceAfter=6,keepWithNext=True),
       'cell':ParagraphStyle('Cell',parent=body,fontSize=8.8,leading=13,spaceAfter=0),
       'head':ParagraphStyle('TableHead',parent=body,fontName='CJK-Bold',fontSize=8.8,leading=13,spaceAfter=0),
+      'caption':ParagraphStyle('Caption',parent=body,fontSize=9,leading=13,spaceAfter=6),
+      'reference':ParagraphStyle('Reference',parent=body,fontSize=9.6,leading=15,leftIndent=14,firstLineIndent=-14,spaceAfter=7),
       'code':ParagraphStyle('Code',fontName='Code' if Path('C:/Windows/Fonts/consola.ttf').exists() else 'Courier',fontSize=8,leading=11,spaceAfter=3,splitLongWords=1)}
     elements=[];lines=MD.read_text(encoding='utf-8').splitlines();i=0
     def para(text,style='body'): return Paragraph(inline(text),styles[style])
@@ -226,7 +228,7 @@ def render(font,bold):
             from PIL import Image as PILImage
             with PILImage.open(path) as picture: rw,rh=picture.size
             width=content;height=width*rh/rw
-            elements.append(KeepTogether([Image(str(path),width=width,height=height),Spacer(1,6)]))
+            elements.append(KeepTogether([Image(str(path),width=width,height=height),Spacer(1,4),para(caption,'caption'),Spacer(1,6)]))
             i+=1;continue
         if line.startswith('|'):
             rows=[]
@@ -245,8 +247,9 @@ def render(font,bold):
         if line.startswith('# '): elements.append(para(line[2:],'title'));i+=1;continue
         if line.startswith('## '): elements.append(para(line[3:],'h2'));i+=1;continue
         if line.startswith('### '): elements.append(para(line[4:],'h3'));i+=1;continue
+        if re.match(r'^\d+\.\s',line): elements.append(para(line,'reference'));i+=1;continue
         text=[line];i+=1
-        while i<len(lines) and lines[i].strip() and not lines[i].startswith(('#','|','```','<!--','![')):
+        while i<len(lines) and lines[i].strip() and not lines[i].startswith(('#','|','```','<!--','![')) and not re.match(r'^\d+\.\s',lines[i]):
             text.append(lines[i].strip());i+=1
         elements.append(para(' '.join(text)))
     def footer(canvas,doc):
