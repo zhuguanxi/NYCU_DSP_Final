@@ -1,64 +1,35 @@
-# ICU 機器學習探索：階段報告索引與總結
+# ICU 住院死亡預測：程式與重現入口
 
-<!-- P60_P61_START -->
-**最新補強已完成：P60／P61。** 固定五種子P33的Set C未遮蔽／GCS全遮／六欄全遮AP為 0.60084 ± 0.00214／0.53111 ± 0.00249／0.48999 ± 0.00358。35次元件擬合、39個缺失案例，全部種子與位置保留；P33相對P28在六欄全遮與Demo有穩定取捨。
+<!-- FINAL_REPORT_START -->
+研究定稿日期 **2026-11-23**，涵蓋 **P0–P61**。目前實驗已完成；本次只彙整既有結果，沒有新增訓練或簡報。
 
-下方0.60447等為原單一凍結模型結果；本輪五種子平均另列，兩者分開判讀。
+**先讀：** [完整報告](reports/期末研究報告.md) · [PDF](reports/期末研究報告.pdf) · [專案目標與核心結果](../README.md)
 
-[五種子結果](reports/P60_five_seed_stability_results.md) · [漸進／區段缺失](reports/P61_progressive_block_results.md) · [研究故事](reports/研究結論與故事.md) · [重跑與驗收](reports/P60_P61_reproduction.md)
-<!-- P60_P61_END -->
+研究區分完整資料排序、指定缺失下的退化，以及跨資料庫轉移。五種子 P33 未遮蔽／GCS 全遮／六欄全遮的 Set C AP 為 **0.60084 ± 0.00214／0.53111 ± 0.00249／0.48999 ± 0.00358**。各情境五次均高於 Full；CNN 相對 P28 在六欄全遮及 Demo 有穩定取捨。部分缺失遮蔽後 AP 較高不等於掉分較少，外部 AP 改善仍不確定。
+<!-- FINAL_REPORT_END -->
 
-[2026 年 11 月 22 日完整研究進度](reports/研究進度總覽.md) 涵蓋 P0–P59。現有資料下的實驗已完成；[研究結論與故事](reports/研究結論與故事.md)、[結果總表](reports/研究結果總表.csv)、[完成驗收](reports/研究完成驗收.json) 和 [重跑入口](reports/研究重跑與驗收.md) 是最新入口。原期末 PDF 截至 P51，保留為歷史版本，本輪不製作簡報。
+## 現行 pipeline 與文件
 
-[P54：A+B 重訓 KEDGN 的 Set C／eICU Demo 結果](reports/P54_kedgn_ab_transfer_results.md) 使用原 A/B 三折選共同輪次，全 A+B 訓練五個種子，再與 [P53 Set A 凍結版](reports/P53_kedgn_frozen_transfer_results.md) 及原模型做同病例比較。訓練使用 GPU，資料與權重不提交 Git。R1 已取消，其他論文背景重跑已停止。
+固定清理與跨庫欄位／死亡標籤對齊 → 表格摘要、時間摘要及逐小時序列 → GCS 缺失增強與 P26 分流 → P28 表格 log-odds 混合 → P33 的 75% 表格／25% CNN 機率混合。選參及輪次依 A/B 決定，凍結後評估 Set C 與 Demo；多次查看測試的限制見報告。
 
-## 目前可核對的主要結果
+| 入口 | 內容 |
+| --- | --- |
+| [完整報告](reports/期末研究報告.md) | 目標、欄位、參數、結果、取捨、故事、文獻與限制 |
+| [階段總覽](reports/研究進度總覽.md) | P0–P61 階段索引，保留原單一凍結模型歷史 |
+| [五種子](reports/P60_five_seed_stability_results.md) | 固定種子 42–46、全部 200 列指標、不挑最佳種子 |
+| [漸進與區段缺失](reports/P61_progressive_block_results.md) | 39 案例、全部 1,560 列指標、預定配對區間 |
+| [文獻定位](reports/文獻定位與可比性.md) | MA-GBT 與 KEDGN 的重現範圍、共同評估與限制 |
+| [研究重跑與驗收](reports/研究重跑與驗收.md) | 主環境、原固定模型、重播與完整資料要求 |
+| [P60/P61 重跑](reports/P60_P61_reproduction.md) | 五種子與缺失程序、恢復入口及彙總驗收 |
+| [報告重建](reporting/README.md) | 只讀公開彙總即可重建 Markdown、圖與 PDF |
 
-| 已評估情境 | 模型與 AP | 相對對照的配對 AP 差（95% 區間） |
-| --- | --- | --- |
-| Set C 未遮蔽 | P33，0.60447 | 對凍結 Full +0.02462 [+0.01109, +0.03775] |
-| Set C GCS 全遮 | P33，0.53213 | 對凍結 Full +0.07830 [+0.05838, +0.09808] |
-| Set C 六項全遮 | P33，0.48911 | 對凍結 Full +0.05665 [+0.03491, +0.07753] |
-| eICU Demo 尿量對齊整點，患者／院鍵區塊五折 | P45，0.51115 | 對凍結 P28 +0.00971 [−0.01335, +0.03271] |
+`src/` 保留原始表格準備、開發與 Set C 評估入口；`related_work/` 包含後續對齊、缺失與序列實驗；`reporting/` 只做定稿編排。依各階段 protocol 使用相應環境，MA-GBT CPU 與 KEDGN 環境分開。資料、環境、cache、權重、parquet/joblib/npz 及逐筆分數由根目錄 `.gitignore` 排除；不把 PhysioNet／eICU 原始資料提交 Git。
 
-P33、P26 評估沿用完全未用於擬合的 Set C。Set C 曾多次用於比較。P45 使用真實外部病例增強，Demo 的同折訓練與測試患者互斥。外部 AP 改善仍不確定。取得有授權的完整版 eICU v2.0 後，可採 P46 固定入口排除所有 Demo 患者並比較。 [Set C 時間敏感度](reports/P41_p12_outcome_timing_results.md) · [真實外部病例增強](reports/P44_real_eicu_augmentation_results.md) · [外部增強分支](reports/P45_augmentation_branch_ablation_results.md) · [完整版確認入口](reports/P46_eicu_adaptation_confirmation_protocol.md)
+原 0.60447 是單一凍結 P33 的 Set C AP；五種子指標平均 0.60084 ± 0.00214、五種子機率集成 0.60290 各有不同口徑。舊 [P51 報告](reports/期末研究報告_P51歷史版.md) 與以下 P0–P6 細節作為歷史紀錄。
 
-## 目前研究進度
+## 原表格基準與開發歷史
 
-- [P55 KEDGN 共同缺失比較](reports/P55_kedgn_missingness_results.md)：兩版 KEDGN 與七組原模型，八個固定情境。
-- [P56 條件混合](reports/P56_observation_mixture_results.md)：32 規則僅用 A/B 比較，保留原 P33。
-- [P57 24h 外部配對](reports/P57_demo_paired_results.md)：P52/P50/P49、APACHE 共隊列及患者／院鍵區塊區間。
-- [P58 同一主模型](reports/P58_joint_objectives_results.md)：P33 同時改善未遮蔽與固定缺失情境，AP 退化較小；外部 AP 增益不確定。
-- [P59 MA-GBT 映射核對](reports/P59_ma_alignment_results.md)：補值依賴下降與 AP 改善分開判讀。
-- [文獻定位](reports/文獻定位與可比性.md) 與 [資料來源核對](reports/資料來源核對.json) 保存來源、重現範圍與限制。
-
-- [組員研究報告第 10 節](實驗報告_組員分享版.md#10-缺失韌性與跨資料集評估) 整理原版 MA-GBT、缺失增強、時間窗分流與混合模型的共同設定。
-- [Set C 固定全遮蔽的配對比較](reports/P30_full_mask_paired_results.md) 報告相對凍結對照的 AP 與 AUROC 差及區間。
-- [eICU Demo 混合模型](reports/P28_robust_ensemble_results.md) 與 [GCS、通氣欄位對齊](reports/P32_eicu_ventilation_results.md) 保留兩種取樣與各對照的結果。
-- [P33 逐小時序列模型](reports/P33_hourly_sequence_results.md) 提高 Set C 未遮蔽 AP，eICU Demo 的 AP 點估計較 P28 低。
-- [P34 四小時序列與量測分布](reports/P34_sequence_cadence_results.md) 比較等量隨機與末段遮蔽，檢查逐小時模型的跨庫差異。
-- [P35 權重門檻](reports/P35_sequence_gate_results.md) 與 [P36 通道別增強](reports/P36_profile_sequence_results.md) 用 A/B 比較 eICU 觀測小時分布模擬，兩輪均維持固定四小時模型。
-- [P37 序列分數修正](reports/P37_sequence_blend_results.md) 用 A/B 選擇對數勝算修正幅度，保留原模型後重跑 Set C 和 eICU Demo。
-- [P38 序列通道消融](reports/P38_sequence_channel_ablation_results.md) 比較從四小時卷積移除尿量、呼吸率及兩者，表格模型沿用原輸入。
-- [P39 序列種子與平均](reports/P39_sequence_seed_ensemble_results.md) 用 A/B 三折比較通道消融的種子敏感度及三網路平均。
-- [P29 完整 eICU 確認規格](reports/P29_eicu_ensemble_confirmation_protocol.md) 有 CPU 執行入口。正式結果等已授權的 eICU v2.0 本機資料，先排除所有 Demo 患者再計分。
-- [P40 完整 eICU 次要比較](reports/P40_eicu_sequence_confirmation_results.md) 可在 P29 同一隊列上核對 P38。Demo 試跑檢查 CPU 流程和凍結分數。
-- [P41 P12 時間欄位稽核](reports/P41_p12_outcome_timing_results.md) 核對官方結果表與時間敏感度隊列的凍結 Set C 分數。
-- [P42 機率校準與分類門檻](reports/P42_frozen_calibration_results.md) 用 A/B 折外預測擬合，檢查 Set C 與 eICU Demo 的機率誤差和分類表現。
-- [P43 eICU 醫院層級敏感度](reports/P43_eicu_hospital_variation_results.md) 用原凍結分數核對醫院重抽、逐區塊省略及院內排序。
-- [P44 真實外部病例增強](reports/P44_real_eicu_augmentation_results.md) 將 eICU Demo 合格病例納入 P12 A/B 訓練，評估獨立 Set C 與患者分折的 Demo。
-- [P45 外部增強分支消融](reports/P45_augmentation_branch_ablation_results.md) 在同一隊列拆開有 GCS 與無 GCS 分支的外部增強。
-- [P46 完整 eICU 的 P45 比較](reports/P46_eicu_adaptation_confirmation_results.md) 提供含 P45 的 CPU 驗證入口及患者排除測試結果。
-- [P47 P12 拆分稽核](reports/P47_p12_split_overlap_results.md) 核對原始紀錄、435 維凍結特徵與高重疊動態觀測。
-- [P48 臨床評分配對比較](reports/P48_clinical_score_baselines_results.md) 在共同隊列比較 SAPS-I、SOFA、APACHE IVa 和凍結模型，附近年文獻的切分及標籤差異。
-- [P49 24 小時觀察窗](reports/P49_24h_landmark_results.md) 用 A/B 選定 CPU 模型，在 Set C 測試遮蔽，並於 eICU 同一隊列比較前 24 小時的模型和 APACHE IVa。
-- [P50 24 小時真實外部增強](reports/P50_24h_eicu_augmentation_results.md) 使用互斥的患者與院鍵區塊五折，檢查增強後 AP 與 Set C 的 GCS 全遮結果。
-- [P51 課程資料包](reports/P51_course_dataset_package_results.md) 保存截至 P50 的模型輸入、分折與本機 ZIP 驗證紀錄。
-- [期末研究報告](reports/期末研究報告.md) 整理主要效能、原前處理、文獻與重現入口。PDF 位於本機 Git 排除的 `artifacts/course_submission/icu_mortality_report/`。
-
-組員分享版包含完整前處理、模型參數、切分、指標與文獻比較限制。第 10 節整理缺失韌性、外部增強及確認入口。 [組員研究報告](實驗報告_組員分享版.md)
-
-早期表格基準與序列資料的輸入定義見下列規格。 [P7 基準評估](reports/P7_C資料集_凍結模型評估.md) · [深度模型資料銜接](reports/深度學習銜接備忘錄.md) · [P33 實際序列模型規格](reports/P33_hourly_sequence_protocol.md)
+以下保留 2026-10-13 的早期文件。其階段狀態與「未評估 C」等描述不代表目前整個專案進度；目前結論以完整定稿為準。
 
 <!-- C_EVALUATION_START -->
 ## 後續已完成 C 評估（2026-10-13）
