@@ -182,6 +182,9 @@ def render(font,bold):
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.styles import ParagraphStyle
     from reportlab.platypus import SimpleDocTemplate,Paragraph,Spacer,Table,TableStyle,Image,PageBreak,KeepTogether
+    class WholeParagraph(Paragraph):
+        def split(self,availWidth,availHeight):
+            return []
     pdfmetrics.registerFont(TTFont('CJK',font,subfontIndex=0))
     pdfmetrics.registerFont(TTFont('CJK-Bold',bold,subfontIndex=0))
     pdfmetrics.registerFontFamily('CJK',normal='CJK',bold='CJK-Bold',italic='CJK',boldItalic='CJK-Bold')
@@ -241,14 +244,12 @@ def render(font,bold):
                 i+=1
             assert all(len(r)==len(rows[0]) for r in rows)
             grid=[[para(c,'head' if ri==0 else 'cell') for c in row] for ri,row in enumerate(rows)]
-            t=Table(grid,colWidths=widths(rows[0]),repeatRows=1,hAlign='LEFT')
+            t=Table(grid,colWidths=widths(rows[0]),repeatRows=1,hAlign='LEFT',splitByRow=int(len(rows)>9))
             t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#edf2f5')),
               ('LINEBELOW',(0,0),(-1,0),.6,colors.HexColor('#637986')),('LINEBELOW',(0,1),(-1,-1),.25,colors.HexColor('#d9e0e4')),
               ('LEFTPADDING',(0,0),(-1,-1),6),('RIGHTPADDING',(0,0),(-1,-1),6),('TOPPADDING',(0,0),(-1,-1),5),
               ('BOTTOMPADDING',(0,0),(-1,-1),5),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
-            elements.append(KeepTogether([t,Spacer(1,10)]) if len(rows)<=9 else t)
-            if len(rows)>9: elements.append(Spacer(1,10))
-            continue
+            elements.extend([t,Spacer(1,10)]);continue
         if line.startswith('# '): elements.append(para(line[2:],'title'));i+=1;continue
         if line.startswith('## '): elements.append(para(line[3:],'h2'));i+=1;continue
         if line.startswith('### '): elements.append(para(line[4:],'h3'));i+=1;continue
@@ -256,8 +257,8 @@ def render(font,bold):
         text=[line];i+=1
         while i<len(lines) and lines[i].strip() and not lines[i].startswith(('#','|','```','<!--','![')) and not re.match(r'^\d+\.\s',lines[i]):
             text.append(lines[i].strip());i+=1
-        paragraph=para(' '.join(text))
-        elements.append(KeepTogether([paragraph]) if len(' '.join(text))<350 else paragraph)
+        value=' '.join(text)
+        elements.append(WholeParagraph(inline(value),styles['body']) if len(value)<350 else para(value))
     def footer(canvas,doc):
         canvas.saveState();canvas.setFont('CJK',8);canvas.setFillColor(colors.HexColor('#596b77'))
         canvas.drawString(margin,H-27,'ICU 住院死亡預測完整研究報告')
