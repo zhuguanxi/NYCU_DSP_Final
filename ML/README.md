@@ -3,33 +3,33 @@
 <!-- FINAL_REPORT_START -->
 研究定稿日期 **2026-11-23**，涵蓋 **P0–P61**。目前實驗已完成；本次只彙整既有結果，沒有新增訓練或簡報。
 
-**先讀：** [完整報告](reports/期末研究報告.md) · [PDF](reports/期末研究報告.pdf) · [專案目標與核心結果](../README.md)
+**先讀：** [專案目標與核心結果](../README.md) · [完整階段索引](reports/研究進度總覽.md)。完整報告草稿與 PDF 目前僅保留本機，暫不公開。
 
 研究區分完整資料排序、指定缺失下的退化，以及跨資料庫轉移。五種子 P33 未遮蔽／GCS 全遮／六欄全遮的 Set C AP 為 **0.60084 ± 0.00214／0.53111 ± 0.00249／0.48999 ± 0.00358**。各情境五次均高於 Full；CNN 相對 P28 在六欄全遮及 Demo 有穩定取捨。部分缺失遮蔽後 AP 較高不等於掉分較少，外部 AP 改善仍不確定。
 <!-- FINAL_REPORT_END -->
 
 ## 現行 pipeline 與文件
 
-固定清理與跨庫欄位／死亡標籤對齊 → 表格摘要、時間摘要及逐小時序列 → GCS 缺失增強與 P26 分流 → P28 表格 log-odds 混合 → P33 的 75% 表格／25% CNN 機率混合。選參及輪次依 A/B 決定，凍結後評估 Set C 與 Demo；多次查看測試的限制見報告。
+固定清理與跨庫欄位／死亡標籤對齊 → 表格摘要、時間摘要及逐小時序列 → GCS 缺失增強與 P26 分流 → P28 表格 log-odds 混合 → P33 的 75% 表格／25% CNN 機率混合。選參及輪次依 A/B 決定，凍結後評估 Set C 與 Demo；多次查看測試的限制見[研究故事](reports/研究結論與故事.md)。
 
 | 入口 | 內容 |
 | --- | --- |
-| [完整報告](reports/期末研究報告.md) | 目標、欄位、參數、結果、取捨、故事、文獻與限制 |
+| [研究故事](reports/研究結論與故事.md) | 目標、結果、取捨與主張邊界 |
 | [階段總覽](reports/研究進度總覽.md) | P0–P61 階段索引，保留原單一凍結模型歷史 |
 | [五種子](reports/P60_five_seed_stability_results.md) | 固定種子 42–46、全部 200 列指標、不挑最佳種子 |
 | [漸進與區段缺失](reports/P61_progressive_block_results.md) | 39 案例、全部 1,560 列指標、預定配對區間 |
 | [文獻定位](reports/文獻定位與可比性.md) | MA-GBT 與 KEDGN 的重現範圍、共同評估與限制 |
 | [研究重跑與驗收](reports/研究重跑與驗收.md) | 主環境、原固定模型、重播與完整資料要求 |
 | [P60/P61 重跑](reports/P60_P61_reproduction.md) | 五種子與缺失程序、恢復入口及彙總驗收 |
-| [報告重建](reporting/README.md) | 只讀公開彙總即可重建 Markdown、圖與 PDF |
+| [報告編排工具](reporting/README.md) | 圖表使用公開彙總；文字與 PDF 另需本機草稿範本 |
 
 `src/` 保留原始表格準備、開發與 Set C 評估入口；`related_work/` 包含後續對齊、缺失與序列實驗；`reporting/` 只做定稿編排。依各階段 protocol 使用相應環境，MA-GBT CPU 與 KEDGN 環境分開。資料、環境、cache、權重、parquet/joblib/npz 及逐筆分數由根目錄 `.gitignore` 排除；不把 PhysioNet／eICU 原始資料提交 Git。
 
-原 0.60447 是單一凍結 P33 的 Set C AP；五種子指標平均 0.60084 ± 0.00214、五種子機率集成 0.60290 各有不同口徑。舊 [P51 報告](reports/期末研究報告_P51歷史版.md) 與以下 P0–P6 細節作為歷史紀錄。
+原 0.60447 是單一凍結 P33 的 Set C AP；五種子指標平均 0.60084 ± 0.00214、五種子機率集成 0.60290 各有不同口徑。以下 P0–P6 細節作為歷史紀錄；期末報告相關檔案暫不納入 Git。
 
 ## 原表格基準與開發歷史
 
-以下保留 2026-10-13 的早期文件。其階段狀態與「未評估 C」等描述不代表目前整個專案進度；目前結論以完整定稿為準。
+以下保留 2026-10-13 的早期文件。其階段狀態與「未評估 C」等描述不代表目前整個專案進度；目前結論以首頁、研究故事及 P60/P61 結果為準。
 
 <!-- C_EVALUATION_START -->
 ## 後續已完成 C 評估（2026-10-13）
@@ -94,8 +94,8 @@
 
 ## 銜接深度學習
 
-- [候選通道](artifacts/candidate_variables_for_dl.csv) 與 [候選欄位](artifacts/selected_features.csv) 是訓練內selector的跨折穩定性記錄，**不能直接視為深度模型的最佳輸入**。
-- 原始序列 [observations_AB.parquet](artifacts/observations_AB.parquet) 仍包含所有原始變數、值、時間與清理旗標。Weight admission與動態序列有重疊，資料字典已揭露。
+- 候選通道（本機檔案：`artifacts/candidate_variables_for_dl.csv`） 與 候選欄位（本機檔案：`artifacts/selected_features.csv`） 是訓練內selector的跨折穩定性記錄，**不能直接視為深度模型的最佳輸入**。
+- 原始序列 observations_AB.parquet（本機檔案：`artifacts/observations_AB.parquet`） 仍包含所有原始變數、值、時間與清理旗標。Weight admission與動態序列有重疊，資料字典已揭露。
 - 後續應比較深度模型完整／精簡通道，保留原始時間、mask與可得靜態資訊，不把手工summary等同於時間序列。
 - 已保存共同RecordID切分與完整／精簡表格pipelines。深度模型也只在A/B選方案，最後凍結後再共同評估C。
 - 時間／缺失／變數關係的探索只能提供設計假說，不證明attention／graph一定優於本輪表格模型。
@@ -105,8 +105,8 @@
 - 總計 **158** 次fit，其中正式修正版 **120** 次，初版欄名除錯 **38** 次不納入結果。
 - 正式版本fit耗時合計 **319.0秒**；這不包含特徵提取、相關性、SHAP／置亂等成本。實際牆鐘時間不可用此合計代替。
 - 最高採樣RSS **458.3MB**；所有正式版本fit收斂警告 **0** 個。
-- 初版官方縮寫TropI/TropT未對到原始TroponinI/TroponinT，已修正重建並重跑；[除錯紀錄](artifacts/superseded_debug_fits.json) 保留，沒有混入最終分數。
-- [驗證結果](artifacts/study_validation.json)：唯一鍵、標籤對齊、OOF全覆蓋及AP重算、肌鈣蛋白欄位、模型保存讀回與C原壓縮檔雜湊均已檢查。
+- 初版官方縮寫TropI/TropT未對到原始TroponinI/TroponinT，已修正重建並重跑；除錯紀錄（本機檔案：`artifacts/superseded_debug_fits.json`） 保留，沒有混入最終分數。
+- 驗證結果（本機檔案：`artifacts/study_validation.json`）：唯一鍵、標籤對齊、OOF全覆蓋及AP重算、肌鈣蛋白欄位、模型保存讀回與C原壓縮檔雜湊均已檢查。
 
 ## 限制與下一步
 

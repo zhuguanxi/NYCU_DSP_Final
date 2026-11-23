@@ -3,9 +3,9 @@
 <!-- FINAL_REPORT_START -->
 研究已收尾，定稿日期 **2026-11-23**，涵蓋 **P0 至 P61**。目前資料範圍為 PhysioNet 2012 與公開 eICU Demo；本次只整理既有實驗，沒有新增訓練，也沒有製作簡報。
 
-**完整報告：** [GitHub 閱讀版](ML/reports/期末研究報告.md) · [PDF](ML/reports/期末研究報告.pdf)
+**發布狀態：** 程式、實驗彙總、圖表與 README 已公開；完整報告草稿、PDF、內容範本與編排紀錄暫只保留本機，不納入目前 Git 版本。
 
-[研究進度與階段索引](ML/reports/研究進度總覽.md) · [五種子結果](ML/reports/P60_five_seed_stability_results.md) · [缺失曲線與配對比較](ML/reports/P61_progressive_block_results.md) · [報告來源清單](ML/reports/final_report_sources.json)
+[研究進度與階段索引](ML/reports/研究進度總覽.md) · [五種子結果](ML/reports/P60_five_seed_stability_results.md) · [缺失曲線與配對比較](ML/reports/P61_progressive_block_results.md) · [公開結果總表](ML/reports/研究結果總表.csv)
 <!-- FINAL_REPORT_END -->
 
 ## 研究目標
@@ -26,7 +26,7 @@ P28 對 P26 與 GCS-only Elastic 作 50%／50% log-odds 混合；P33 使用 **75
 
 ![研究 pipeline](ML/figures/final_report_pipeline.png)
 
-完整欄位映射、模型參數、48h／24h 差異與方法限制見[正式報告](ML/reports/期末研究報告.md)。
+完整欄位映射、模型參數、48h／24h 差異與方法限制見[階段索引與規格](ML/reports/研究進度總覽.md)及[文獻定位](ML/reports/文獻定位與可比性.md)。
 
 ## 核心結果與邊界
 
@@ -64,7 +64,7 @@ eICU Demo 的 AP 改善仍不確定。24h P52 相對 P49 的 Brier 誤差下降�
 | P12 24h 代理隊列 A/B／C | 7,817／3,906；死亡 1,071／549 | 24h 延伸，與 48h 分開 |
 | eICU Demo 24h | 1,398／121 | 同窗評估；APACHE 共同子集 1,166／100 |
 
-主指標 AP，另報 AUROC、Brier 與固定 0.5 敏感度。訓練種子、遮蔽位置及固定模型病例抽樣的變異分開。P12 時鐘／結果整天欄位、Demo 院鍵含義與映射限制均見報告，不以原始跨庫 AP 大小直接排名。
+主指標 AP，另報 AUROC、Brier 與固定 0.5 敏感度。訓練種子、遮蔽位置及固定模型病例抽樣的變異分開。P12 時鐘／結果整天欄位、Demo 院鍵含義與映射限制均見[階段文件](ML/reports/研究進度總覽.md)，不以原始跨庫 AP 大小直接排名。
 
 ## 證據與重跑入口
 
@@ -72,7 +72,7 @@ eICU Demo 的 AP 改善仍不確定。24h P52 相對 P49 的 Brier 誤差下降�
 - [P60/P61 驗收](ML/reports/P60_P61_verification.json)：35 次元件擬合、五種子、39 案例、同步遮蔽及所有公開 AP 核對。
 - [研究重跑說明](ML/reports/研究重跑與驗收.md)；[五種子與時間缺失重播](ML/reports/P60_P61_reproduction.md)；[原表格基準與歷史開發](ML/README.md)。
 - [文獻定位與可比性](ML/reports/文獻定位與可比性.md)：MA-GBT 為本組設定對照，KEDGN 完成作者 P12 設定與共同評估；其餘未完成／取消排程未冒充完整結果。
-- [報告重建](ML/reporting/README.md)：只讀公開彙總，不需要原始資料或模型即可重建文字、表格與 PDF。
+- [報告編排工具](ML/reporting/README.md)：程式保留；文字與 PDF 重建另需目前僅存本機的內容範本。圖表只讀公開彙總，不需要原始資料或模型。
 
 已有本機產物時，從 `ML` 核對（會更新驗收 JSON，不重新訓練）：
 
@@ -86,6 +86,6 @@ $env:PYTHONPATH=Join-Path (Get-Location) 'artifacts/p21_cpu_packages/site'
 
 ## 資料與版本管理
 
-`data/`、`ML/dataset/`、`ML/artifacts/`、環境、cache、權重、parquet/joblib/npz 及逐筆分數均由 `.gitignore` 排除。GitHub 保存程式、規格、彙總指標、圖與完整報告；**沒有提交 PhysioNet／eICU 原始醫療資料**。PDF 只包含整體結果。
+`data/`、`ML/dataset/`、`ML/artifacts/`、環境、cache、權重、parquet/joblib/npz 及逐筆分數均由 `.gitignore` 排除。GitHub 保存程式、規格、彙總指標與圖；**沒有提交 PhysioNet／eICU 原始醫療資料**。完整報告相關檔案暫由 `.gitignore` 排除，保留在本機。
 
-原 [P51 報告](ML/reports/期末研究報告_P51歷史版.md) 保留為歷史快照。正式入口以本頁與 P0 至 P61 完整報告為準。
+目前公開入口以本頁、研究進度總覽及逐階段實驗文件為準。

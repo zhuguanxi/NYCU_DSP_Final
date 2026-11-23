@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import subprocess
 
 ML=Path(__file__).resolve().parents[1]
 ROOT=ML.parent
@@ -42,8 +43,10 @@ def main():
       'P33對P28與KEDGN五種子集成的50% AP差均不確定；隨機24小時與連續24小時的差也未確認。這些是固定模型的病例抽樣區間；種子與位置波動另報，不把15組種子×位置當15個新測試集。Demo多種子仍不能消除患者數有限及反覆查看的限制。外部AP改善未由本輪證實，R1及其他已取消排程沒有恢復。','',
       '[五種子結果](P60_five_seed_stability_results.md) · [缺失曲線與全部比較](P61_progressive_block_results.md) · [全部種子CSV](P60_all_seed_results.csv) · [全部遮蔽CSV](P61_all_seed_mask_results.csv) · [驗收](P60_P61_verification.json) · [重跑](P60_P61_reproduction.md)','',
       '![漸進與連續區段缺失](../figures/P61_missingness_curves.png)']
+    report_is_tracked=subprocess.run(['git','ls-files','--error-unmatch','--','ML/reports/期末研究報告.pdf'],
+        cwd=ROOT,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0
     final_link=('**2026-11-23 完整定稿：** [報告](期末研究報告.md) · [PDF](期末研究報告.pdf)。整合 P0-P61、全部改善與取捨；下方保留階段證據。\n\n'
-                if (REPORT/'final_report_sources.json').exists() else '')
+                if report_is_tracked and (REPORT/'final_report_sources.json').exists() else '')
     marked(REPORT/'研究結論與故事.md',final_link+'\n'.join(story))
     short=(f'**最新補強已完成：P60／P61。** 固定五種子P33的Set C未遮蔽／GCS全遮／六欄全遮AP為 {ap}。'
        '35次元件擬合、39個缺失案例，全部種子與位置保留；P33相對P28在六欄全遮與Demo有穩定取捨。')

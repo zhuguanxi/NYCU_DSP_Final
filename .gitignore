@@ -76,3 +76,11 @@ desktop.ini
 *.tmp
 *.bak
 ~$*
+
+# Final report draft stays local until publication is requested.
+/ML/reports/期末研究報告.md
+/ML/reports/期末研究報告.pdf
+/ML/reports/期末研究報告_P51歷史版.md
+/ML/reports/final_report_sources.json
+/ML/reports/final_report_build.json
+/ML/reporting/final_report_content.md
