@@ -142,11 +142,14 @@ def compose():
     MD.write_text(template.rstrip()+'\n',encoding='utf-8',newline='\n')
     source_names=['P54_kedgn_ab_transfer_summary.json','P55_kedgn_missingness_summary.json','P57_demo_paired_summary.json',
       'P58_joint_objectives_summary.json','P59_ma_alignment_summary.json','P60_five_seed_stability_summary.json',
-      'P61_progressive_block_summary.json','P60_P61_verification.json','資料來源核對.json','P8_eicu_demo_protocol.md',
+      'P61_progressive_block_summary.json','P60_P61_verification.json','資料來源核對.json','P4_特徵篩選.md','P5_變數關係與解釋.md','P8_eicu_demo_protocol.md',
       'P20_ma_gbt_alpha10_bilirubin_results.md','P41_p12_outcome_timing_results.md','P45_augmentation_branch_ablation_results.md',
       'P49_24h_landmark_protocol.md','P52_24h_catboost_blend_results.md','文獻定位與可比性.md']
-    sources={str((REPORT/name).relative_to(ML)):sha(REPORT/name) for name in source_names}
-    sources['reporting/final_report_content.md']=sha(ML/'reporting/final_report_content.md')
+    sources={(REPORT/name).relative_to(ML).as_posix():sha(REPORT/name) for name in source_names}
+    for path in ['reporting/final_report_content.md','reporting/build_final_report.py',
+                 'reporting/plot_final_report.py','requirements-report.txt',
+                 *[p.relative_to(ML).as_posix() for p in sorted((ML/'figures').glob('final_report_*.png'))]]:
+        sources[path]=sha(ML/path)
     save(REPORT/'final_report_sources.json',dict(report_date=DATE,experiment_result_commit=BASELINE,
       builder_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
       new_model_fits=0,source_sha256=sources,report_markdown_sha256=sha(MD),
@@ -243,7 +246,9 @@ def render(font,bold):
               ('LINEBELOW',(0,0),(-1,0),.6,colors.HexColor('#637986')),('LINEBELOW',(0,1),(-1,-1),.25,colors.HexColor('#d9e0e4')),
               ('LEFTPADDING',(0,0),(-1,-1),6),('RIGHTPADDING',(0,0),(-1,-1),6),('TOPPADDING',(0,0),(-1,-1),5),
               ('BOTTOMPADDING',(0,0),(-1,-1),5),('VALIGN',(0,0),(-1,-1),'MIDDLE')]))
-            elements.extend([t,Spacer(1,10)]);continue
+            elements.append(KeepTogether([t,Spacer(1,10)]) if len(rows)<=9 else t)
+            if len(rows)>9: elements.append(Spacer(1,10))
+            continue
         if line.startswith('# '): elements.append(para(line[2:],'title'));i+=1;continue
         if line.startswith('## '): elements.append(para(line[3:],'h2'));i+=1;continue
         if line.startswith('### '): elements.append(para(line[4:],'h3'));i+=1;continue
@@ -251,7 +256,8 @@ def render(font,bold):
         text=[line];i+=1
         while i<len(lines) and lines[i].strip() and not lines[i].startswith(('#','|','```','<!--','![')) and not re.match(r'^\d+\.\s',lines[i]):
             text.append(lines[i].strip());i+=1
-        elements.append(para(' '.join(text)))
+        paragraph=para(' '.join(text))
+        elements.append(KeepTogether([paragraph]) if len(' '.join(text))<350 else paragraph)
     def footer(canvas,doc):
         canvas.saveState();canvas.setFont('CJK',8);canvas.setFillColor(colors.HexColor('#596b77'))
         canvas.drawString(margin,H-27,'ICU 住院死亡預測完整研究報告')

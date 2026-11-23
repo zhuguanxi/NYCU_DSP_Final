@@ -6,3 +6,20 @@ ML/reports/研究實驗登錄.json text eol=lf
 ML/reports/資料來源核對.json text eol=lf
 ML/reports/P6[01]*.json text eol=lf
 ML/reports/P6[01]*_protocol.md text eol=lf
+
+# Keep the final report and its hashed evidence byte-stable on checkout.
+ML/reporting/* text eol=lf
+ML/requirements-report.txt text eol=lf
+ML/related_work/integrate_p60_p61.py text eol=lf
+ML/reports/期末研究報告*.md text eol=lf
+ML/reports/final_report_*.json text eol=lf
+ML/reports/P54_kedgn_ab_transfer_summary.json text eol=crlf
+ML/reports/P4_特徵篩選.md text eol=lf
+ML/reports/P5_變數關係與解釋.md text eol=lf
+ML/reports/P8_eicu_demo_protocol.md text eol=lf
+ML/reports/P20_ma_gbt_alpha10_bilirubin_results.md text eol=lf
+ML/reports/P41_p12_outcome_timing_results.md text eol=lf
+ML/reports/P45_augmentation_branch_ablation_results.md text eol=lf
+ML/reports/P49_24h_landmark_protocol.md text eol=lf
+ML/reports/P52_24h_catboost_blend_results.md text eol=lf
+ML/reports/文獻定位與可比性.md text eol=lf
