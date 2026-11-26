@@ -96,6 +96,8 @@ def main():
                 np.testing.assert_array_equal(p['ids'],ids);np.testing.assert_array_equal(p['y'],y)
                 scores=dict(zip(p['models'].tolist(),p['predictions'].copy()))
             info=read(EVAL/f'{case}.json');assert info['frozen_sha256']==sha(ROOT/'frozen.json')
+            assert sha(path)==info['predictions_sha256']
+            assert set(scores)==set(labels)|set(refs)
             rhos=info['rho']
         else:
             scores,rhos=predict(frame,True);scores.update(refs)
