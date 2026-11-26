@@ -101,7 +101,7 @@ def main():
           for name in ('Full','Elastic') for aug in ('plain','gcs60')
           for r in [evidence['paired'][case][f'{name}_{aug}_{policy}_minus_off']['ap']]]),'']
     lines+=['## 全部缺失結果與限制','',
-      '原 P9 的 13 種設定、相同 32 次匹配遮蔽均完成；逐模型／位置的整體 AP、AUROC、Brier、敏感度見 [缺失總表](P62_all_stress_metrics.csv)。主要三情境與 Demo 的 rho 另列於 [主指標表](P62_primary_metrics.csv)。本輪沒有重跑 P61 連續時間區段設定，不將整欄結果延伸為全部時間缺失的結論。','',
+      '原 P9 的 13 種設定、相同 32 次匹配遮蔽均完成；逐模型／位置的整體 AP、AUROC、Brier、敏感度見 [缺失總表](P62_all_stress_metrics.csv)。主要三情境與 Demo 的 rho 另列於 [主指標表](P62_primary_metrics.csv)。本輪沒有重跑 P61 連續時間區段設定，不將整欄結果延伸為全部時間缺失的結論。P9 匹配比例保留最初的 Demo 映射，其中尿量當時未對齊；現在 Demo 評估已使用修正尿量映射。因此這是固定的歷史壓力情境，不代表目前 Demo 仍有六欄同等程度的缺失，也不是六個最重要欄位的排名。','',
       f'本輪有 96 個唯一交叉驗證工作；另有 {execution.get("duplicate_cv_attempts",0)} 次已完成的相同設定重算，科學輸出逐值一致，未據此挑較高者。初期主佇列／獨立區塊各使用 6／4 個 CPU 工作，之後改用 6 個工作、每工作 2 線程的等價特徵與排序平行化。逐候選與整個 A/B 折的樹／機率核對均完全一致；不使用近似 binning 或改動切分規則。GPU 僅做相容性測試，沒有訓練任何本輪模型。','',
       '相同樹數、深度與學習率僅對齊名義設定；作者 GBT 與 XGBoost 的梯度／切分／正則化仍不同。最接近機制控制的是同作者實作的 MA／無懲罰比較。各增強條件的 alpha 由 A/B 分別選定，兩個最終增強版本的差同時包含其選參結果；固定 alpha 的增強比較可在 A/B 全表查閱。','',
       'rho 僅統計直接讀到補值特徵的路徑；count、missing 旗標等已知輸入仍可被模型使用，低 rho 不等於完全不使用量測模式。','',
