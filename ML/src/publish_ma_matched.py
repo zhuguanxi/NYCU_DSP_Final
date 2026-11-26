@@ -84,6 +84,11 @@ def main():
       '無懲罰 GBT 與 MA-GBT 使用同一作者實作；前者訓練不傳缺失懲罰矩陣，已核對與全零矩陣的樹相同。評估補值依賴一律傳真實缺失矩陣，因此無懲罰組的 rho 並不是零。這是同實作的懲罰消融，不把它冒稱 sklearn 或 XGBoost 的相同實作。','',
       '每組分無增強與 GCS60 加權副本；兩者使用完全相同的副本抽樣、權重、標籤與前處理。Full／Elastic、兩種增強條件各自用 A/B 在七個 alpha 中選擇。MA-AP 依平均驗證 AP；MA-ρ95 依候選內 AUROC 保留 95% 再最低 rho。兩種口徑全部報告，不依測試結果擇一。','',
       f'完成 **96 個唯一交叉驗證工作＋{frozen["final_fits"]} 次去重後最終訓練**；另有 38 次 A/B 數值等價／加速診斷擬合，與正式比較分開。切換等價執行版本時曾中斷尚未完成的程序，已完成的交叉驗證結果全部保留；未完成工作依原規格續跑，沒有依分數挑選。原低容量資料與模型未覆寫。','',
+      '## 主要解讀','',
+      '同名義容量後，MA-AP Full 的未遮蔽 Set C AP 為 0.57683，原 XGBoost Full 為 0.57985；差 −0.00302，配對區間 [−0.01586, +0.01139]。GCS60 版本相對原 GCS-only Full 的未遮蔽差 −0.00190，區間 [−0.01572, +0.01200]。點估計接近，尚未確認差異，也沒有做等效檢定。舊低容量低分不能據此代表整個 MA 框架的表現；新舊同時改了其他設定，亦不能把差距全歸因於樹數。','',
+      '在 MA-AP 口徑下，Full 的 GCS 增強使 GCS 全遮 AP 由 0.45913 到 0.50839，ΔAP +0.04927 [ +0.03211, +0.06684 ]；Elastic 為 +0.04715 [ +0.03096, +0.06330 ]。未遮蔽點估計略降，區間均跨零；Demo 整點兩者點估計都下降，差的區間亦跨零，沒有確認外部 AP 收益。兩個增強版本各自在 A/B 選 alpha，這是完整訓練程序的比較。','',
+      'rho95 選模四組都選 alpha=1000：未遮蔽 Set C 的 rho 為無增強 3.52%、有增強 4.52%，但 AP 低於同實作無懲罰組。六欄全遮的 rho 四組均回到 100%；Demo 兩種取樣為 93.48–95.65%。因此域內低補值依賴沒有普遍轉移到新缺失情境或外部資料。具體欄位歸因尚未在本輪量測，不能由總 rho 指定原因。','',
+      'MA-AP 對同實作無懲罰控制的多數區間跨零；Elastic 無增強在 Demo 原始間隔有一個未校正區間略高於零，但在多項比較、單種子與反覆使用 Demo 的條件下，不能當成通用外部改善的結論。','',
       '## A/B 選定參數','',table(['欄位','訓練條件','選模口徑','alpha','驗證 AP','驗證 AUROC','驗證 rho'],[
        [r['features'],'GCS60' if r['augmentation'] else '無增強',r['policy'],alpha(r['alpha']),
         *[f'{r["validation"]["clean"][m]:.5f}' for m in ('ap','auroc','rho')]] for r in evidence['selected']]),'',
@@ -92,9 +97,9 @@ def main():
     for name in ('Full','Elastic'):
         tags=[f'{name}_{a}_{p}' for a in ('plain','gcs60') for p in ('off','ap','rho95')]
         tags+=[f'XGB_{name}',f'XGB_GCS_{name}']
-        lines += ['### '+name,'',table(['模型','未遮蔽 AP','GCS 全遮 AP','六欄全遮 AP','未遮蔽 rho'],[
+        lines += ['### '+name,'',table(['模型','未遮蔽 AP','GCS 全遮 AP','六欄全遮 AP','未遮蔽 rho','GCS 全遮 rho','六欄全遮 rho'],[
           [label(tag),*[f'{lookup[c,tag]["ap"]:.5f}' for c in ('clean','gcs_full','six_full')],
-           '未在本輪量測' if lookup['clean',tag]['rho'] is None else f'{lookup["clean",tag]["rho"]*100:.2f}%'] for tag in tags]),'']
+           *['未在本輪量測' if lookup[c,tag]['rho'] is None else f'{lookup[c,tag]["rho"]*100:.2f}%' for c in ('clean','gcs_full','six_full')]] for tag in tags]),'']
     lines+=['## eICU Demo：同一 782 次住院／91 次死亡','',
       '沿已修正的明確尿量 mL 映射，整點／原始間隔兩套取樣均列出；它們是同一個 Demo 的敏感度設定。全部為 P12-only 訓練的凍結轉移。','',
       table(['模型','整點 AP','原始間隔 AP','整點 rho','原始間隔 rho'],[
@@ -110,6 +115,12 @@ def main():
           for case in ('clean','gcs_full','six_full','eicu_hourly','eicu_native')
           for name in ('Full','Elastic') for aug in ('plain','gcs60')
           for r in [evidence['paired'][case][f'{name}_{aug}_{policy}_minus_off']['ap']]]),'']
+    lines+=['## MA-AP 的 GCS 增強程序配對差','',
+      '方向為 GCS60 減無增強；兩者各自依 A/B 選 alpha，區間不含重訓與選參不確定性。','',
+      table(['隊列','欄位','ΔAP','95% 區間'],[
+       [case,name,f'{r["delta"]:+.5f}',f'[{r["ci"][0]:+.5f}, {r["ci"][1]:+.5f}]']
+       for case in ('clean','gcs_full','six_full','eicu_hourly','eicu_native') for name in ('Full','Elastic')
+       for r in [evidence['paired'][case][f'{name}_ap_gcs60_minus_plain']['ap']]]),'']
     lines+=['## 與原凍結 XGBoost 的 AP 配對差','',
       'MA-AP 依 A/B 的 AP 口徑選定；無增強對原 Full／Elastic，GCS60 對原 GCS-only 的相同欄位組。下表方向為 MA-AP 減 XGBoost，區間解讀同上；MA-rho95 與同作者無懲罰組的完整比較均保留於彙總 JSON。','',
       table(['隊列','MA-AP 欄位／增強','XGBoost 對照','ΔAP','95% 區間'],[
