@@ -38,8 +38,9 @@ def main():
       'publication_date':'2026-11-26','source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ML,text=True).strip()}
     execution=dict(main_workers=6,helper_workers=0,gpu_models_trained=0,gpu_probe='synthetic compatibility check failed; no model trained on GPU')
     if (ROOT/'assist_execution.json').exists():
-        execution.update(read(ROOT/'assist_execution.json'))
-        assert execution['protocol_sha256']==sha(ROOT/'protocol.json')
+        legacy=read(ROOT/'assist_execution.json')
+        execution['prior_assist']=legacy
+        assert legacy['protocol_sha256']==sha(ROOT/'protocol.json')
         duplicates=0
         for helper in (ROOT/'assist_elastic_gcs/jobs').glob('*.json'):
             a=read(helper);b=read(ROOT/'jobs'/helper.name)
