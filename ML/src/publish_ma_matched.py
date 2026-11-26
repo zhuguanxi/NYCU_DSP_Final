@@ -56,7 +56,15 @@ def main():
         assert sha(ROOT/'parallel_numeric_check.json')==resume['numeric_check_sha256']
         execution['current_parallel_backend']=resume
         public['parallel_numeric_check']=read(ROOT/'parallel_numeric_check.json')
-    execution['diagnostic_fit_note']='10 original equivalence/throughput fits; 9 unused prefix-batch fits; 9 initial parallel fits; 10 paired optimized-parallel fits. All A/B only.'
+    if (ROOT/'inference_execution.json').exists():
+        inference=read(ROOT/'inference_execution.json');check=read(ROOT/'inference_numeric_check.json')
+        assert inference['source_sha256']==sha(ML/'src/evaluate_ma_matched_fast.py')
+        assert inference['evaluator_source_sha256']==sha(ML/'src/evaluate_ma_matched.py')
+        assert inference['numeric_check_sha256']==sha(ROOT/'inference_numeric_check.json')
+        assert check['source_sha256']==inference['source_sha256'] and check['new_model_fits']==0
+        assert check['frozen_sha256']==sha(ROOT/'frozen.json')
+        execution['inference']=inference;public['inference_numeric_check']=check
+    execution['diagnostic_fit_note']='10 original equivalence/throughput fits; 9 unused prefix-batch fits; 9 initial parallel fits; 10 paired optimized-parallel fits. All A/B only. Additional compiled inference checks used frozen models and fitted zero new models.'
     public['execution']=execution
     public['cv_unique_jobs']=96
     privacy(public);save(REPORT/'P62_ma_gbt_matched_summary.json',public)
@@ -110,7 +118,7 @@ def main():
        for r in [evidence['paired'][case][f'{name}_{aug}_ap_minus_{ref}']['ap']]]),'']
     lines+=['## 全部缺失結果與限制','',
       '原 P9 的 13 種設定、相同 32 次匹配遮蔽均完成；逐模型／位置的整體 AP、AUROC、Brier、敏感度見 [缺失總表](P62_all_stress_metrics.csv)。主要三情境與 Demo 的 rho 另列於 [主指標表](P62_primary_metrics.csv)。本輪沒有重跑 P61 連續時間區段設定，不將整欄結果延伸為全部時間缺失的結論。P9 匹配比例保留最初的 Demo 映射，其中尿量當時未對齊；現在 Demo 評估已使用修正尿量映射。因此這是固定的歷史壓力情境，不代表目前 Demo 仍有六欄同等程度的缺失，也不是六個最重要欄位的排名。','',
-      f'本輪有 96 個唯一交叉驗證工作；另有 {execution.get("duplicate_cv_attempts",0)} 次已完成的相同設定重算，科學輸出逐值一致，未據此挑較高者。初期主佇列／獨立區塊各使用 6／4 個 CPU 工作，之後改用 6 個工作、每工作 2 線程的等價特徵與排序平行化。逐候選與整個 A/B 折的樹／機率核對均完全一致；不使用近似 binning 或改動切分規則。GPU 僅做相容性測試，沒有訓練任何本輪模型。','',
+      f'本輪有 96 個唯一交叉驗證工作；另有 {execution.get("duplicate_cv_attempts",0)} 次已完成的相同設定重算，科學輸出逐值一致，未據此挑較高者。初期主佇列／獨立區塊各使用 6／4 個 CPU 工作，之後改用 6 個工作、每工作 2 線程的等價特徵與排序平行化。逐候選與整個 A/B 折的樹／機率核對均完全一致；不使用近似 binning 或改動切分規則。GPU 僅做相容性測試，沒有訓練任何本輪模型。預測階段另以 A/B 核對全部 12 個凍結模型、3,600 棵樹的落點與機率，以及浮點邊界，與作者逐筆原版完全相同後改用編譯路徑；已完成的主要隊列快取全部保留，尚未完成的情境依同一設定重算，沒有新增訓練。','',
       '相同樹數、深度與學習率僅對齊名義設定；作者 GBT 與 XGBoost 的梯度／切分／正則化仍不同。最接近機制控制的是同作者實作的 MA／無懲罰比較。各增強條件的 alpha 由 A/B 分別選定，兩個最終增強版本的差同時包含其選參結果；固定 alpha 的增強比較可在 A/B 全表查閱。另需注意：作者懲罰使用 mean(weight × missing)，分母是實際訓練行數；加權副本維持病例總權重，卻會改變行數。因此跨增強版本相同 alpha 不代表完全相同的有效懲罰強度；本輪沿作者公式，沒有另外修改正則化定義。','',
       'rho 僅統計直接讀到補值特徵的路徑；count、missing 旗標等已知輸入仍可被模型使用，低 rho 不等於完全不使用量測模式。','',
       '這輪為 seed42，沒有五種子重訓。補值依賴是任一預測路徑讀到補值的病例比例，樹數增加後此指標可能更易飽和；不能只看 AP 或只看 rho。原 XGBoost 參考列未在本輪量測 rho，保留空值，不補成零；同作者無懲罰 GBT 則有使用真實缺失矩陣量測。','',
@@ -121,7 +129,9 @@ def main():
       '```powershell','python src/train_ma_matched.py check','# 下列兩個訓練入口擇一；不用同時啟動',
       'python src/train_ma_matched.py train --workers 6','# 等價較快入口：先逐值核對，再續跑相同 protocol',
       'python src/assist_ma_matched_parallel.py check','python src/resume_ma_matched_parallel.py',
-      'python src/evaluate_ma_matched.py','# 公開彙總使用主環境，不載入模型','python src/publish_ma_matched.py','```','',
+      '# 評估入口擇一：原版或核對後的較快預測','python src/evaluate_ma_matched.py',
+      '# python src/evaluate_ma_matched_fast.py check','# python src/evaluate_ma_matched_fast.py',
+      '# 公開彙總使用主環境，不載入模型','python src/publish_ma_matched.py','```','',
       '既有 protocol／selection／frozen 與每個已完成擬合會核對來源再續跑，拒絕覆寫不同來源。獨立重訓須先改用新的輸出根目錄保存原凍結成果；不要刪除既有醫療資料與模型。']
     (REPORT/'P62_ma_gbt_matched_results.md').write_text('\n'.join(lines)+'\n',encoding='utf-8',newline='\n')
     print('Published aggregate-only P62 tables and limitations; local final report untouched.')
