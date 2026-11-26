@@ -1,0 +1,26 @@
+{
+  "complete": true,
+  "unique_cv": 96,
+  "final_fits": 12,
+  "selected_semantic_models": 12,
+  "primary_rows": 80,
+  "stress_rows": 2016,
+  "held_reports_preserved": 6,
+  "raw_data_or_weights_changed_in_git": false,
+  "checked_source_commit": "44d756c8783dafa6a14bf8ce2b9c45ab6f54dc65",
+  "validated_at": "2026-11-26T19:22:30.690967+08:00",
+  "public_summary_sha256": "e444856a51cda5aa6ba9a3269a6dde04f31d2bbe67d97e1098be655e104bf013",
+  "checks": [
+    "96 unique CV receipts and all fold metrics",
+    "A/B-only AP and rho95 selections recomputed",
+    "12 frozen model hashes and actual 300-tree depth-3 structures",
+    "all five cohorts and 13 original stress settings",
+    "original evaluation source hashes preserved",
+    "training and inference numerical equivalence",
+    "22 local evidence links",
+    "six held report files unchanged and untracked",
+    "explicit aggregate-only staging"
+  ],
+  "new_models_trained_on_gpu": 0,
+  "inference_diagnostic_model_fits": 0
+}

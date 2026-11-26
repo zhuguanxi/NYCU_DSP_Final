@@ -1,7 +1,15 @@
 # ICU 住院死亡預測：程式與重現入口
 
+<!-- P62_START -->
+## 最新補強：相同容量 MA-GBT
+
+全部新模型固定 300 棵、深度 3、學習率 0.05；同作者程式的無懲罰 GBT／MA-GBT 使用相同前處理、三折與 GCS60 加權副本。兩種 MA 選模口徑都只用 A/B，全部候選公開。
+
+[P62 結果與限制](reports/P62_ma_gbt_matched_results.md) · [事前規格](reports/P62_ma_gbt_matched_protocol.md) · [全部 A/B 候選](reports/P62_ab_candidates.csv) · [全部遮蔽](reports/P62_all_stress_metrics.csv)。程式入口為 `src/train_ma_matched.py`、`src/resume_ma_matched_parallel.py`、`src/evaluate_ma_matched.py`（或核對後的 `src/evaluate_ma_matched_fast.py`）及 `src/publish_ma_matched.py`；依結果文件選一個訓練入口，不能同時啟動兩個。相同名義容量仍不代表作者 GBT 與 XGBoost 為相同演算法；機制判斷優先看同作者無懲罰消融。這輪固定 seed42，沒有五種子或 P61 時間區段重跑。測試已反覆查看，Demo 亦非獨立完整版驗證。
+<!-- P62_END -->
+
 <!-- FINAL_REPORT_START -->
-研究定稿日期 **2026-11-23**，涵蓋 **P0–P61**。目前實驗已完成；本次只彙整既有結果，沒有新增訓練或簡報。
+P0–P61 於 **2026-11-23** 完成彙整；**2026-11-26** 新增 P62 MA-GBT 容量與懲罰消融，沒有製作簡報。
 
 **先讀：** [專案目標與核心結果](../README.md) · [完整階段索引](reports/研究進度總覽.md)。完整報告草稿與 PDF 目前僅保留本機，暫不公開。
 
