@@ -4,6 +4,7 @@ os.environ['CUDA_VISIBLE_DEVICES']='-1'
 for key in ('OMP_NUM_THREADS','MKL_NUM_THREADS','OPENBLAS_NUM_THREADS'):os.environ[key]='1'
 import argparse
 import json
+import importlib.metadata
 from pathlib import Path
 import time
 import joblib
@@ -32,7 +33,8 @@ def check_metrics():
         for p in (rng.random(n),rng.integers(5,size=n)/4):
             np.testing.assert_allclose(binary(y,p),list(score_metrics(y,p).values()),atol=1e-12,rtol=0)
 def frozen():
-    data=read(ROOT/'frozen.json');verify_sources(read(ROOT/'protocol.json'))
+    data=read(ROOT/'frozen.json');protocol=read(ROOT/'protocol.json');verify_sources(protocol)
+    assert sha(ROOT/'numeric_check.json')==protocol['numeric_check_sha256']
     assert data['training_only_AB'] and not data['test_accessed_for_selection']
     assert sha(ROOT/'selection.json')==data['selection_sha256'] and sha(ROOT/'protocol.json')==data['protocol_sha256']
     for r in data['fits']:assert sha(ROOT/'models'/f'{r["key"]}.joblib')==r['model_sha256']
@@ -63,6 +65,19 @@ def main():
     EVAL.mkdir(exist_ok=True)
     models={r['key']:joblib.load(ROOT/'models'/f'{r["key"]}.joblib') for r in meta['fits']}
     featuresets={r['key']:r['features'] for r in meta['fits']}
+    structures={}
+    for key,model in models.items():
+        depths=[];leaves=[]
+        assert len(model.estimators_)==300
+        for tree in model.estimators_.ravel():
+            todo=[tree.root_];depth=0;leaf=0
+            while todo:
+                node=todo.pop();depth=max(depth,node.depth)
+                if node.left_subtree is None:leaf+=1
+                else:todo.extend([node.left_subtree,node.right_subtree])
+            depths.append(depth);leaves.append(leaf)
+        assert max(depths)<=3
+        structures[key]=dict(trees=len(depths),maximum_depth=max(depths),mean_leaves=float(np.mean(leaves)))
     def predict(frame,include_rho=False):
         encoded={name:encode(frame,schemas[name]['final']) for name in ('Full','Elastic')}
         scores={};rhos={}
@@ -147,7 +162,9 @@ def main():
        primary=metricrows,stress=stressrows,paired=bootstrap,protected_evaluation_sources=protected,
        inference='fixed seed42 models; unadjusted paired intervals; no training/search uncertainty',
        original_xgb='P60 seed42 frozen models; current explicit urine alignment',frozen_sha256=sha(ROOT/'frozen.json'),
-       evaluation_source_sha256=sha(Path(__file__)),test_selected=False,model_fits_in_evaluation=0)
+       evaluation_source_sha256=sha(Path(__file__)),model_structure=structures,
+       runtime_versions={k:importlib.metadata.version(k) for k in ('numpy','scikit-learn','torch','numba','llvmlite')},
+       test_selected=False,model_fits_in_evaluation=0)
     write(EVAL/'summary.json',summary)
     pd.DataFrame(metricrows).to_csv(EVAL/'primary_metrics.csv',index=False)
     pd.DataFrame(stressrows).to_csv(EVAL/'all_stress_metrics.csv',index=False)
