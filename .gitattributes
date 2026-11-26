@@ -27,3 +27,7 @@ ML/reports/文獻定位與可比性.md text eol=lf
 # Binary report and figure files must never receive text conversion.
 *.pdf binary
 *.png binary
+
+# Preserve P62 matched-control source and evidence hashes.
+ML/src/*ma_matched*.py text eol=lf
+ML/reports/P62* text eol=lf
