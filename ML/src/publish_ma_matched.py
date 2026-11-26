@@ -13,7 +13,8 @@ def save(p,x):Path(p).write_text(json.dumps(x,ensure_ascii=False,indent=2,allow_
 def table(head,rows):return '\n'.join(['| '+' | '.join(head)+' |','| '+' | '.join(['---']*len(head))+' |']+['| '+' | '.join(map(str,r))+' |' for r in rows])
 def privacy(x):
     if isinstance(x,dict):
-        assert not set(x)&{'ids','y','probabilities','patientunitstayid','uniquepid','RecordID'}
+        assert not set(x)&{'ids','y','patientunitstayid','uniquepid','RecordID'}
+        if 'probabilities' in x:assert x['probabilities']=='exact', 'Only exact-check metadata is public; patient probabilities are forbidden'
         for value in x.values():privacy(value)
     elif isinstance(x,list):
         for value in x:privacy(value)
