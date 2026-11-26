@@ -101,6 +101,13 @@ def main():
           for case in ('clean','gcs_full','six_full','eicu_hourly','eicu_native')
           for name in ('Full','Elastic') for aug in ('plain','gcs60')
           for r in [evidence['paired'][case][f'{name}_{aug}_{policy}_minus_off']['ap']]]),'']
+    lines+=['## 與原凍結 XGBoost 的 AP 配對差','',
+      'MA-AP 依 A/B 的 AP 口徑選定；無增強對原 Full／Elastic，GCS60 對原 GCS-only 的相同欄位組。下表方向為 MA-AP 減 XGBoost，區間解讀同上；MA-rho95 與同作者無懲罰組的完整比較均保留於彙總 JSON。','',
+      table(['隊列','MA-AP 欄位／增強','XGBoost 對照','ΔAP','95% 區間'],[
+       [case,name+'／'+aug,label(ref),f'{r["delta"]:+.5f}',f'[{r["ci"][0]:+.5f}, {r["ci"][1]:+.5f}]']
+       for case in ('clean','gcs_full','six_full','eicu_hourly','eicu_native')
+       for name in ('Full','Elastic') for aug,ref in [('plain',f'XGB_{name}'),('gcs60',f'XGB_GCS_{name}')]
+       for r in [evidence['paired'][case][f'{name}_{aug}_ap_minus_{ref}']['ap']]]),'']
     lines+=['## 全部缺失結果與限制','',
       '原 P9 的 13 種設定、相同 32 次匹配遮蔽均完成；逐模型／位置的整體 AP、AUROC、Brier、敏感度見 [缺失總表](P62_all_stress_metrics.csv)。主要三情境與 Demo 的 rho 另列於 [主指標表](P62_primary_metrics.csv)。本輪沒有重跑 P61 連續時間區段設定，不將整欄結果延伸為全部時間缺失的結論。P9 匹配比例保留最初的 Demo 映射，其中尿量當時未對齊；現在 Demo 評估已使用修正尿量映射。因此這是固定的歷史壓力情境，不代表目前 Demo 仍有六欄同等程度的缺失，也不是六個最重要欄位的排名。','',
       f'本輪有 96 個唯一交叉驗證工作；另有 {execution.get("duplicate_cv_attempts",0)} 次已完成的相同設定重算，科學輸出逐值一致，未據此挑較高者。初期主佇列／獨立區塊各使用 6／4 個 CPU 工作，之後改用 6 個工作、每工作 2 線程的等價特徵與排序平行化。逐候選與整個 A/B 折的樹／機率核對均完全一致；不使用近似 binning 或改動切分規則。GPU 僅做相容性測試，沒有訓練任何本輪模型。','',
