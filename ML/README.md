@@ -1,15 +1,17 @@
 # ICU 住院死亡預測：程式與重現入口
 
 <!-- P63_START -->
-## 報告用模型五種子補齊（P63）
+## 報告六模型的共同標準（P63）
 
-**2026-11-28：報告用五種子已補齊。** 16 個固定預測程序各有五套實際權重，完成五個主要情境、400列逐種子指標與80列平均／樣本標準差。新增32次最終 A+B 擬合（MA24、R1八），另有12次三樹 A/B 數值診斷；沒有重新搜尋參數或挑種子。
+**2026-11-28 報告統一口徑：每個種子分別評估，再列五次指標算術平均 ± 樣本標準差（ddof=1）。** AP、AUROC、Brier 與固定0.5敏感度全部遵循同一規則；不平均不同種子模型的機率、不挑最好種子。
 
-P22 沿已保存的五套時間窗權重補獨立評估；P28、P26、GCS-only、Full／Elastic、KEDGN 沿既有權重。MA 的 Full 六個固定程序與 R1 兩配置補足 seeds43–46，原 seed42 不覆寫。KEDGN 仍用作者 seeds0–4，其餘42–46。
+六組主模型為 Full、P22、P62 MA-AP Full＋GCS60、P28、KEDGN A+B 與 R1 論文參數版。P28 的既定表格混合是其模型架構，每個種子分別執行；它不額外跨種子集成。
 
-主結果先各算一次 AP 等指標，再列五次算術平均 ± 樣本 SD（ddof=1）；五模型機率集成另表，不互換。Full／Elastic、GCS-only、R1 及 MA 六程序已逐筆確認五情境各自的五次機率完全相同，SD=0 並非四捨五入；這不是五份獨立測試。Set C／Demo 已反覆查看，外部泛化仍未獨立確認。
+本次只統一展示，400列逐種子指標、80列平均／SD、權重、病例及前處理完全不變，新增擬合0次。六模型四指標CSV共30列，涵蓋三種 Set C 情境及 Demo 兩種取樣。下方其他階段結果為歷史紀錄，不直接帶入本次六模型主表。
 
-[主結果／限制／重跑](reports/P63_report_five_seed_results.md) · [規格](reports/P63_report_five_seed_protocol.md) · [驗收](reports/P63_verification.json)。程式入口在 `src/train_report_r1_seeds.py`、`src/train_report_ma_seeds.py`、`src/freeze_report_seed_study.py`、`src/evaluate_report_ma_seeds.py`、`src/evaluate_report_seeds.py`、`src/publish_report_seed_results.py` 與 `src/verify_report_seed_results.py`。模型索引與個案預測保存在 Git 排除的 `artifacts/p63_report_five_seed/`。
+Full／Elastic、GCS-only、R1 及 MA 六程序的五次逐筆預測相同，SD=0 如實保留；這不代表五份獨立測試。Set C／Demo 已反覆查看，外部改善仍未獨立確認。
+
+[四指標結果／重跑](reports/P63_report_five_seed_results.md) · [統一口徑](reports/P63_reporting_standard.md) · [六模型四指標CSV](reports/P63_main_model_metrics.csv) · [驗收](reports/P63_verification.json)。模型與逐筆預測留在 Git 排除的 `artifacts/p63_report_five_seed/`。
 <!-- P63_END -->
 
 <!-- P62_START -->
@@ -45,7 +47,7 @@ P0–P61 於 **2026-11-23** 完成彙整；**2026-11-26** 新增 P62 MA-GBT 容�
 
 `src/` 保留原始表格準備、開發與 Set C 評估入口；`related_work/` 包含後續對齊、缺失與序列實驗；`reporting/` 只做定稿編排。依各階段 protocol 使用相應環境，MA-GBT CPU 與 KEDGN 環境分開。資料、環境、cache、權重、parquet/joblib/npz 及逐筆分數由根目錄 `.gitignore` 排除；不把 PhysioNet／eICU 原始資料提交 Git。
 
-原 0.60447 是單一凍結 P33 的 Set C AP；五種子指標平均 0.60084 ± 0.00214、五種子機率集成 0.60290 各有不同口徑。以下 P0–P6 細節作為歷史紀錄；期末報告相關檔案暫不納入 Git。
+P33 等舊階段數字保留為歷史；目前六模型報告以 P63 的逐種子指標平均／SD 為準。以下 P0–P6 為開發歷史，正式期末報告相關檔案仍不納入 Git。
 
 ## 原表格基準與開發歷史
 

@@ -1,5 +1,19 @@
 # KEDGN
 
+<!-- P63_START -->
+## 正式報告採用的 KEDGN A+B
+
+**2026-11-28 報告統一口徑：每個種子分別評估，再列五次指標算術平均 ± 樣本標準差（ddof=1）。** AP、AUROC、Brier 與固定0.5敏感度全部遵循同一規則；不平均不同種子模型的機率、不挑最好種子。
+
+| 隊列 | AP | AUROC | Brier | 敏感度 @0.5 |
+| --- | ---: | ---: | ---: | ---: |
+| Set C 未遮蔽 | 0.54569 ± 0.01202 | 0.86618 ± 0.00483 | 0.14247 ± 0.01525 | 0.76034 ± 0.04488 |
+| Demo 整點 | 0.40869 ± 0.02251 | 0.79418 ± 0.01360 | 0.16151 ± 0.05144 | 0.65275 ± 0.11383 |
+| Demo 原始間隔 | 0.39718 ± 0.02370 | 0.79235 ± 0.01329 | 0.16600 ± 0.05669 | 0.65055 ± 0.13173 |
+
+[六模型共同結果](../../reports/P63_report_five_seed_results.md) · [統一口徑](../../reports/P63_reporting_standard.md)。五次使用相同隊列，SD不是患者信賴區間。
+<!-- P63_END -->
+
 作者版本 c82bc004cd1d1305fc58ca7150369d78682fccad，使用 physionet 的住院死亡設定及作者第 5 折。論文 ChatGPT 變體在該欄報告 AUROC 87.9%、AUPRC 57.1%。 [GitHub](https://github.com/qianlima-lab/KEDGN) · [論文表 1](https://proceedings.neurips.cc/paper_files/paper/2024/file/7c04aea54c2a60a632a47bd451cd2849-Paper-Conference.pdf)
 
 用官方 Set A 經作者腳本重建 3,997 筆序列，按作者已提交的結果陣列順序核對每筆 ID 和死亡標籤。採已附的 BERT 與 GPT 來源變數表示。CPU 工作副本修改寫死的 CUDA 呼叫、模型讀取位置與作者前處理成功後的非零結束碼。
@@ -34,30 +48,10 @@ $py = '.\artifacts\ma_gbt_runtime\.venv\Scripts\python.exe'
 & $py related_work/run_cpu.py KEDGN --profile paper_schedule --tag kedgn_cpu_rerun
 ```
 
-## P53：凍結模型的 Set C 與 eICU Demo
+## 共同隊列訓練與歷史
 
-2026 年 11 月 21 日已使用上述五個驗證 AP 最佳權重，先逐種子重現作者測試 AP／AUROC，再評估本組兩個資料集。模型擬合 0 次，全程 CPU；主要分數事先固定為五種子機率等權平均。
+P53沿作者Set A訓練權重做凍結轉移。P54改用A/B 8,000次住院／1,122次死亡，在原三折的合併折外AP選出共同9輪，再訓練seeds0–4。本次六模型報告使用這五套A+B權重，沒有重訓或重新選輪次。
 
-| 測試隊列 | 住院／死亡 | KEDGN AP | KEDGN AUROC |
-| --- | ---: | ---: | ---: |
-| P12 Set C | 4,000／585 | 0.54977 | 0.86636 |
-| eICU Demo 整點 | 782／91 | 0.44998 | 0.81177 |
-| eICU Demo 原始間隔 | 782／91 | 0.44596 | 0.81209 |
+模型保留作者架構、參數、平衡採樣與有效batch256。GPU版採等價遮罩批次運算，已核對原作者輸出及有效參數梯度；資料、模型及逐筆預測留在本機。選輪次改用雙類softmax AP，與原作者驗證程式的正類logit sigmoid AP有差異，見原訓練規格。
 
-這些是凍結模型的測試結果。前文 56.8%／88.0% 是作者 Set A 內 399 筆測試的五種子指標平均，不能當成本組 Set C 成績。完整種子、七組原模型、配對差值區間及前處理限制見 [P53 結果](../../reports/P53_kedgn_frozen_transfer_results.md) 和 [凍結評估規格](FROZEN_TRANSFER_PROTOCOL.md)。
-
-P53 KEDGN 訓練為作者 Set A 的 3,198 筆，本組原模型訓練為 A+B 8,000 筆。當時依凍結模型要求未重訓；後續 A+B 比較見 P54。R1 已取消。
-
-## P54：A+B 三折開發與五種子重訓
-
-依使用者後續指示，使用原 A/B 8,000 筆、1,122 次死亡和原三折，固定作者參數，只以三折合併折外 AP 從 1–10 輪中選共同輪次。選出 **9 輪**，A/B pooled OOF AP **0.52450**、AUROC **0.85330**。之後全 A+B 以 seed 0–4 各訓練 9 輪，凍結後才做同病例的 Set C 與 eICU Demo 推論。
-
-使用 RTX 4060 Laptop GPU 與獨立 Torch 2.1.2+cu121 環境。保留作者架構、平衡採樣及有效 batch 256，將逐觀測節點的索引計算改成等價遮罩批次運算；與原作者 CPU 輸出及有效參數梯度核對通過，初始最大差約 8.94×10⁻⁸。資料、折外預測、checkpoint、權重及逐筆測試預測只留本機。
-
-[P54 完整結果、各種子及配對區間](../../reports/P54_kedgn_ab_transfer_results.md) · [A+B 規格與重跑方式](AB_RETRAIN_PROTOCOL.md)。同訓練病例數下仍有特徵表示、前處理、五種子平均和選模規則的差異，限制保留於報告。
-
-| 同病例測試 | A+B KEDGN AP | Set A KEDGN AP | A+B KEDGN AUROC |
-| --- | ---: | ---: | ---: |
-| P12 Set C | 0.57502 | 0.54977 | 0.87790 |
-| eICU Demo 整點 | 0.46375 | 0.44998 | 0.81484 |
-| eICU Demo 原始間隔 | 0.44640 | 0.44596 | 0.81308 |
+[A+B訓練規格](AB_RETRAIN_PROTOCOL.md) · [歷史P53紀錄](../../reports/P53_kedgn_frozen_transfer_results.md) · [歷史P54紀錄](../../reports/P54_kedgn_ab_transfer_results.md)。歷史轉移結果使用的集成與配對區間不納入目前報告；目前六模型比較以P63為準。前文作者Set A內399筆測試的復現分數，亦不是本組Set C分數。

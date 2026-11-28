@@ -6,7 +6,8 @@
   "primary_cases": 5,
   "individual_metric_rows": 400,
   "mean_sd_rows": 80,
-  "ensemble_rows": 80,
+  "main_four_metric_rows": 30,
+  "cross_seed_probability_averaging": false,
   "seed_difference_rows": 275,
   "new_formal_fits": 32,
   "AB_numerical_diagnostic_fits": 12,
@@ -83,5 +84,5 @@
     }
   },
   "figure_sha256": "7b46fa07dc0f73a4cdd4055b53b379a19c6fd0875d7bc9aaf46986cb39e0d857",
-  "public_summary_sha256": "eb07e6f2fd955ae4c6dc5c34f281b10b37a9a7e9a5db6fbfc853222484dfa8e4"
+  "public_summary_sha256": "9a09e7a852af30627d8b0b73cde8f4db1ca9e8122df184601de1104f44fe7cfe"
 }
