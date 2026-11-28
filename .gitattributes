@@ -31,3 +31,11 @@ ML/reports/文獻定位與可比性.md text eol=lf
 # Preserve P62 matched-control source and evidence hashes.
 ML/src/*ma_matched*.py text eol=lf
 ML/reports/P62* text eol=lf
+
+# Preserve P63 report completion sources and aggregate evidence.
+ML/src/report_seed_common.py text eol=lf
+ML/src/train_report_*_seeds.py text eol=lf
+ML/src/r1_report_features.py text eol=lf
+ML/src/*report*seeds*.py text eol=lf
+ML/src/freeze_report_seed_study.py text eol=lf
+ML/reports/P63* text eol=lf
