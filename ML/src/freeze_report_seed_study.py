@@ -9,6 +9,7 @@ def validate_frozen():
   for path,digest in record['weight_files'].items():assert sha(ML/path)==digest,path
  assert sha(ROOT/'ma_frozen.json')==value['ma_frozen_sha256']
  assert sha(ROOT/'r1_frozen.json')==value['r1_frozen_sha256']
+ verify_sources(value['evaluation_input_sha256'])
  return value
 
 def main():
@@ -49,9 +50,22 @@ def main():
  for name in MODELS:
   assert {r['seed'] for r in records if r['model']==name}==set(range(5) if name=='kedgn_ab' else SEEDS)
  assert sum(r['new_fit'] for r in records)==32
+ legacy_cases=read(P60/'evaluation.json')
+ assert legacy_cases['stress_inputs_sha256']==sha(P61/'inputs.json')
+ mask_cases={r['name']:r for r in read(P61/'inputs.json')['cases']}
+ p62_sources=read(P62/'evaluation/summary.json')['protected_evaluation_sources']
+ evaluation_inputs={}
+ for case in CASES:
+  features,timing=case_paths(case)
+  if not case.startswith('eicu'):
+   for file in (features,timing):assert sha(file)==mask_cases[case]['files'][file.name]
+  else:assert sha(features)==p62_sources[relative(features)]
+  prediction=ML/legacy_cases['cases'][case]['file']
+  assert sha(prediction)==legacy_cases['cases'][case]['sha256']
+  for file in (features,timing,prediction):evaluation_inputs[relative(file)]=sha(file)
  value=dict(protocol_sha256=sha(ROOT/'protocol.json'),records=records,new_formal_fits=32,
   diagnostic_fits=12,ma_frozen_sha256=sha(ROOT/'ma_frozen.json'),r1_frozen_sha256=sha(ROOT/'r1_frozen.json'),
-  test_selected=False,training_only_AB=True,parameters_reselected=False)
+  test_selected=False,training_only_AB=True,parameters_reselected=False,evaluation_input_sha256=evaluation_inputs)
  path=ROOT/'frozen.json'
  if path.exists():assert read(path)==value
  else:write(path,value)
