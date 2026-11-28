@@ -40,3 +40,7 @@ ML/src/*report*seeds*.py text eol=lf
 ML/src/freeze_report_seed_study.py text eol=lf
 ML/reports/P63* text eol=lf
 ML/src/*report*seed*.py text eol=lf
+ML/related_work/audit_kedgn_implementation.py text eol=lf
+ML/related_work/replay_kedgn_original_cohorts.py text eol=lf
+ML/related_work/publish_kedgn_implementation_audit.py text eol=lf
+ML/reports/P64* text eol=lf
