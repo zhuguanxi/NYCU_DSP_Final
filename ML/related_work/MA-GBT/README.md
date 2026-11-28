@@ -1,5 +1,13 @@
 # MA GBT
 
+<!-- P63_START -->
+## P63：Full 報告程序的五種子
+
+P62 的 Full 無增強／GCS60，各自 off、AP選模與rho95選模六程序，全部補足 seeds42–46。alpha 沿原 A/B 選擇固定，未重搜。新增24次最終 A+B 擬合，原seed42逐筆預測與rho均核對一致。
+
+[五次平均／SD與全部rho](../../reports/P63_report_five_seed_results.md) · [驗收](../../reports/P63_verification.json)。P62 Elastic 與完整 alpha CV 網格仍保留原歷史範圍，本輪擴充的是報告用 Full 程序。主結果先各算一次 AP 等指標，再列五次算術平均 ± 樣本 SD（ddof=1）；五模型機率集成另表，不互換。Full／Elastic、GCS-only、R1 及 MA 六程序已逐筆確認五情境各自的五次機率完全相同，SD=0 並非四捨五入；這不是五份獨立測試。Set C／Demo 已反覆查看，外部泛化仍未獨立確認。
+<!-- P63_END -->
+
 <!-- P62_START -->
 ## P62：300 棵／深度 3 的補強
 

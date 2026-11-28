@@ -1,5 +1,17 @@
 # ICU 住院死亡預測：程式與重現入口
 
+<!-- P63_START -->
+## 報告用模型五種子補齊（P63）
+
+**2026-11-28：報告用五種子已補齊。** 16 個固定預測程序各有五套實際權重，完成五個主要情境、400列逐種子指標與80列平均／樣本標準差。新增32次最終 A+B 擬合（MA24、R1八），另有12次三樹 A/B 數值診斷；沒有重新搜尋參數或挑種子。
+
+P22 沿已保存的五套時間窗權重補獨立評估；P28、P26、GCS-only、Full／Elastic、KEDGN 沿既有權重。MA 的 Full 六個固定程序與 R1 兩配置補足 seeds43–46，原 seed42 不覆寫。KEDGN 仍用作者 seeds0–4，其餘42–46。
+
+主結果先各算一次 AP 等指標，再列五次算術平均 ± 樣本 SD（ddof=1）；五模型機率集成另表，不互換。Full／Elastic、GCS-only、R1 及 MA 六程序已逐筆確認五情境各自的五次機率完全相同，SD=0 並非四捨五入；這不是五份獨立測試。Set C／Demo 已反覆查看，外部泛化仍未獨立確認。
+
+[主結果／限制／重跑](reports/P63_report_five_seed_results.md) · [規格](reports/P63_report_five_seed_protocol.md) · [驗收](reports/P63_verification.json)。程式入口在 `src/train_report_r1_seeds.py`、`src/train_report_ma_seeds.py`、`src/freeze_report_seed_study.py`、`src/evaluate_report_ma_seeds.py`、`src/evaluate_report_seeds.py`、`src/publish_report_seed_results.py` 與 `src/verify_report_seed_results.py`。模型索引與個案預測保存在 Git 排除的 `artifacts/p63_report_five_seed/`。
+<!-- P63_END -->
+
 <!-- P62_START -->
 ## 最新補強：相同容量 MA-GBT
 

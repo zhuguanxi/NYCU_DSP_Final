@@ -1,0 +1,87 @@
+{
+  "complete": true,
+  "predictors": 16,
+  "weight_sets": 80,
+  "unique_weight_files": 80,
+  "primary_cases": 5,
+  "individual_metric_rows": 400,
+  "mean_sd_rows": 80,
+  "ensemble_rows": 80,
+  "seed_difference_rows": 275,
+  "new_formal_fits": 32,
+  "AB_numerical_diagnostic_fits": 12,
+  "evaluation_fits": 0,
+  "sample_sd_independently_recomputed": true,
+  "all_weight_hashes_verified": true,
+  "all_seed_sets_verified": true,
+  "all_seed42_references_preserved": true,
+  "held_report_files_preserved": 6,
+  "seed_probability_checks": {
+    "frozen_full": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "frozen_elastic": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "gcs_only_full": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "gcs_only_elastic": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "p26": {
+      "exact_cases": 0,
+      "maximum_probability_difference": 0.3803060124020433
+    },
+    "p28": {
+      "exact_cases": 0,
+      "maximum_probability_difference": 0.1837007448349915
+    },
+    "p22": {
+      "exact_cases": 0,
+      "maximum_probability_difference": 0.3055002689361572
+    },
+    "kedgn_ab": {
+      "exact_cases": 0,
+      "maximum_probability_difference": 0.8385853431797647
+    },
+    "r1_paper": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "r1_matched": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "ma_plain_off": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "ma_plain_ap": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "ma_plain_rho95": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "ma_gcs60_off": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "ma_gcs60_ap": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    },
+    "ma_gcs60_rho95": {
+      "exact_cases": 5,
+      "maximum_probability_difference": 0.0
+    }
+  },
+  "figure_sha256": "7b46fa07dc0f73a4cdd4055b53b379a19c6fd0875d7bc9aaf46986cb39e0d857",
+  "public_summary_sha256": "eb07e6f2fd955ae4c6dc5c34f281b10b37a9a7e9a5db6fbfc853222484dfa8e4"
+}
