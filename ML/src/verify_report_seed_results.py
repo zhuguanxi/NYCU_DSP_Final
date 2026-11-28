@@ -71,6 +71,7 @@ def main():
   new_formal_fits=32,AB_numerical_diagnostic_fits=12,evaluation_fits=0,
   sample_sd_independently_recomputed=True,all_weight_hashes_verified=True,all_seed_sets_verified=True,
   all_seed42_references_preserved=True,held_report_files_preserved=len(protected),
+  figure_sha256=sha(ML/'figures/P63_report_five_seed_AP.png'),
   public_summary_sha256=sha(ML/'reports/P63_report_five_seed_summary.json'))
  write(ML/'reports/P63_verification.json',verification)
  print(__import__('json').dumps(verification,indent=2),flush=True)

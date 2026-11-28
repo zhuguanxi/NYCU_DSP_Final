@@ -93,11 +93,14 @@ def main():
  csv_file(REPORT/'P63_mean_sd_results.csv',means)
  csv_file(REPORT/'P63_probability_ensembles.csv',ensembles)
  csv_file(REPORT/'P63_seed_differences.csv',differences)
+ from plot_report_seed_results import main as plot
+ plot()
  mean={(r['cohort'],r['model']):r for r in means};ens={(r['cohort'],r['model']):r for r in ensembles}
  fmt=lambda case,name:f'{mean[case,name]["ap_mean"]:.5f} ± {mean[case,name]["ap_sd"]:.5f}'
  lines=['# P63：報告用固定五種子結果','',
   '本輪補齊報告用六組主模型與必要控制組，總共 **16 個固定預測程序 × 五種子權重 × 五個主要情境**。全體權重先封存後評估，沒有重選參數／alpha／種子。主表為 **先各算一次指標，再取五次算術平均 ± 樣本標準差（ddof=1）**。標準差不是患者信賴區間。','',
   '新增 24 次 MA Full 與八次 R1 最終 A+B 擬合，共 **32 次正式擬合**；另有 12 次 A/B 三樹數值診斷，與正式結果分開。其餘重用既有權重，沒有重訓 KEDGN。新增訓練沿原 CPU 演算法；使用者允許 GPU，本輪沒有為裝置更換演算法。','',
+  '![五種子 AP 平均與樣本標準差](../figures/P63_report_five_seed_AP.png)','',
   '## 六組主模型：AP 平均 ± 種子 SD','',
   table(['模型',*[CASE_NAMES[c] for c in CASES]],[[NAMES[n],*[fmt(c,n) for c in CASES]] for n in MAIN]),'',
   '## 支持組與 MA 機制控制','',
