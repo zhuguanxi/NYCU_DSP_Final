@@ -16,6 +16,18 @@ def main():
  for group in (ma,r1):assert group['protocol_sha256']==sha(ROOT/'protocol.json') and not group['test_used']
  assert ma['new_fits']==24 and r1['new_fits']==8
  p60=read(P60/'frozen.json');kg=read(KG/'frozen.json');records=[]
+ assert p60['selected_seed'] is None and not p60['selected_on_tests']
+ verify_sources(p60['protocol']['source_sha256'])
+ verify_sources(read(P62/'protocol.json')['source_sha256'])
+ prior_ma=read(P62/'frozen.json')
+ assert prior_ma['training_only_AB'] and not prior_ma['test_accessed_for_selection']
+ for name,aug,alpha,_ in MA_CONFIGS:
+  policy=name.rsplit('_',1)[1]
+  selected=next(r for r in prior_ma['selected'] if r['features']=='Full' and r['augmentation']==aug and r['policy']==policy)
+  assert selected['alpha']==alpha
+ assert not kg['test_data_used'] and kg['selection_sha256']==sha(KG/'selection.json')
+ assert read(KG/'selection.json')['selected_epoch']==9
+ assert all(r['epochs']==9 and r['training_stays']==8000 for r in kg['seeds'].values())
  simple={'frozen_full':'Full.joblib','frozen_elastic':'Elastic.joblib','gcs_only_full':'gcs_Full.joblib',
   'gcs_only_elastic':'gcs_Elastic.joblib','p22':'temporal.joblib'}
  for seed in SEEDS:
