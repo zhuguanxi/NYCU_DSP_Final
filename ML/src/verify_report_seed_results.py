@@ -13,11 +13,14 @@ def main():
  assert public['frozen_sha256']==sha(ROOT/'frozen.json') and public['selected_seed'] is None
  assert public['evaluation_summary_sha256']==sha(ROOT/'evaluation/summary.json')
  assert not public['test_selected'] and not public['parameters_reselected']
- assert len(public['individual_metrics'])==400 and len(public['mean_sd'])==len(public['probability_ensembles'])==80
+ assert len(public['individual_metrics'])==400 and len(public['mean_sd'])==80
+ assert public['cross_seed_probability_averaging'] is False and 'probability_ensembles' not in public
+ assert public['main_metrics']==['ap','auroc','brier','sensitivity'] and public['sensitivity_threshold']==0.5
+ assert public['reporting_standard_sha256']==sha(ML/'reports/P63_reporting_standard.md')
+ assert not (ML/'reports/P63_probability_ensembles.csv').exists()
  assert public['individual_metrics']==[{**r,'ap_drop_from_clean':next(c['ap'] for c in evaluation['rows'] if c['cohort']=='clean' and c['model']==r['model'] and c['seed']==r['seed'])-r['ap'] if not r['cohort'].startswith('eicu') else None} for r in evaluation['rows']]
  actual={(r['cohort'],r['model'],r['seed']):r for r in public['individual_metrics']}
  means={(r['cohort'],r['model']):r for r in public['mean_sd']}
- ensembles={(r['cohort'],r['model']):r for r in public['probability_ensembles']}
  seed_probability_checks={name:dict(exact_cases=0,maximum_probability_difference=0.) for name in MODELS}
  for case in CASES:
   path=ROOT/'evaluation'/f'{case}.npz';info=evaluation['cases'][case]
@@ -48,8 +51,6 @@ def main():
      mean=means[case,name]
      assert abs(mean[key+'_mean']-statistics.mean(v))<1e-12
      assert abs(mean[key+'_sd']-statistics.stdev(v))<1e-12
-    computed=score_metrics(p['y'],p['predictions'][j].mean(axis=0,dtype=np.float64))
-    for key,value in computed.items():assert abs(ensembles[case,name][key]-value)<1e-12
  ma=read(ROOT/'ma_frozen.json');r1=read(ROOT/'r1_frozen.json')
  assert len(ma['records'])==30 and len(r1['records'])==10
  assert sum(r['new_fit'] for r in ma['records'])==24
@@ -62,17 +63,24 @@ def main():
  tracked=subprocess.check_output(['git','ls-files','-z'],cwd=REPO,text=True,encoding='utf-8').split('\0')
  for path in protected:assert 'ML/'+path not in tracked
  for filename,count in (('P63_all_seed_results.csv',400),('P63_mean_sd_results.csv',80),
-  ('P63_probability_ensembles.csv',80),('P63_seed_differences.csv',275)):
+  ('P63_main_model_metrics.csv',30),('P63_seed_differences.csv',275)):
   with (ML/'reports'/filename).open(encoding='utf-8',newline='') as stream:
    reader=csv.DictReader(stream);rows=list(reader)
    assert len(rows)==count and not set(reader.fieldnames)&{'ids','y','probabilities','RecordID','patientunitstayid','uniquepid'}
+ with (ML/'reports/P63_main_model_metrics.csv').open(encoding='utf-8',newline='') as stream:
+  main_rows=list(csv.DictReader(stream))
+ assert {(r['cohort'],r['model']) for r in main_rows}=={(c,n) for c in CASES for n in MAIN}
+ for row in main_rows:
+  expected=means[row['cohort'],row['model']]
+  for metric in ('ap','auroc','brier','sensitivity'):
+   for suffix in ('_mean','_sd'):assert float(row[metric+suffix])==expected[metric+suffix]
  assert all(len(r['seeds'])==r['weight_sets']==5 for r in public['inventory'])
  weight_files={p for r in frozen['records'] for p in r['weight_files']}
  for path in weight_files:
   result=subprocess.run(['git','check-ignore','--quiet','--','ML/'+path],cwd=REPO)
   assert result.returncode==0,path
  verification=dict(complete=True,predictors=16,weight_sets=80,unique_weight_files=len(weight_files),
-  primary_cases=5,individual_metric_rows=400,mean_sd_rows=80,ensemble_rows=80,seed_difference_rows=275,
+  primary_cases=5,individual_metric_rows=400,mean_sd_rows=80,main_four_metric_rows=30,cross_seed_probability_averaging=False,seed_difference_rows=275,
   new_formal_fits=32,AB_numerical_diagnostic_fits=12,evaluation_fits=0,
   sample_sd_independently_recomputed=True,all_weight_hashes_verified=True,all_seed_sets_verified=True,
   all_seed42_references_preserved=True,held_report_files_preserved=len(protected),
