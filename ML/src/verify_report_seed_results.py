@@ -18,6 +18,7 @@ def main():
  actual={(r['cohort'],r['model'],r['seed']):r for r in public['individual_metrics']}
  means={(r['cohort'],r['model']):r for r in public['mean_sd']}
  ensembles={(r['cohort'],r['model']):r for r in public['probability_ensembles']}
+ seed_probability_checks={name:dict(exact_cases=0,maximum_probability_difference=0.) for name in MODELS}
  for case in CASES:
   path=ROOT/'evaluation'/f'{case}.npz';info=evaluation['cases'][case]
   assert sha(path)==info['predictions_sha256'];verify_sources(info['input_sha256']);verify_sources(info['source_sha256'])
@@ -29,6 +30,10 @@ def main():
    assert len(set(p['ids']))==len(p['y'])
    assert list(p['models'])==list(MODELS)
    for j,name in enumerate(p['models']):
+    probabilities=p['predictions'][j]
+    check=seed_probability_checks[str(name)]
+    check['exact_cases']+=int(np.array_equal(probabilities,np.broadcast_to(probabilities[0],probabilities.shape)))
+    check['maximum_probability_difference']=max(check['maximum_probability_difference'],float(np.max(np.abs(probabilities-probabilities[0]))))
     assert list(p['seeds'][j])==list(range(5) if name=='kedgn_ab' else SEEDS)
     values={key:[] for key in ('ap','auroc','brier','sensitivity')}
     for i,seed in enumerate(p['seeds'][j]):
@@ -71,6 +76,7 @@ def main():
   new_formal_fits=32,AB_numerical_diagnostic_fits=12,evaluation_fits=0,
   sample_sd_independently_recomputed=True,all_weight_hashes_verified=True,all_seed_sets_verified=True,
   all_seed42_references_preserved=True,held_report_files_preserved=len(protected),
+  seed_probability_checks=seed_probability_checks,
   figure_sha256=sha(ML/'figures/P63_report_five_seed_AP.png'),
   public_summary_sha256=sha(ML/'reports/P63_report_five_seed_summary.json'))
  write(ML/'reports/P63_verification.json',verification)
