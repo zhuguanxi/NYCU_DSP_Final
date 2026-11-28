@@ -1,0 +1,34 @@
+{
+  "complete": true,
+  "new_fits": 10,
+  "actual_seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "new_models": 2,
+  "cohorts": 5,
+  "individual_metric_rows": 50,
+  "mean_sd_rows": 10,
+  "comparison_rows": 10,
+  "six_model_four_metric_rows": 30,
+  "actual_colsample": 0.9,
+  "row_subsample": 1.0,
+  "other_parameters_fixed": true,
+  "all_weight_hashes_verified": true,
+  "all_primary_metrics_recomputed": true,
+  "sample_sd_ddof": 1,
+  "original_P63_numerical_CSVs_unchanged": true,
+  "protected_report_files_preserved": 6,
+  "distinct_tree_structures": {
+    "full_col90": 5,
+    "r1_paper_col90": 5
+  },
+  "all_new_AP_sds_nonzero": true,
+  "no_cross_seed_probability_averaging": true,
+  "test_selection": false,
+  "environment_matches_training_protocol": true,
+  "summary_sha256": "7fc6c756eeac1e394895d03031836b3e18d7b08d5fc33e92d14637c33dc0a4f3"
+}

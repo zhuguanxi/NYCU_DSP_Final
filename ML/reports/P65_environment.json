@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-28",
+  "OS": {
+    "name": "Microsoft Windows 11 家用版",
+    "architecture": "64-bit",
+    "kernel": "10.0.26300",
+    "build": "26300",
+    "revision": 10075,
+    "display_version": "26H2"
+  },
+  "main_environment": {
+    "python": "3.12.13",
+    "libraries": {
+      "xgboost": "3.4.1",
+      "lightgbm": "4.7.0",
+      "scikit-learn": "1.9.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "pyarrow": "26.0.0",
+      "matplotlib": "3.11.2"
+    }
+  },
+  "separate_environments": {
+    "KEDGN_GPU": {
+      "python": "3.11.2",
+      "libraries": {
+        "torch": "2.1.2+cu121",
+        "scikit-learn": "1.3.2",
+        "numpy": "1.25.2",
+        "pandas": "2.1.4"
+      }
+    },
+    "MA_GBT": {
+      "python": "3.11.2",
+      "libraries": {
+        "torch": "2.1.2+cpu",
+        "scikit-learn": "1.5.2",
+        "numpy": "1.25.2",
+        "pandas": "2.2.3"
+      }
+    }
+  },
+  "tools": {
+    "git": "git version 2.49.0.windows.1",
+    "uv": "uv 0.11.8 (0e961dd9a 2026-04-27 x86_64-pc-windows-msvc)"
+  },
+  "scope": "Current important runtime versions, not a claim that every historical experiment used one environment"
+}
