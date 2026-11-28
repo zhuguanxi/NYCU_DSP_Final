@@ -1,0 +1,719 @@
+{
+  "complete": true,
+  "date": "2026-11-28",
+  "author_commit": "c82bc004cd1d1305fc58ca7150369d78682fccad",
+  "primary_results_changed": false,
+  "new_formal_fits": 0,
+  "diagnostic_optimizers": 2,
+  "diagnostic_updates_per_optimizer": 3,
+  "cross_seed_probability_averaging": false,
+  "sample_sd_ddof": 1,
+  "individual_metrics": [
+    {
+      "group": "author_split_reproduction",
+      "seed": 0,
+      "training_stays": 3198,
+      "stays": 399,
+      "deaths": 51,
+      "ap": 0.547697018552128,
+      "auroc": 0.875140860942078,
+      "brier": 0.12611590400297468,
+      "sensitivity": 0.7058823529411765
+    },
+    {
+      "group": "author_split_reproduction",
+      "seed": 1,
+      "training_stays": 3198,
+      "stays": 399,
+      "deaths": 51,
+      "ap": 0.5785004639078978,
+      "auroc": 0.89272030651341,
+      "brier": 0.13755780220525926,
+      "sensitivity": 0.8235294117647058
+    },
+    {
+      "group": "author_split_reproduction",
+      "seed": 2,
+      "training_stays": 3198,
+      "stays": 399,
+      "deaths": 51,
+      "ap": 0.5683893721042725,
+      "auroc": 0.8813387423935091,
+      "brier": 0.1532558801987497,
+      "sensitivity": 0.8235294117647058
+    },
+    {
+      "group": "author_split_reproduction",
+      "seed": 3,
+      "training_stays": 3198,
+      "stays": 399,
+      "deaths": 51,
+      "ap": 0.5925940797510919,
+      "auroc": 0.8803245436105476,
+      "brier": 0.13792809793409183,
+      "sensitivity": 0.8235294117647058
+    },
+    {
+      "group": "author_split_reproduction",
+      "seed": 4,
+      "training_stays": 3198,
+      "stays": 399,
+      "deaths": 51,
+      "ap": 0.5513880371564185,
+      "auroc": 0.8685485688528285,
+      "brier": 0.13623306540555336,
+      "sensitivity": 0.7254901960784313
+    },
+    {
+      "group": "author_frozen_to_Set_C",
+      "seed": 0,
+      "training_stays": 3198,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5233714088343027,
+      "auroc": 0.8571205466081013,
+      "brier": 0.13542589772632777,
+      "sensitivity": 0.7111111111111111
+    },
+    {
+      "group": "author_frozen_to_Set_C",
+      "seed": 1,
+      "training_stays": 3198,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5069602384334858,
+      "auroc": 0.8441686376093404,
+      "brier": 0.14999315684420084,
+      "sensitivity": 0.7504273504273504
+    },
+    {
+      "group": "author_frozen_to_Set_C",
+      "seed": 2,
+      "training_stays": 3198,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5202521492912464,
+      "auroc": 0.8547123675088535,
+      "brier": 0.15999043335897056,
+      "sensitivity": 0.7760683760683761
+    },
+    {
+      "group": "author_frozen_to_Set_C",
+      "seed": 3,
+      "training_stays": 3198,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5504399581818077,
+      "auroc": 0.8699498191738309,
+      "brier": 0.14772270390487108,
+      "sensitivity": 0.7948717948717948
+    },
+    {
+      "group": "author_frozen_to_Set_C",
+      "seed": 4,
+      "training_stays": 3198,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5221333243568878,
+      "auroc": 0.8483137490458136,
+      "brier": 0.1372630560198945,
+      "sensitivity": 0.7025641025641025
+    },
+    {
+      "group": "AB_adapted_Set_C",
+      "seed": 0,
+      "training_stays": 8000,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.556459301802029,
+      "auroc": 0.8717167849232271,
+      "brier": 0.14198218167337417,
+      "sensitivity": 0.7623931623931623
+    },
+    {
+      "group": "AB_adapted_Set_C",
+      "seed": 1,
+      "training_stays": 8000,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5301165441513156,
+      "auroc": 0.8590877351053047,
+      "brier": 0.14359335840333293,
+      "sensitivity": 0.7658119658119659
+    },
+    {
+      "group": "AB_adapted_Set_C",
+      "seed": 2,
+      "training_stays": 8000,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5385642131750571,
+      "auroc": 0.8649452515923965,
+      "brier": 0.12347820856587408,
+      "sensitivity": 0.694017094017094
+    },
+    {
+      "group": "AB_adapted_Set_C",
+      "seed": 3,
+      "training_stays": 8000,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5586437854167501,
+      "auroc": 0.86943224337075,
+      "brier": 0.13750355626182453,
+      "sensitivity": 0.7589743589743589
+    },
+    {
+      "group": "AB_adapted_Set_C",
+      "seed": 4,
+      "training_stays": 8000,
+      "stays": 4000,
+      "deaths": 585,
+      "ap": 0.5446887498306924,
+      "auroc": 0.8657301247637997,
+      "brier": 0.16577173991554803,
+      "sensitivity": 0.8205128205128205
+    },
+    {
+      "group": "AB_adapted_Demo_hourly",
+      "seed": 0,
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4303819778379209,
+      "auroc": 0.7992080278621524,
+      "brier": 0.1161874259837091,
+      "sensitivity": 0.5274725274725275
+    },
+    {
+      "group": "AB_adapted_Demo_hourly",
+      "seed": 1,
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.3804775835266436,
+      "auroc": 0.7769596539495237,
+      "brier": 0.19696437299626143,
+      "sensitivity": 0.7252747252747253
+    },
+    {
+      "group": "AB_adapted_Demo_hourly",
+      "seed": 2,
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.3892184013792531,
+      "auroc": 0.8106105182805616,
+      "brier": 0.14152585626054265,
+      "sensitivity": 0.6483516483516484
+    },
+    {
+      "group": "AB_adapted_Demo_hourly",
+      "seed": 3,
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.42633758042900083,
+      "auroc": 0.8004007569854169,
+      "brier": 0.1197518857938741,
+      "sensitivity": 0.5604395604395604
+    },
+    {
+      "group": "AB_adapted_Demo_hourly",
+      "seed": 4,
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.41702427214938476,
+      "auroc": 0.7837343553696664,
+      "brier": 0.23313496826433486,
+      "sensitivity": 0.8021978021978022
+    },
+    {
+      "group": "AB_adapted_Demo_native",
+      "seed": 0,
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4174212221542447,
+      "auroc": 0.7990967064773143,
+      "brier": 0.11564057781005888,
+      "sensitivity": 0.5054945054945055
+    },
+    {
+      "group": "AB_adapted_Demo_native",
+      "seed": 1,
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.36539271704915527,
+      "auroc": 0.7740493948887582,
+      "brier": 0.20589435728744387,
+      "sensitivity": 0.7472527472527473
+    },
+    {
+      "group": "AB_adapted_Demo_native",
+      "seed": 2,
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.37827876640156277,
+      "auroc": 0.8080978355942177,
+      "brier": 0.14414820912863205,
+      "sensitivity": 0.6483516483516484
+    },
+    {
+      "group": "AB_adapted_Demo_native",
+      "seed": 3,
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.41395010402351284,
+      "auroc": 0.7961228351966413,
+      "brier": 0.12001815520619043,
+      "sensitivity": 0.5384615384615384
+    },
+    {
+      "group": "AB_adapted_Demo_native",
+      "seed": 4,
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4108640565093364,
+      "auroc": 0.784370477568741,
+      "brier": 0.24431841470666016,
+      "sensitivity": 0.8131868131868132
+    }
+  ],
+  "mean_sd": [
+    {
+      "group": "author_split_reproduction",
+      "training_stays": 3198,
+      "stays": 399,
+      "deaths": 51,
+      "ap_mean": 0.5677137942943618,
+      "ap_sd": 0.018728580487981362,
+      "auroc_mean": 0.8796146044624746,
+      "auroc_sd": 0.008912177296364445,
+      "brier_mean": 0.13821814994932577,
+      "brier_sd": 0.009708996317346221,
+      "sensitivity_mean": 0.7803921568627451,
+      "sensitivity_sd": 0.05947353289452194
+    },
+    {
+      "group": "author_frozen_to_Set_C",
+      "training_stays": 3198,
+      "stays": 4000,
+      "deaths": 585,
+      "ap_mean": 0.5246314158195461,
+      "ap_sd": 0.01585368587236746,
+      "auroc_mean": 0.8548530239891879,
+      "auroc_sd": 0.009874118910296726,
+      "brier_mean": 0.14607904957085294,
+      "brier_sd": 0.010034438458757474,
+      "sensitivity_mean": 0.747008547008547,
+      "sensitivity_sd": 0.04003431941412092
+    },
+    {
+      "group": "AB_adapted_Set_C",
+      "training_stays": 8000,
+      "stays": 4000,
+      "deaths": 585,
+      "ap_mean": 0.5456945188751688,
+      "ap_sd": 0.01202175301975775,
+      "auroc_mean": 0.8661824279510956,
+      "auroc_sd": 0.004828567526934956,
+      "brier_mean": 0.14246580896399075,
+      "brier_sd": 0.015246512727275226,
+      "sensitivity_mean": 0.7603418803418803,
+      "sensitivity_sd": 0.04487627165295153
+    },
+    {
+      "group": "AB_adapted_Demo_hourly",
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap_mean": 0.40868796306444066,
+      "ap_sd": 0.022508457661215737,
+      "auroc_mean": 0.7941826624894642,
+      "auroc_sd": 0.013597725793484592,
+      "brier_mean": 0.16151290185974443,
+      "brier_sd": 0.05144023332916165,
+      "sensitivity_mean": 0.6527472527472528,
+      "sensitivity_sd": 0.11383045417651481
+    },
+    {
+      "group": "AB_adapted_Demo_native",
+      "training_stays": 8000,
+      "stays": 782,
+      "deaths": 91,
+      "ap_mean": 0.3971813732275624,
+      "ap_sd": 0.023695383755695045,
+      "auroc_mean": 0.7923474499451345,
+      "auroc_sd": 0.01328844942769127,
+      "brier_mean": 0.16600394282779707,
+      "brier_sd": 0.05668605641170918,
+      "sensitivity_mean": 0.6505494505494506,
+      "sensitivity_sd": 0.13173069761310777
+    }
+  ],
+  "paper_reference": {
+    "task": "Physionet in-hospital mortality",
+    "ap_mean": 0.571,
+    "ap_sd_reported": 0.018,
+    "auroc_mean": 0.879
+  },
+  "all_original_author_raw_preprocessing_records_exact": {
+    "arr": 3997,
+    "time": 3997,
+    "static": 3997,
+    "extended_static": 3997,
+    "length": 3997
+  },
+  "bundled_original_PTdict_available": false,
+  "data_audit": {
+    "author_processed_stays": 3997,
+    "author_work_vs_independent_raw_reference": {
+      "arr": 3997,
+      "time": 3997,
+      "static": 3997,
+      "extended_static": 3997,
+      "length": 3997
+    },
+    "bundled_original_PTdict_available": false,
+    "labels_and_author_record_order_exact": true,
+    "all_Set_A_current_parser_vs_original_reproduction": {
+      "arr": 3907,
+      "time": 3983,
+      "extended_static": 3907,
+      "length": 3983
+    },
+    "all_Set_A_cache_vs_original_reproduction": {
+      "arr": 3907,
+      "time": 3983,
+      "extended_static": 3907,
+      "length": 3983
+    },
+    "AB_raw_comparison": {
+      "a": {
+        "stays": 4000,
+        "raw_hashes_verified": 4000,
+        "cache_matches_current_parser": 4000,
+        "author_reference_dynamic_exact": 3910,
+        "author_reference_time_exact": 3986,
+        "author_reference_static_exact": 3910,
+        "author_reference_length_exact": 3986,
+        "nonstandard_first_five_rows": 90,
+        "repaired_static_only": 0,
+        "repaired_dynamic": 90
+      },
+      "b": {
+        "stays": 4000,
+        "raw_hashes_verified": 4000,
+        "cache_matches_current_parser": 4000,
+        "author_reference_dynamic_exact": 3901,
+        "author_reference_time_exact": 3991,
+        "author_reference_static_exact": 3901,
+        "author_reference_length_exact": 3991,
+        "nonstandard_first_five_rows": 99,
+        "repaired_static_only": 0,
+        "repaired_dynamic": 99
+      }
+    },
+    "C_raw_comparison": {
+      "stays": 4000,
+      "cache_matches_current_parser": 4000,
+      "author_reference_dynamic_exact": 3910,
+      "author_reference_static_exact": 3910,
+      "author_reference_time_exact": 3981,
+      "author_reference_length_exact": 3981,
+      "nonstandard_first_five_rows": 90
+    },
+    "AB_stays": 8000,
+    "AB_deaths": 1122,
+    "C_stays": 4000,
+    "C_deaths": 585,
+    "AB_C_overlap": 0,
+    "all_AB_raw_and_cache_verified": true,
+    "new_formal_fits": 0
+  },
+  "author_blacklist_retained": {
+    "AB": 10,
+    "Set_C": 2
+  },
+  "checkpoint_checks": [
+    {
+      "seed": 0,
+      "last_and_frozen_weight_exact": true,
+      "epochs": 9,
+      "optimizer_update_steps": 234,
+      "effective_batch": 256,
+      "learning_rate": 0.001
+    },
+    {
+      "seed": 1,
+      "last_and_frozen_weight_exact": true,
+      "epochs": 9,
+      "optimizer_update_steps": 234,
+      "effective_batch": 256,
+      "learning_rate": 0.001
+    },
+    {
+      "seed": 2,
+      "last_and_frozen_weight_exact": true,
+      "epochs": 9,
+      "optimizer_update_steps": 234,
+      "effective_batch": 256,
+      "learning_rate": 0.001
+    },
+    {
+      "seed": 3,
+      "last_and_frozen_weight_exact": true,
+      "epochs": 9,
+      "optimizer_update_steps": 234,
+      "effective_batch": 256,
+      "learning_rate": 0.001
+    },
+    {
+      "seed": 4,
+      "last_and_frozen_weight_exact": true,
+      "epochs": 9,
+      "optimizer_update_steps": 234,
+      "effective_batch": 256,
+      "learning_rate": 0.001
+    }
+  ],
+  "numeric_audit": {
+    "AB_probe_cases": 24,
+    "trained_five_seed_logits_max_abs": 8.344650268554688e-07,
+    "trained_five_seed_gradients_max_abs": 2.1457672119140625e-06,
+    "three_update_logits_max_abs": 8.940696716308594e-08,
+    "original_Set_C_probabilities_max_abs": 9.657942062757385e-07,
+    "original_Set_C_ap_max_abs": 9.238088639618169e-07,
+    "original_Demo_probabilities_max_abs": 8.479123984606041e-07,
+    "original_Demo_ap_max_abs": 5.411824837270318e-05,
+    "Demo_changed_order_pairs_within_numeric_interval": true
+  },
+  "original_cell_replay_Demo": [
+    {
+      "cohort": "eicu_hourly",
+      "seed": 0,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4303819778379209,
+      "auroc": 0.7992080278621524,
+      "brier": 0.1161874106459503,
+      "sensitivity": 0.5274725274725275,
+      "maximum_probability_difference_from_original_cache": 6.233756051354788e-07,
+      "ap_difference_from_original_cache": 0.0,
+      "changed_score_order_or_tie_pairs": 0,
+      "maximum_cached_probability_gap_of_changed_pair": 0.0,
+      "changed_pairs_confined_to_numeric_error_interval": true
+    },
+    {
+      "cohort": "eicu_hourly",
+      "seed": 1,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.3804775835266436,
+      "auroc": 0.7769596539495237,
+      "brier": 0.1969642971901143,
+      "sensitivity": 0.7252747252747253,
+      "maximum_probability_difference_from_original_cache": 5.893750628649386e-07,
+      "ap_difference_from_original_cache": 0.0,
+      "changed_score_order_or_tie_pairs": 0,
+      "maximum_cached_probability_gap_of_changed_pair": 0.0,
+      "changed_pairs_confined_to_numeric_error_interval": true
+    },
+    {
+      "cohort": "eicu_hourly",
+      "seed": 2,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.3892184013792531,
+      "auroc": 0.8106105182805616,
+      "brier": 0.14152585450563013,
+      "sensitivity": 0.6483516483516484,
+      "maximum_probability_difference_from_original_cache": 7.728743465773569e-07,
+      "ap_difference_from_original_cache": 0.0,
+      "changed_score_order_or_tie_pairs": 0,
+      "maximum_cached_probability_gap_of_changed_pair": 0.0,
+      "changed_pairs_confined_to_numeric_error_interval": true
+    },
+    {
+      "cohort": "eicu_hourly",
+      "seed": 3,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.42633758042900083,
+      "auroc": 0.8004007569854169,
+      "brier": 0.11975188327584319,
+      "sensitivity": 0.5604395604395604,
+      "maximum_probability_difference_from_original_cache": 7.021931814343851e-07,
+      "ap_difference_from_original_cache": 0.0,
+      "changed_score_order_or_tie_pairs": 0,
+      "maximum_cached_probability_gap_of_changed_pair": 0.0,
+      "changed_pairs_confined_to_numeric_error_interval": true
+    },
+    {
+      "cohort": "eicu_hourly",
+      "seed": 4,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.41697015390101205,
+      "auroc": 0.7837184523146896,
+      "brier": 0.23313495786710717,
+      "sensitivity": 0.8021978021978022,
+      "maximum_probability_difference_from_original_cache": 8.479123984606041e-07,
+      "ap_difference_from_original_cache": -5.411824837270318e-05,
+      "changed_score_order_or_tie_pairs": 1,
+      "maximum_cached_probability_gap_of_changed_pair": 5.6063996778377145e-08,
+      "changed_pairs_confined_to_numeric_error_interval": true
+    },
+    {
+      "cohort": "eicu_native",
+      "seed": 0,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4174212221542447,
+      "auroc": 0.7990967064773143,
+      "brier": 0.11564056371764701,
+      "sensitivity": 0.5054945054945055,
+      "maximum_probability_difference_from_original_cache": 5.947812586892809e-07,
+      "ap_difference_from_original_cache": 0.0,
+      "changed_score_order_or_tie_pairs": 0,
+      "maximum_cached_probability_gap_of_changed_pair": 0.0,
+      "changed_pairs_confined_to_numeric_error_interval": true
+    },
+    {
+      "cohort": "eicu_native",
+      "seed": 1,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.36539271704915527,
+      "auroc": 0.7740493948887582,
+      "brier": 0.20589427442446734,
+      "sensitivity": 0.7472527472527473,
+      "maximum_probability_difference_from_original_cache": 5.79101037567753e-07,
+      "ap_difference_from_original_cache": 0.0,
+      "changed_score_order_or_tie_pairs": 0,
+      "maximum_cached_probability_gap_of_changed_pair": 0.0,
+      "changed_pairs_confined_to_numeric_error_interval": true
+    },
+    {
+      "cohort": "eicu_native",
+      "seed": 2,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.37827876640156277,
+      "auroc": 0.8080978355942177,
+      "brier": 0.14414820864545533,
+      "sensitivity": 0.6483516483516484,
+      "maximum_probability_difference_from_original_cache": 7.583873629091187e-07,
+      "ap_difference_from_original_cache": 0.0,
+      "changed_score_order_or_tie_pairs": 0,
+      "maximum_cached_probability_gap_of_changed_pair": 0.0,
+      "changed_pairs_confined_to_numeric_error_interval": true
+    },
+    {
+      "cohort": "eicu_native",
+      "seed": 3,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.41395010402351284,
+      "auroc": 0.7961228351966413,
+      "brier": 0.12001815386918478,
+      "sensitivity": 0.5384615384615384,
+      "maximum_probability_difference_from_original_cache": 4.5097984080477715e-07,
+      "ap_difference_from_original_cache": 0.0,
+      "changed_score_order_or_tie_pairs": 0,
+      "maximum_cached_probability_gap_of_changed_pair": 0.0,
+      "changed_pairs_confined_to_numeric_error_interval": true
+    },
+    {
+      "cohort": "eicu_native",
+      "seed": 4,
+      "stays": 782,
+      "deaths": 91,
+      "ap": 0.4108640565093364,
+      "auroc": 0.784370477568741,
+      "brier": 0.24431840933801638,
+      "sensitivity": 0.8131868131868132,
+      "maximum_probability_difference_from_original_cache": 7.743858789210911e-07,
+      "ap_difference_from_original_cache": 0.0,
+      "changed_score_order_or_tie_pairs": 0,
+      "maximum_cached_probability_gap_of_changed_pair": 0.0,
+      "changed_pairs_confined_to_numeric_error_interval": true
+    }
+  ],
+  "test_only_parser_sensitivity": [
+    {
+      "version": "set_a",
+      "changed_test_stays": 90,
+      "corrected_parser_ap_mean": 0.5246314158195461,
+      "positional_test_parser_ap_mean": 0.5221443496083952,
+      "mean_delta_ap": -0.0024870662111509123,
+      "maximum_absolute_seed_delta_ap": 0.004394318857237067
+    },
+    {
+      "version": "ab",
+      "changed_test_stays": 90,
+      "corrected_parser_ap_mean": 0.5456945188751688,
+      "positional_test_parser_ap_mean": 0.5440275096871746,
+      "mean_delta_ap": -0.001667009187994184,
+      "maximum_absolute_seed_delta_ap": 0.0029396246975164075
+    }
+  ],
+  "Demo_coverage": {
+    "eicu_hourly": {
+      "stays": 782,
+      "maximum_length": 547,
+      "stays_over_215": 127,
+      "GCS_observed_stays": 583,
+      "Urine_observed_stays": 541,
+      "Lactate_observed_stays": 233,
+      "MAP_observed_stays": 174,
+      "Urine_recorded_stays": 545,
+      "Urine_recorded_but_nonpositive_only": 4
+    },
+    "eicu_native": {
+      "stays": 782,
+      "maximum_length": 1048,
+      "stays_over_215": 764,
+      "GCS_observed_stays": 583,
+      "Urine_observed_stays": 541,
+      "Lactate_observed_stays": 233,
+      "MAP_observed_stays": 174,
+      "Urine_recorded_stays": 545,
+      "Urine_recorded_but_nonpositive_only": 4
+    }
+  },
+  "original_model_source_exact": true,
+  "declared_CPU_compatibility_patches_only": true,
+  "original_text_tensor_sha256": "772a194331b84e3a68c13ea6e5451726319ce8ad186e25836fe44350c3d366c2",
+  "code_sha256": {
+    "publish_kedgn_implementation_audit.py": "7929d5d9742da29646915955bfc86b06b8ad1d8663b378f84cdd624a18d69fd3",
+    "audit_kedgn_implementation.py": "6856521ec18797f68232e5f54ee14a0f591da12e1ebe0882f55cbb7aed43d4f2",
+    "replay_kedgn_original_cohorts.py": "e17b3bbefdee883c32091c1ca09dd41d4d4a69d1afbb24cb9e98d71d7e7954f1"
+  },
+  "private_evidence_sha256": {
+    "sources.json": "61180d48edb5bc6d4867b64803958b4cf574e0b7d1234e7550e9b0dc0382eb8c",
+    "data.json": "8b9e007558d74c1ac317244cf92acf2994eb2aac84a9864b7ebb8895248904a6",
+    "runtime.json": "01e8f20a7f6b7ca72488b48ab6cd1f44ba898270fcb08a650a0aee90a544f705",
+    "author_test_replay.json": "1387052cb50bc2dd036dd31f88df5d62a61bf66ff32c099db734e1d74b05c5ab",
+    "demo_replay.json": "363f9bd8ec38d670c00c36bb367dd5c5cb087a230a1938bf48336bab1c6191b5",
+    "parser_test_sensitivity.json": "ce9bb50b2fc1b8772f89f987ee9c4897600d5f3b35d0da697731e15cfcaf1e03",
+    "checkpoint_checks.json": "9d18c4c15237068471edcc099ac8d39ab72d0b6bda036b4a406c80d6a7fd7345",
+    "demo_input_coverage.json": "2076fd5e83281dc38bf2382339add8c48e6fa99a6313095202473a875764cb1e"
+  },
+  "primary_individual_csv_sha256": "2521e73a1909bf968fd52995f338b1e083a221199f5226caf62ff8f429aebe67",
+  "primary_mean_sd_csv_sha256": "16da9db834566495818114146741cc5670221b6b14b67bf8098055a862a85eeb",
+  "unresolved": [
+    "Full CPU/GPU training-trajectory identity was not tested",
+    "No A/B architecture hyperparameter grid was re-searched",
+    "Contribution of per-seed checkpoint selection and validation-score definition was not isolated by retraining",
+    "Test-only positional parser sensitivity does not estimate the effect of changing the training parser",
+    "No fresh all-patient original-cell re-evaluation of GCS/six-channel mask cohorts in this audit",
+    "Author Torch1.12 requirement differs from local Torch2.1.2; exact historical authors environment not recreated"
+  ]
+}

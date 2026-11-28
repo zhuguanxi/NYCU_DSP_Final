@@ -11246,7 +11246,7 @@
   "frozen_sha256": "8f908dd894f0885d302ff3a57c49e6627d66f6b55895641e5483d280b73de23f",
   "protocol_sha256": "766506dd1cb4d0864dcd14a547dabde823e20ea0b8ca973311065e110f9b40b4",
   "evaluation_summary_sha256": "e2dfd760e16d1ddc4387cecc6cbfb61c21aedfae897ce65e3463872a6bca7313",
-  "publisher_source_sha256": "52bff6ee98362652045dfdd13e6c1d40f5eb6b0351b9db58bbc32f5f578a1b29",
+  "publisher_source_sha256": "dd0afc60cd5d75f6ee1bb41423fe8ea20dadb9730f73dd27025dcd0ea1a525bc",
   "caveats": [
     "Five seeds are model randomness repeats, not five independent data samples",
     "Augmentation positions, input preprocessing and parameters remain fixed",
