@@ -39,3 +39,4 @@ ML/src/r1_report_features.py text eol=lf
 ML/src/*report*seeds*.py text eol=lf
 ML/src/freeze_report_seed_study.py text eol=lf
 ML/reports/P63* text eol=lf
+ML/src/*report*seed*.py text eol=lf
