@@ -24,7 +24,7 @@ def r1_inputs():
  sources={};features={};audits={}
  labels=pd.read_csv(ML/'artifacts/C_evaluation/labels_C.csv').set_index('RecordID').In_hospital_death
  archive=DATA/'set-c.tar.gz';assert sha(archive)==old['input_sources']['archive_c']['sha256']
- sources[relative(archive)]=sha(archive)
+ sources[os.path.relpath(archive,ML).replace(os.sep,'/')]=sha(archive)
  frame,counts,audit=summarize(p12_c_events(archive,labels.index),labels.index)
  raw=pd.read_parquet(ML/'artifacts/C_evaluation/features_C.parquet')
  np.testing.assert_array_equal(counts['count'].to_numpy(),raw[[f'{k}__count' for k in CHANNELS]].to_numpy())
