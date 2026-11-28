@@ -49,3 +49,4 @@ ML/src/evaluate_xgboost_colsample.py text eol=lf
 ML/src/capture_environment.py text eol=lf
 ML/reports/P65* text eol=lf
 ML/ENVIRONMENT.md text eol=lf
+ML/src/verify_xgboost_colsample.py text eol=lf
